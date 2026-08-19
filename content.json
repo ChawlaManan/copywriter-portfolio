@@ -1,0 +1,269 @@
+{
+  "personal": {
+    "name": "Manan",
+    "email": "chawlamanan@outlook.com",
+    "location": "Gurgaon, India",
+    "tagline": "Senior Copywriter & Content Strategist"
+  },
+  "homepage": {
+    "hero": {
+      "headline": "My journey started from creating affiliate marketing channel to now creating full blown marketing system. I have always focused on serving [clarity with creativity].",
+      "subhead": "I have worked as copywriter, content marketing strategist for 7+ years helping brands grow organically, & build systems that bring trust & sales."
+    },
+    "capabilities": [
+      {
+        "num": "01/",
+        "title": "Brand Voice & Strategy",
+        "desc": "Defining concrete messaging frameworks, positioning parameters, and guidelines that translate key value vectors without fluff."
+      },
+      {
+        "num": "02/",
+        "title": "Website & Landing Pages",
+        "desc": "Designing target wireframe copies and high-intent copy that transforms passive search hits into pipeline opportunities."
+      },
+      {
+        "num": "03/",
+        "title": "Product & Lifecycle Copy",
+        "desc": "Crafting customer-centric email nurture flows, onboarding copy, and in-app triggers that boost active product retention."
+      },
+      {
+        "num": "04/",
+        "title": "SEO-Driven Content",
+        "desc": "Structuring high-velocity content funnels, topical authority clusters, and industry-oriented thought leadership articles."
+      }
+    ],
+    "proof_strip": [
+      {
+        "id": "ethnicindia",
+        "stat": "3.5x",
+        "circled": true,
+        "desc": "E-commerce cart completion lift through overhauled email flows — Ethnic India"
+      },
+      {
+        "id": "wiseconomy",
+        "stat": "42%",
+        "circled": false,
+        "desc": "Increase in TFSA account sign-ups by simplifying algorithmic jargon — Wiseconomy"
+      },
+      {
+        "id": "cuchd",
+        "stat": "30%",
+        "circled": false,
+        "desc": "Reduction in customer acquisition cost (CAC) through email flow optimization"
+      }
+    ],
+    "about": {
+      "headline": "The Strategist Framework",
+      "p1": "I am a Gurgaon-based content strategist and copywriter with over five years of active experience shipping copy that works. I do not describe myself as a 'storyteller' or offer 'words that sell.'",
+      "p2": "Instead, I treat copy as an engineering problem. Most copywriting fails because it starts with drafting headlines. I start by auditing your conversion metrics, interviewing your target audience, and aligning value propositions with direct buyer motivations.",
+      "p3": "Whether working directly with growth marketing leads, founders, or agency creative directors, my focus is to provide absolute strategic clarity. No generic fluff, no creative compromise, just measurable pipeline impact."
+    }
+  },
+  "projects": [
+    {
+      "id": "wiseconomy",
+      "type": "full",
+      "layout": "route",
+      "brand": "Wiseconomy",
+      "category": "Financial & insurance advisory, Canada",
+      "filterClass": "finance-b2b",
+      "brief": "From a single physical office in Surrey, BC to a digital trust framework generating insurance and investment leads across Canada.",
+      "about_brand": "Wiseconomy is a Canadian financial and insurance advisory brand offering life insurance, savings investments, and its flagship Super Visa Insurance. Previously, the brand operated from a single brick-and-mortar office in Surrey, BC with no digital web footprint or appointment booking software, making it impossible to capture interest outside their immediate local municipal community.",
+      "objective": "Bridge the critical trust gap between the advisory brand and Canadian consumers (especially newcomers encountering credit, RRSPs, TFSAs, and life insurance policies for the first time). In this Your Money or Your Life (YMYL) category, establishing deep regulatory credibility and personal authority outweighs clever marketing slogans.",
+      "strategy": "Deployed an integrated content pipeline across web and social channels centered on a founder-led video series. The founder shared his own experience navigating the Canadian financial system as a newcomer, unpacking insurance nuances and savings frameworks to educate visitors and humanize the advisory process.",
+      "founder_quote": "his own experience navigating the Canadian financial system as a newcomer",
+      "outcome": "Transformed a local Surrey-only business into a trusted national brand. By converting web visitors into advisory calls, the brand now captures qualified insurance and investment leads from every Canadian province, alongside international travel-insurance leads from families abroad organizing coverage for visiting relatives."
+    },
+    {
+      "id": "hardypaw",
+      "type": "full",
+      "layout": "ownership",
+      "brand": "HardyPaw",
+      "category": "Healthcare / D2C",
+      "filterClass": "healthcare-d2c",
+      "brief": "End-to-end content strategy ownership for an online pet pharmacy. Structured content pillars, aligned seasonal search demand, and resolved sensitive compliance disclaimers.",
+      "snapshot": "HardyPaw is an online pet pharmacy selling prescription and OTC medications, supplements, and pet health products. The category makes this harder than typical D2C: content has to convert and hold up to pharmacy-level scrutiny (accuracy, compliance, misuse prevention).",
+      "role_framing": "Owned content strategy end-to-end — not brought in for isolated copy requests, but responsible for how content mapped to the funnel, supported SEO, maintained regulatory credibility, and drove retention.",
+      "scope_areas": [
+        {
+          "title": "Content Strategy & Planning",
+          "bullets": [
+            "Defined core content pillars: pet health education, product guides, condition-specific content (joint care, dental, allergies), seasonal pet care",
+            "Built an editorial calendar aligned to product launches, seasonal pet health cycles, and search demand",
+            "Mapped content across the full customer journey: awareness (symptom/condition searches) → consideration (product comparisons) → purchase (product pages) → retention (dosing guides, reorder prompts)"
+          ]
+        },
+        {
+          "title": "SEO-Driven Content",
+          "bullets": [
+            "Category and collection page copy (e.g., 'Joint Care for Dogs')",
+            "Condition and ingredient hub pages (arthritis, allergies, dental care) built to funnel traffic into relevant products",
+            "Blog and guide content targeting high-intent informational searches (dosage questions, symptom guides, senior pet care)",
+            "Keyword research and content gap analysis against competitor pet pharmacies"
+          ]
+        },
+        {
+          "title": "Product & Category Copy",
+          "bullets": [
+            "Product descriptions balancing persuasive copy with pharmacy-grade accuracy — dosing, usage, warnings",
+            "FAQ content, with particular care around misuse disclaimers on medications with known off-label misuse risk (a real sensitivity area for this category, evident in customer reviews)",
+            "Comparison content helping customers choose between similar supplements/medications for their pet's specific condition"
+          ]
+        },
+        {
+          "title": "Trust & Compliance Content",
+          "bullets": [
+            "Credibility content: NABP accreditation messaging, sourcing and cold-chain/temperature-handling transparency, prescription process explainers",
+            "Clear, non-misleading language throughout — especially for medications carrying off-label misuse risk, where vague or overly casual copy becomes a liability"
+          ]
+        },
+        {
+          "title": "Email & Retention Content",
+          "bullets": [
+            "Reorder reminders and refill nudges for chronic conditions (joint care, allergies)",
+            "Educational nurture sequences for new pet owners entering the funnel"
+          ]
+        },
+        {
+          "title": "Brand Voice & Messaging",
+          "bullets": [
+            "Built the brand's tone framework — balancing 'warm, pet-loving' against 'credible healthcare provider,' a harder line to hold than either extreme alone",
+            "Delivered a style guide and messaging framework to keep product, blog, and email content consistent"
+          ]
+        },
+        {
+          "title": "Performance Content",
+          "bullets": [
+            "Landing pages for paid campaigns",
+            "Email marketing strategy",
+            "Worked alongside SEO/analytics to iterate content based on what was actually converting"
+          ]
+        }
+      ],
+      "before_after": [
+        {
+          "label_before": "Old Product Description (OTC Supplement)",
+          "before": "HardyPaw Joint Max Joint Supplement for Dogs containing Glucosamine, Chondroitin, and MSM. Dose: 1 chew daily for dogs under 40 lbs.",
+          "after": "Does your dog hesitate before the stairs? Don't wait for a limp. Our cold-pressed Glucosamine chews protect active cartilage before stiffness starts, delivering targeted joint lubrication in a daily treat dogs actually love."
+        },
+        {
+          "label_before": "Old FAQ Answer (Misuse Sensitivity)",
+          "before": "Can I give Fish Mox to my dog if they have a cut? Yes, it's just amoxicillin, but make sure to check with your vet for the right dose.",
+          "after": "<strong>Is Fish Mox safe for dogs?</strong> No. While Fish Mox contains amoxicillin, veterinary fish antibiotics are not manufactured under FDA regulations for mammals and contain no safety labeling for dogs. Giving fish medication to dogs can lead to critical dosing errors or drug resistance. Always request a canine-approved prescription from your vet."
+        }
+      ]
+    },
+    {
+      "id": "bankemi",
+      "type": "card",
+      "brand": "bankEMI",
+      "category": "Finance / B2B",
+      "filterClass": "finance-b2b",
+      "brief": "Reconfigured high-intent landing page copy and value propositions to simplify complex EMI calculation steps.",
+      "deliverables": [
+        "Calculator step microcopy optimization",
+        "Trust & security value blocks",
+        "Conversion landing page revision"
+      ],
+      "quote": "No surprise interest. No hidden clauses. Just clean, split payments."
+    },
+    {
+      "id": "blacklisted",
+      "type": "card",
+      "brand": "Blacklisted",
+      "category": "Agency / Creative",
+      "filterClass": "agency-creative",
+      "brief": "Co-authored positioning strategy and lead-generation copy for a premium design agency's rebrand.",
+      "deliverables": [
+        "Homepage manifesto and taglines",
+        "Bespoke project case study edits",
+        "Outreach positioning email copywriting"
+      ],
+      "quote": "We don't pitch. We solve. Browse the case studies to see why."
+    },
+    {
+      "id": "intersolar",
+      "type": "card",
+      "brand": "Inter Solar Systems",
+      "category": "Manufacturing",
+      "filterClass": "manufacturing",
+      "brief": "Crafted complete website copy and clear technical messaging for a commercial solar manufacturer.",
+      "deliverables": [
+        "Landing page copy for plant manager profiles",
+        "B2B commercial ROI explanation framework",
+        "Industrial warehouse rooftop case studies"
+      ],
+      "quote": "Solar isn't a carbon offset. It's a capital efficiency upgrade."
+    },
+    {
+      "id": "ethnicindia",
+      "type": "card",
+      "brand": "Ethnic India Handicrafts",
+      "category": "Fashion / Lifestyle",
+      "filterClass": "fashion-lifestyle",
+      "brief": "Overhauled product narrative and email flows to bridge cultural heritage with modern lifestyle positioning.",
+      "deliverables": [
+        "Artisan story product descriptions",
+        "Cart-abandonment sequence rewrite",
+        "Brand heritage landing page copy"
+      ],
+      "quote": "Crafted in Jaipur. Built to endure. Handed down generations."
+    },
+    {
+      "id": "cuchd",
+      "type": "card",
+      "brand": "CUCHD",
+      "category": "Education",
+      "filterClass": "education",
+      "brief": "Developed conversion-oriented landing page copy and lead-capture emails for postgraduate engineering programs.",
+      "deliverables": [
+        "Executive landing page copywriting",
+        "Drip nurture sequences for applicants",
+        "Admissions advisor call flow guide"
+      ],
+      "quote": "Acquire the skills high-growth companies hire for, without leaving your job."
+    },
+    {
+      "id": "cihub",
+      "type": "card",
+      "brand": "CI Hub",
+      "category": "Tech / B2B",
+      "filterClass": "tech-saas",
+      "brief": "Refined product marketing copy and feature explanations for an enterprise digital asset management connector.",
+      "deliverables": [
+        "Integration value-proposition rewrite",
+        "Creative Cloud user target landing pages",
+        "Outbound B2B LinkedIn templates"
+      ],
+      "quote": "Connect your digital asset vaults directly to your design canvas. No file jumps."
+    },
+    {
+      "id": "lavister",
+      "type": "card",
+      "brand": "Lavister",
+      "category": "Fashion / Retail",
+      "filterClass": "fashion-lifestyle",
+      "brief": "Created launch campaign copy and product stories for an artisanal leather goods brand.",
+      "deliverables": [
+        "Brand launch campaign tagline definitions",
+        "Product description copywriting",
+        "Exclusivity launch sequence emails"
+      ],
+      "quote": "Full-grain Italian leather, hand-stitched for life's travels."
+    },
+    {
+      "id": "sendwishonline",
+      "type": "card",
+      "brand": "SendWishOnline.com",
+      "category": "Tech / SaaS",
+      "filterClass": "tech-saas",
+      "brief": "Drafted messaging strategy, landing page copy, and automated email trigger copy for a group greeting card and corporate culture platform.",
+      "deliverables": [
+        "Corporate landing page copy rewrite",
+        "Automated customer lifecycle emails",
+        "Positioning strategy documentation"
+      ],
+      "quote": "Celebrate workplace milestones with shared, digital-first cards."
+    }
+  ]
+}
