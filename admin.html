@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CMS Dashboard | Portfolio Manager</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      background-color: #f7f6f0;
+      color: #1c1c1c;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .admin-container {
+      max-width: 1000px;
+      margin: 4rem auto;
+      padding: 2.5rem;
+      background: #faf8f5;
+      border: 2px solid #1c1c1c;
+      box-shadow: 6px 6px 0px #1c1c1c;
+      position: relative;
+    }
+    .admin-header {
+      border-bottom: 2px dashed rgba(28, 28, 28, 0.15);
+      padding-bottom: 1.5rem;
+      margin-bottom: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .admin-title {
+      font-family: 'Lora', serif;
+      font-size: 2.25rem;
+      font-weight: 700;
+      margin: 0;
+    }
+    .admin-subtitle {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.8rem;
+      color: #7d8b96;
+      margin-top: 0.25rem;
+    }
+    .nav-tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+      border-bottom: 2px solid #1c1c1c;
+      padding-bottom: 0.5rem;
+    }
+    .tab-btn {
+      background: none;
+      border: 1px solid transparent;
+      padding: 0.5rem 1rem;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.9rem;
+      cursor: pointer;
+      font-weight: 700;
+      transition: all 0.2s ease;
+    }
+    .tab-btn:hover {
+      background: rgba(224, 83, 60, 0.05);
+    }
+    .tab-btn.active {
+      border: 2px solid #1c1c1c;
+      border-bottom: 2px solid #faf8f5;
+      margin-bottom: -10px;
+      background: #faf8f5;
+      color: #e0533c;
+    }
+    .tab-content {
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+    }
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    label {
+      display: block;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    input[type="text"], input[type="email"], input[type="password"], textarea, select {
+      width: 100%;
+      padding: 0.75rem;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.95rem;
+      border: 2px solid #1c1c1c;
+      background: #faf8f5;
+      box-sizing: border-box;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+    input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus, textarea:focus, select:focus {
+      border-color: #e0533c;
+    }
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+    .project-card-item {
+      border: 1px solid #1c1c1c;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      background: #fbfbf9;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .project-card-title {
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+    .project-card-meta {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.75rem;
+      color: #7d8b96;
+      margin-top: 0.25rem;
+    }
+    .btn-sm {
+      padding: 0.25rem 0.5rem;
+      font-size: 0.8rem;
+    }
+    .btn-danger {
+      background: #8c2f2f;
+      color: #fff;
+    }
+    .btn-danger:hover {
+      background: #b23b3b;
+    }
+    .console-box {
+      background: #1c1c1c;
+      color: #7ef17e;
+      font-family: 'IBM Plex Mono', monospace;
+      padding: 1rem;
+      margin-top: 2rem;
+      font-size: 0.85rem;
+      min-height: 50px;
+      max-height: 150px;
+      overflow-y: auto;
+      border: 2px solid #1c1c1c;
+    }
+    .console-box.error {
+      color: #ff6b6b;
+    }
+    /* Modal styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+    .modal.active {
+      display: flex;
+    }
+    .modal-content {
+      background: #faf8f5;
+      border: 2px solid #1c1c1c;
+      padding: 2rem;
+      width: 90%;
+      max-width: 650px;
+      max-height: 85vh;
+      overflow-y: auto;
+      box-shadow: 6px 6px 0px #1c1c1c;
+    }
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+      margin-top: 1.5rem;
+      border-top: 1px dashed rgba(28,28,28,0.15);
+      padding-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="admin-container">
+    <div class="admin-header">
+      <div>
+        <h1 class="admin-title">Portfolio CMS</h1>
+        <div class="admin-subtitle">DATABASE-BACKED REGISTRY MANAGER</div>
+      </div>
+      <a href="index.html" class="btn btn-secondary btn-sm" style="margin: 0;">← View Portfolio</a>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="nav-tabs">
+      <button class="tab-btn active" onclick="switchTab('profile')">PROFILE & HERO</button>
+      <button class="tab-btn" onclick="switchTab('stats')">STATS & ABOUT</button>
+      <button class="tab-btn" onclick="switchTab('projects')">PROJECTS INDEX</button>
+    </div>
+
+    <!-- TAB 1: Profile & Hero -->
+    <div id="tab-profile" class="tab-content active">
+      <h3 style="margin-top: 0; font-family: Lora, serif; font-size: 1.5rem; margin-bottom: 1.5rem;">Core Identity Details</h3>
+      <div class="grid-2">
+        <div class="form-group">
+          <label for="profile-name">Owner Name</label>
+          <input type="text" id="profile-name" placeholder="e.g. Manan">
+        </div>
+        <div class="form-group">
+          <label for="profile-email">Work Email</label>
+          <input type="email" id="profile-email" placeholder="e.g. chawlamanan@outlook.com">
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="form-group">
+          <label for="profile-location">Location</label>
+          <input type="text" id="profile-location" placeholder="e.g. Gurgaon, India">
+        </div>
+        <div class="form-group">
+          <label for="profile-tagline">Header Tagline</label>
+          <input type="text" id="profile-tagline" placeholder="e.g. Senior Copywriter & Content Strategist">
+        </div>
+      </div>
+      
+      <h3 style="font-family: Lora, serif; font-size: 1.5rem; margin-top: 2rem; margin-bottom: 1.5rem;">Hero Section Headline</h3>
+      <div class="form-group">
+        <label for="hero-headline">Headline (Use [word] for red marker underlines)</label>
+        <textarea id="hero-headline" style="min-height: 80px;"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="hero-subhead">Hero Subhead / Summary Paragraph</label>
+        <textarea id="hero-subhead" style="min-height: 80px;"></textarea>
+      </div>
+    </div>
+
+    <!-- TAB 2: Stats & About -->
+    <div id="tab-stats" class="tab-content">
+      <h3 style="margin-top: 0; font-family: Lora, serif; font-size: 1.5rem; margin-bottom: 1.5rem;">Whiteboard Performance Statistics</h3>
+      <div id="stats-container">
+        <!-- Dyn Loaded -->
+      </div>
+
+      <h3 style="font-family: Lora, serif; font-size: 1.5rem; margin-top: 2rem; margin-bottom: 1.5rem;">About Me & Framework</h3>
+      <div class="form-group">
+        <label for="about-headline">About Headline</label>
+        <input type="text" id="about-headline">
+      </div>
+      <div class="form-group">
+        <label for="about-p1">Paragraph 1</label>
+        <textarea id="about-p1"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="about-p2">Paragraph 2</label>
+        <textarea id="about-p2"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="about-p3">Paragraph 3</label>
+        <textarea id="about-p3"></textarea>
+      </div>
+    </div>
+
+    <!-- TAB 3: Projects Index -->
+    <div id="tab-projects" class="tab-content">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <h3 style="margin: 0; font-family: Lora, serif; font-size: 1.5rem;">Projects & Case Studies</h3>
+        <button class="btn btn-primary btn-sm" onclick="openProjectModal()">+ Add New Project</button>
+      </div>
+      
+      <div id="projects-list-container">
+        <!-- Dyn Loaded -->
+      </div>
+    </div>
+
+    <!-- Save & Authentication Footer -->
+    <div style="border-top: 2px solid #1c1c1c; margin-top: 3rem; padding-top: 2rem;">
+      <div class="grid-2" style="align-items: flex-end;">
+        <div class="form-group" style="margin: 0;">
+          <label for="admin-password" style="color: #e0533c;">CMS Administration Password</label>
+          <input type="password" id="admin-password" placeholder="Enter Vercel ADMIN_PASSWORD">
+        </div>
+        <div>
+          <button class="btn btn-primary" onclick="savePortfolioChanges()" style="width: 100%; margin: 0; padding: 0.85rem;">Save Changes to Vercel Database</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="console-box" id="console-log">Ready. Loaded local state configurations.</div>
+  </div>
+
+  <!-- Project Edit Modal -->
+  <div class="modal" id="project-modal">
+    <div class="modal-content">
+      <h3 id="modal-title" style="margin-top: 0; font-family: Lora, serif; font-size: 1.5rem; border-bottom: 2px solid #1c1c1c; padding-bottom: 0.5rem;">Add/Edit Project</h3>
+      
+      <input type="hidden" id="proj-index">
+      
+      <div class="grid-2">
+        <div class="form-group">
+          <label for="proj-id">Unique ID (lowercase, no spaces)</label>
+          <input type="text" id="proj-id" placeholder="e.g. wiseconomy">
+        </div>
+        <div class="form-group">
+          <label for="proj-type">Card Type</label>
+          <select id="proj-type">
+            <option value="card">Campaign Card (Small Grid)</option>
+            <option value="full">Full Case Study (Expandable)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="form-group">
+          <label for="proj-brand">Brand Name</label>
+          <input type="text" id="proj-brand" placeholder="e.g. Wiseconomy">
+        </div>
+        <div class="form-group">
+          <label for="proj-category">Sector/Category Label</label>
+          <input type="text" id="proj-category" placeholder="e.g. Education, Tech / SaaS">
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="form-group">
+          <label for="proj-filter">Filter Group</label>
+          <select id="proj-filter">
+            <option value="tech-saas">Tech/SaaS</option>
+            <option value="finance-b2b">Finance/B2B</option>
+            <option value="healthcare-d2c">Healthcare/D2C</option>
+            <option value="fashion-lifestyle">Fashion/Lifestyle</option>
+            <option value="agency-creative">Agency/Creative</option>
+            <option value="education">Education</option>
+            <option value="manufacturing">Manufacturing</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="proj-layout">Layout Style (Full only)</label>
+          <select id="proj-layout">
+            <option value="card">None (Small Card)</option>
+            <option value="route">Route Timeline (Wiseconomy Style)</option>
+            <option value="ownership">Sticky Notes Ledger (Hardypaw Style)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="proj-brief">Brief Description</label>
+        <textarea id="proj-brief" style="min-height: 60px;"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="proj-deliverables">Deliverables List (One per line)</label>
+        <textarea id="proj-deliverables" style="min-height: 80px;" placeholder="Landing page optimization&#10;Email drip series&#10;Ad copy"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="proj-quote">Featured Quote / Pull Quote</label>
+        <textarea id="proj-quote" style="min-height: 50px;"></textarea>
+      </div>
+
+      <!-- Advanced metadata for layout variables -->
+      <div class="form-group">
+        <label for="proj-meta">Advanced Metadata (Raw JSON parameters - optional)</label>
+        <textarea id="proj-meta" style="min-height: 100px; font-family: monospace; font-size: 0.8rem;" placeholder='{"objective": "...", "sticky_notes": [...]}'></textarea>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn btn-secondary btn-sm" onclick="closeProjectModal()">Cancel</button>
+        <button class="btn btn-primary btn-sm" onclick="saveProjectItem()">Save Project</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let registry = null;
+
+    // Load configurations on entry
+    document.addEventListener('DOMContentLoaded', () => {
+      log('Fetching current registry content...');
+      fetch('/api/get-content')
+        .then(res => {
+          if (!res.ok) throw new Error('API not resolved');
+          return res.json();
+        })
+        .catch(() => {
+          log('API offline. Loading static local content.json configuration...');
+          return fetch('content.json').then(res => res.json());
+        })
+        .then(data => {
+          registry = data;
+          populateForm();
+          log('Registry successfully loaded!');
+        })
+        .catch(err => {
+          log('Error loading registry data: ' + err.message, true);
+        });
+    });
+
+    // Populate UI Forms
+    function populateForm() {
+      if (!registry) return;
+
+      // Tab 1: Profile & Hero
+      document.getElementById('profile-name').value = registry.personal.name || '';
+      document.getElementById('profile-email').value = registry.personal.email || '';
+      document.getElementById('profile-location').value = registry.personal.location || '';
+      document.getElementById('profile-tagline').value = registry.personal.tagline || '';
+      
+      document.getElementById('hero-headline').value = registry.homepage.hero.headline || '';
+      document.getElementById('hero-subhead').value = registry.homepage.hero.subhead || '';
+
+      // Tab 2: Stats & About
+      const statsContainer = document.getElementById('stats-container');
+      statsContainer.innerHTML = registry.homepage.stats.map((stat, i) => `
+        <div style="border: 1px solid #1c1c1c; padding: 1.25rem; margin-bottom: 1.25rem; background: #fff;">
+          <h4 style="margin: 0 0 1rem 0; font-family: 'IBM Plex Mono', monospace;">STAT CARD #${i + 1}</h4>
+          <div class="grid-2">
+            <div class="form-group">
+              <label>Stat Metric Label</label>
+              <input type="text" id="stat-val-${i}" value="${stat.stat || ''}" placeholder="e.g. 7+">
+            </div>
+            <div class="form-group">
+              <label>Circled Indicator Highlight</label>
+              <select id="stat-circle-${i}">
+                <option value="true" ${stat.circled ? 'selected' : ''}>Yes (Encircled)</option>
+                <option value="false" ${!stat.circled ? 'selected' : ''}>No (Plain)</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group" style="margin: 0;">
+            <label>Stat Description</label>
+            <input type="text" id="stat-desc-${i}" value="${stat.desc || ''}">
+          </div>
+        </div>
+      `).join('');
+
+      document.getElementById('about-headline').value = registry.homepage.about.headline || '';
+      document.getElementById('about-p1').value = registry.homepage.about.p1 || '';
+      document.getElementById('about-p2').value = registry.homepage.about.p2 || '';
+      document.getElementById('about-p3').value = registry.homepage.about.p3 || '';
+
+      // Tab 3: Projects List
+      renderProjectsList();
+    }
+
+    function renderProjectsList() {
+      const container = document.getElementById('projects-list-container');
+      container.innerHTML = registry.projects.map((proj, i) => `
+        <div class="project-card-item">
+          <div>
+            <div class="project-card-title">${proj.brand}</div>
+            <div class="project-card-meta">
+              ${proj.type.toUpperCase()} | CATEGORY: ${proj.category} | FILTER: ${proj.filterClass}
+            </div>
+          </div>
+          <div style="display: flex; gap: 0.5rem;">
+            <button class="btn btn-secondary btn-sm" style="margin: 0;" onclick="openProjectModal(${i})">Edit</button>
+            <button class="btn btn-danger btn-sm" style="margin: 0;" onclick="deleteProject(${i})">Delete</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Switch between view tabs
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+      event.target.classList.add('active');
+      document.getElementById('tab-' + tabId).classList.add('active');
+    }
+
+    // Modal Operations
+    function openProjectModal(index = null) {
+      const modal = document.getElementById('project-modal');
+      const title = document.getElementById('modal-title');
+      
+      if (index !== null) {
+        title.textContent = 'Edit Project: ' + registry.projects[index].brand;
+        document.getElementById('proj-index').value = index;
+        
+        const proj = registry.projects[index];
+        document.getElementById('proj-id').value = proj.id || '';
+        document.getElementById('proj-type').value = proj.type || 'card';
+        document.getElementById('proj-brand').value = proj.brand || '';
+        document.getElementById('proj-category').value = proj.category || '';
+        document.getElementById('proj-filter').value = proj.filterClass || 'tech-saas';
+        document.getElementById('proj-layout').value = proj.layout || 'card';
+        document.getElementById('proj-brief').value = proj.brief || '';
+        document.getElementById('proj-deliverables').value = (proj.deliverables || []).join('\n');
+        document.getElementById('proj-quote').value = proj.quote || '';
+
+        // Exclude generic fields to construct raw advanced json properties
+        const advanced = {};
+        const commonKeys = ['id', 'type', 'brand', 'category', 'filterClass', 'layout', 'brief', 'deliverables', 'quote'];
+        Object.keys(proj).forEach(k => {
+          if (!commonKeys.includes(k)) {
+            advanced[k] = proj[k];
+          }
+        });
+        document.getElementById('proj-meta').value = Object.keys(advanced).length > 0 ? JSON.stringify(advanced, null, 2) : '';
+      } else {
+        title.textContent = 'Add New Project';
+        document.getElementById('proj-index').value = '';
+        
+        document.getElementById('proj-id').value = '';
+        document.getElementById('proj-type').value = 'card';
+        document.getElementById('proj-brand').value = '';
+        document.getElementById('proj-category').value = '';
+        document.getElementById('proj-filter').value = 'tech-saas';
+        document.getElementById('proj-layout').value = 'card';
+        document.getElementById('proj-brief').value = '';
+        document.getElementById('proj-deliverables').value = '';
+        document.getElementById('proj-quote').value = '';
+        document.getElementById('proj-meta').value = '';
+      }
+
+      modal.classList.add('active');
+    }
+
+    function closeProjectModal() {
+      document.getElementById('project-modal').classList.remove('active');
+    }
+
+    // Save project in list (Local state)
+    function saveProjectItem() {
+      const idx = document.getElementById('proj-index').value;
+      const id = document.getElementById('proj-id').value.trim();
+      const brand = document.getElementById('proj-brand').value.trim();
+
+      if (!id || !brand) {
+        alert('Unique ID and Brand Name are required!');
+        return;
+      }
+
+      const proj = {
+        id,
+        type: document.getElementById('proj-type').value,
+        brand,
+        category: document.getElementById('proj-category').value.trim(),
+        filterClass: document.getElementById('proj-filter').value,
+        layout: document.getElementById('proj-layout').value,
+        brief: document.getElementById('proj-brief').value.trim(),
+        deliverables: document.getElementById('proj-deliverables').value.split('\n').map(d => d.trim()).filter(Boolean),
+        quote: document.getElementById('proj-quote').value.trim()
+      };
+
+      // Unpack raw advanced parameters JSON
+      const rawMeta = document.getElementById('proj-meta').value.trim();
+      if (rawMeta) {
+        try {
+          const parsed = JSON.parse(rawMeta);
+          Object.assign(proj, parsed);
+        } catch (e) {
+          alert('Advanced Metadata is not valid JSON! ' + e.message);
+          return;
+        }
+      }
+
+      if (idx !== '') {
+        registry.projects[parseInt(idx)] = proj;
+        log(`Locally updated project: "${brand}"`);
+      } else {
+        registry.projects.push(proj);
+        log(`Locally added new project: "${brand}"`);
+      }
+
+      renderProjectsList();
+      closeProjectModal();
+    }
+
+    function deleteProject(index) {
+      if (confirm(`Are you sure you want to delete "${registry.projects[index].brand}"?`)) {
+        const name = registry.projects[index].brand;
+        registry.projects.splice(index, 1);
+        log(`Locally deleted project: "${name}"`);
+        renderProjectsList();
+      }
+    }
+
+    // Save all local registry configurations back to Vercel Database
+    function savePortfolioChanges() {
+      const password = document.getElementById('admin-password').value;
+      if (!password) {
+        log('Error: CMS Password must be entered to save changes!', true);
+        alert('Please enter your Vercel ADMIN_PASSWORD.');
+        return;
+      }
+
+      // Collect profile elements
+      registry.personal.name = document.getElementById('profile-name').value.trim();
+      registry.personal.email = document.getElementById('profile-email').value.trim();
+      registry.personal.location = document.getElementById('profile-location').value.trim();
+      registry.personal.tagline = document.getElementById('profile-tagline').value.trim();
+
+      // Collect hero elements
+      registry.homepage.hero.headline = document.getElementById('hero-headline').value.trim();
+      registry.homepage.hero.subhead = document.getElementById('hero-subhead').value.trim();
+
+      // Collect stats elements
+      registry.homepage.stats = registry.homepage.stats.map((stat, i) => ({
+        num: stat.num,
+        stat: document.getElementById(`stat-val-${i}`).value.trim(),
+        circled: document.getElementById(`stat-circle-${i}`).value === 'true',
+        desc: document.getElementById(`stat-desc-${i}`).value.trim()
+      }));
+
+      // Collect about me elements
+      registry.homepage.about.headline = document.getElementById('about-headline').value.trim();
+      registry.homepage.about.p1 = document.getElementById('about-p1').value.trim();
+      registry.homepage.about.p2 = document.getElementById('about-p2').value.trim();
+      registry.homepage.about.p3 = document.getElementById('about-p3').value.trim();
+
+      log('Sending payload to /api/save-content database...');
+
+      fetch('/api/save-content', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password, data: registry })
+      })
+      .then(res => res.json().then(data => ({ status: res.status, data })))
+      .then(({ status, data }) => {
+        if (status === 200) {
+          log('Success: ' + data.message);
+          alert('Success: ' + data.message);
+        } else {
+          log('Error: ' + data.message, true);
+          alert('Error: ' + data.message);
+        }
+      })
+      .catch(err => {
+        log('Error saving configuration: ' + err.message, true);
+        alert('Error connecting to database handler.');
+      });
+    }
+
+    // Logger
+    function log(message, isError = false) {
+      const consoleLog = document.getElementById('console-log');
+      const time = new Date().toLocaleTimeString();
+      consoleLog.innerHTML = `[${time}] ${message}`;
+      if (isError) {
+        consoleLog.classList.add('error');
+      } else {
+        consoleLog.classList.remove('error');
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,7 +1,16 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // Fetch central data registry content.json
-  fetch('content.json')
-    .then(response => response.json())
+  // Fetch central data registry (try database-backed API first, fall back to static file)
+  fetch('/api/get-content')
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('API request failed');
+      }
+      return response.json();
+    })
+    .catch(err => {
+      console.log('[CMS Fallback] Database API offline or local development. Fetching static content.json...');
+      return fetch('content.json').then(res => res.json());
+    })
     .then(data => {
       // Initialize layout rendering
       if (document.getElementById('hero-headline')) {
