@@ -419,7 +419,7 @@
 
       // Tab 2: Stats & About
       const statsContainer = document.getElementById('stats-container');
-      statsContainer.innerHTML = registry.homepage.stats.map((stat, i) => `
+      statsContainer.innerHTML = registry.homepage.proof_strip.map((stat, i) => `
         <div style="border: 1px solid #1c1c1c; padding: 1.25rem; margin-bottom: 1.25rem; background: #fff;">
           <h4 style="margin: 0 0 1rem 0; font-family: 'IBM Plex Mono', monospace;">STAT CARD #${i + 1}</h4>
           <div class="grid-2">
@@ -606,7 +606,7 @@
       registry.homepage.hero.subhead = document.getElementById('hero-subhead').value.trim();
 
       // Collect stats elements
-      registry.homepage.stats = registry.homepage.stats.map((stat, i) => ({
+      registry.homepage.proof_strip = registry.homepage.proof_strip.map((stat, i) => ({
         num: stat.num,
         stat: document.getElementById(`stat-val-${i}`).value.trim(),
         circled: document.getElementById(`stat-circle-${i}`).value === 'true',
