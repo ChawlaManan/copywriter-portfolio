@@ -191,8 +191,27 @@
 </head>
 <body>
 
-  <div class="admin-container">
-    <div class="admin-header">
+  <!-- 1. LOGIN PANEL (Visible when not authenticated) -->
+  <div id="login-panel" style="display: block; max-width: 400px; margin: 8rem auto; padding: 2.5rem; border: 2px solid #1c1c1c; background: #faf8f5; box-shadow: 6px 6px 0px #1c1c1c; text-align: center;">
+    <h2 style="font-family: 'Lora', serif; font-size: 2rem; font-weight: 700; margin: 0 0 0.5rem 0;">CMS Administration</h2>
+    <div style="font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; color: #7d8b96; margin-bottom: 2rem; letter-spacing: 1px;">AUTHENTICATION REQUIRED</div>
+    
+    <div class="form-group" style="text-align: left;">
+      <label for="login-password">CMS Password</label>
+      <input type="password" id="login-password" placeholder="Enter ADMIN_PASSWORD" style="font-family: monospace;">
+    </div>
+    
+    <button class="btn btn-primary" onclick="attemptLogin()" style="width: 100%; margin: 1.5rem 0 0 0; padding: 0.85rem;">Login to Dashboard</button>
+    <div id="login-error" style="color: #8c2f2f; font-family: 'IBM Plex Mono', monospace; font-size: 0.8rem; margin-top: 1rem; text-align: left; display: none;"></div>
+    
+    <div style="margin-top: 2rem; border-top: 1px dashed rgba(28,28,28,0.15); padding-top: 1rem; font-size: 0.8rem;">
+      <a href="index.html" style="color: #7d8b96; text-decoration: none;">← Back to Portfolio</a>
+    </div>
+  </div>
+
+  <!-- 2. WORKSPACE PANEL (Hidden by default, shown upon successful login) -->
+  <div class="admin-container" id="workspace-panel" style="display: none;">
+    <div class="admin-header" id="admin-header">
       <div>
         <h1 class="admin-title">Portfolio CMS</h1>
         <div class="admin-subtitle">DATABASE-BACKED REGISTRY MANAGER</div>
@@ -280,17 +299,10 @@
       </div>
     </div>
 
-    <!-- Save & Authentication Footer -->
-    <div style="border-top: 2px solid #1c1c1c; margin-top: 3rem; padding-top: 2rem;">
-      <div class="grid-2" style="align-items: flex-end;">
-        <div class="form-group" style="margin: 0;">
-          <label for="admin-password" style="color: #e0533c;">CMS Administration Password</label>
-          <input type="password" id="admin-password" placeholder="Enter Vercel ADMIN_PASSWORD">
-        </div>
-        <div>
-          <button class="btn btn-primary" onclick="savePortfolioChanges()" style="width: 100%; margin: 0; padding: 0.85rem;">Save Changes to Vercel Database</button>
-        </div>
-      </div>
+    <!-- Save & Logout Footer -->
+    <div style="border-top: 2px solid #1c1c1c; margin-top: 3rem; padding-top: 2rem; display: flex; justify-content: space-between; align-items: center;">
+      <button class="btn btn-secondary" onclick="logoutCMS()" style="margin: 0; padding: 0.75rem 1.5rem;">Logout</button>
+      <button class="btn btn-primary" onclick="savePortfolioChanges()" style="margin: 0; padding: 0.75rem 2rem;">Save Changes to Vercel Database</button>
     </div>
 
     <div class="console-box" id="console-log">Ready. Loaded local state configurations.</div>
@@ -382,8 +394,25 @@
   <script>
     let registry = null;
 
-    // Load configurations on entry
+    // Check authentication status on entry
     document.addEventListener('DOMContentLoaded', () => {
+      const storedPassword = sessionStorage.getItem('cms_admin_password');
+      if (storedPassword) {
+        showWorkspace();
+      } else {
+        showLogin();
+      }
+    });
+
+    function showLogin() {
+      document.getElementById('login-panel').style.display = 'block';
+      document.getElementById('workspace-panel').style.display = 'none';
+    }
+
+    function showWorkspace() {
+      document.getElementById('login-panel').style.display = 'none';
+      document.getElementById('workspace-panel').style.display = 'block';
+      
       log('Fetching current registry content...');
       fetch('/api/get-content')
         .then(res => {
@@ -402,7 +431,45 @@
         .catch(err => {
           log('Error loading registry data: ' + err.message, true);
         });
-    });
+    }
+
+    function attemptLogin() {
+      const password = document.getElementById('login-password').value;
+      const errorDiv = document.getElementById('login-error');
+      
+      if (!password) {
+        errorDiv.textContent = 'Please enter a password.';
+        errorDiv.style.display = 'block';
+        return;
+      }
+
+      errorDiv.style.display = 'none';
+      
+      fetch('/api/verify-login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password })
+      })
+      .then(async res => {
+        const data = await res.json();
+        if (res.status === 200) {
+          sessionStorage.setItem('cms_admin_password', password);
+          showWorkspace();
+        } else {
+          errorDiv.textContent = data.message || 'Verification failed.';
+          errorDiv.style.display = 'block';
+        }
+      })
+      .catch(err => {
+        errorDiv.textContent = 'Connection error verifying credentials.';
+        errorDiv.style.display = 'block';
+      });
+    }
+
+    function logoutCMS() {
+      sessionStorage.removeItem('cms_admin_password');
+      window.location.reload();
+    }
 
     // Populate UI Forms
     function populateForm() {
@@ -588,10 +655,10 @@
 
     // Save all local registry configurations back to Vercel Database
     function savePortfolioChanges() {
-      const password = document.getElementById('admin-password').value;
+      const password = sessionStorage.getItem('cms_admin_password');
       if (!password) {
-        log('Error: CMS Password must be entered to save changes!', true);
-        alert('Please enter your Vercel ADMIN_PASSWORD.');
+        log('Error: Session expired. Please log in again.', true);
+        logoutCMS();
         return;
       }
 
