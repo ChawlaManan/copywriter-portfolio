@@ -37,6 +37,9 @@ document.addEventListener('DOMContentLoaded', () => {
  */
 function renderHomePage(data) {
   // Render Hero
+  if (data.homepage.hero.tag && document.getElementById('hero-tag')) {
+    document.getElementById('hero-tag').textContent = data.homepage.hero.tag;
+  }
   const rawHeadline = data.homepage.hero.headline;
   // Parse brackets [words] into whiteboard style inline SVG highlights
   const parsedHeadline = rawHeadline.replace(/\[(.*?)\]/g, `
@@ -48,54 +51,151 @@ function renderHomePage(data) {
   document.getElementById('hero-headline').innerHTML = parsedHeadline;
   document.getElementById('hero-subhead').textContent = data.homepage.hero.subhead;
 
+  if (data.homepage.hero.primary_btn_text && document.getElementById('hero-btn-primary')) {
+    document.getElementById('hero-btn-primary').textContent = data.homepage.hero.primary_btn_text;
+  }
+  if (data.homepage.hero.secondary_btn_text && document.getElementById('hero-btn-secondary')) {
+    document.getElementById('hero-btn-secondary').textContent = data.homepage.hero.secondary_btn_text;
+  }
+
+  // Render Capabilities Header
+  if (data.homepage.capabilities_header) {
+    if (document.getElementById('cap-tag')) document.getElementById('cap-tag').textContent = data.homepage.capabilities_header.tag;
+    if (document.getElementById('cap-title-text')) document.getElementById('cap-title-text').textContent = data.homepage.capabilities_header.title;
+    if (document.getElementById('cap-subtitle')) document.getElementById('cap-subtitle').textContent = data.homepage.capabilities_header.subtitle;
+  }
+
   // Render Capabilities
   const capabilitiesContainer = document.getElementById('capabilities-container');
-  capabilitiesContainer.innerHTML = data.homepage.capabilities.map(cap => `
-    <div class="capability-card">
-      <span class="capability-num">${cap.num}</span>
-      <h3>${cap.title}</h3>
-      <p>${cap.desc}</p>
-    </div>
-  `).join('');
+  if (capabilitiesContainer) {
+    capabilitiesContainer.innerHTML = data.homepage.capabilities.map(cap => `
+      <div class="capability-card">
+        <span class="capability-num">${cap.num}</span>
+        <h3>${cap.title}</h3>
+        <p>${cap.desc}</p>
+      </div>
+    `).join('');
+  }
 
   // Render Proof Strip (Stats Banner)
   const proofContainer = document.getElementById('proof-strip-container');
-  proofContainer.innerHTML = data.homepage.proof_strip.map(item => {
-    let statHtml = item.stat;
-    if (item.circled) {
-      statHtml = `
-        <span style="position: relative; display: inline-block; padding-right: 5px;">
-          ${item.stat}
-          <svg style="position: absolute; top: -5%; left: -10%; width: 120%; height: 110%; pointer-events: none;" viewBox="0 0 100 100" fill="none"><path d="M50,5 C78,5 95,25 93,50 C91,72 72,92 50,92 C28,92 8,72 6,48 C4,24 25,8 55,9" stroke="var(--ink-accent)" stroke-width="3" stroke-linecap="round"/></svg>
-        </span>
+  if (proofContainer) {
+    proofContainer.innerHTML = data.homepage.proof_strip.map(item => {
+      let statHtml = item.stat;
+      if (item.circled) {
+        statHtml = `
+          <span style="position: relative; display: inline-block; padding-right: 5px;">
+            ${item.stat}
+            <svg style="position: absolute; top: -5%; left: -10%; width: 120%; height: 110%; pointer-events: none;" viewBox="0 0 100 100" fill="none"><path d="M50,5 C78,5 95,25 93,50 C91,72 72,92 50,92 C28,92 8,72 6,48 C4,24 25,8 55,9" stroke="var(--ink-accent)" stroke-width="3" stroke-linecap="round"/></svg>
+          </span>
+        `;
+      }
+      return `
+        <a href="proof-of-work.html?project=${item.id}" class="proof-item">
+          <div class="stat-number">${statHtml}</div>
+          <div class="stat-description">${item.desc}</div>
+          <span class="stat-link">Read case study details</span>
+        </a>
       `;
+    }).join('');
+  }
+
+  // Render Industries Served Row
+  if (data.homepage.industries_served) {
+    if (document.getElementById('industries-served-title')) {
+      document.getElementById('industries-served-title').textContent = data.homepage.industries_served.title;
     }
-    return `
-      <a href="proof-of-work.html?project=${item.id}" class="proof-item">
-        <div class="stat-number">${statHtml}</div>
-        <div class="stat-description">${item.desc}</div>
-        <span class="stat-link">Read case study details</span>
-      </a>
-    `;
-  }).join('');
+    const tagsContainer = document.getElementById('industries-served-tags');
+    if (tagsContainer && data.homepage.industries_served.tags) {
+      tagsContainer.innerHTML = data.homepage.industries_served.tags.map((tag, idx) => `
+        <span class="industry-tag ${idx % 3 === 1 ? 'accent-tag' : ''}">${tag}</span>
+      `).join('');
+    }
+  }
 
   // Render About Paragraphs
   const aboutContainer = document.getElementById('about-content-container');
-  aboutContainer.innerHTML = `
-    <h2 style="position: relative; display: inline-block;">
-      ${data.homepage.about.headline}
-      <svg style="position: absolute; bottom: -8px; left: 0; width: 60%; height: 8px; pointer-events: none;" viewBox="0 0 100 10" preserveAspectRatio="none"><path d="M0,5 Q50,2 100,5" stroke="var(--ink-accent-blue)" stroke-width="3" fill="none" stroke-linecap="round"/></svg>
-    </h2>
-    <p style="margin-top: 1.5rem;">${data.homepage.about.p1}</p>
-    <p>${data.homepage.about.p2}</p>
-    <p>${data.homepage.about.p3}</p>
-  `;
+  if (aboutContainer) {
+    aboutContainer.innerHTML = `
+      <h2 style="position: relative; display: inline-block;">
+        ${data.homepage.about.headline}
+        <svg style="position: absolute; bottom: -8px; left: 0; width: 60%; height: 8px; pointer-events: none;" viewBox="0 0 100 10" preserveAspectRatio="none"><path d="M0,5 Q50,2 100,5" stroke="var(--ink-accent-blue)" stroke-width="3" fill="none" stroke-linecap="round"/></svg>
+      </h2>
+      <p style="margin-top: 1.5rem;">${data.homepage.about.p1}</p>
+      <p>${data.homepage.about.p2}</p>
+      <p>${data.homepage.about.p3}</p>
+    `;
+  }
+
+  // Render Process Timeline (How We Work)
+  const processContainer = document.getElementById('process-timeline-container');
+  if (processContainer && data.homepage.process) {
+    processContainer.innerHTML = `
+      <h3 style="font-family: var(--font-sans); text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px; color: var(--text-muted); margin-bottom: -0.5rem;">${data.homepage.process.tag}</h3>
+      ${data.homepage.process.steps.map(step => `
+        <div class="process-step">
+          <div class="step-num">${step.num}</div>
+          <div class="step-details">
+            <h4>${step.title}</h4>
+            <p>${step.desc}</p>
+          </div>
+        </div>
+      `).join('')}
+    `;
+  }
+
+  // Render Contact Info Block
+  const contactInfoContainer = document.getElementById('contact-info-container');
+  if (contactInfoContainer && data.homepage.contact_section) {
+    contactInfoContainer.innerHTML = `
+      <div>
+        <h2>${data.homepage.contact_section.headline}</h2>
+        <p>${data.homepage.contact_section.subtext}</p>
+      </div>
+      <div>
+        <span style="font-family: var(--font-hand); color: var(--ink-accent); font-size: 1.35rem; display: block; transform: rotate(-1deg); margin-bottom: 0.25rem;">${data.homepage.contact_section.email_prompt}</span>
+        <a href="mailto:${data.personal.email}" class="direct-email">${data.personal.email}</a>
+      </div>
+    `;
+  }
+
+  // Render Footer Elements
+  if (data.personal) {
+    if (document.getElementById('footer-logo')) document.getElementById('footer-logo').textContent = data.personal.footer_logo || 'MANAN | CONTENT STRATEGIST';
+    if (document.getElementById('footer-subtext')) document.getElementById('footer-subtext').textContent = data.personal.footer_subtext || '© 2026 Gurgaon, India. Built with structured logic.';
+  }
 }
 
 /**
  * 2. Render Proof of Work Case Studies & Campaigns Dynamically
  */
 function renderProofOfWorkPage(data) {
+  // Render Proof of Work Hero Text
+  if (data.proof_of_work_page) {
+    if (document.getElementById('pow-subtext')) {
+      document.getElementById('pow-subtext').textContent = data.proof_of_work_page.subtext;
+    }
+    
+    // Render Campaign Cards Header
+    if (data.proof_of_work_page.campaign_cards_header) {
+      if (document.getElementById('pow-cards-tag')) document.getElementById('pow-cards-tag').textContent = data.proof_of_work_page.campaign_cards_header.tag;
+      if (document.getElementById('pow-cards-title')) document.getElementById('pow-cards-title').textContent = data.proof_of_work_page.campaign_cards_header.title;
+      if (document.getElementById('pow-cards-subtitle')) document.getElementById('pow-cards-subtitle').textContent = data.proof_of_work_page.campaign_cards_header.subtitle;
+    }
+
+    // Render Bottom CTA
+    if (data.proof_of_work_page.cta) {
+      if (document.getElementById('pow-cta-headline')) document.getElementById('pow-cta-headline').textContent = data.proof_of_work_page.cta.headline;
+      if (document.getElementById('pow-cta-subhead')) document.getElementById('pow-cta-subhead').textContent = data.proof_of_work_page.cta.subhead;
+      if (document.getElementById('pow-cta-btn')) document.getElementById('pow-cta-btn').textContent = data.proof_of_work_page.cta.btn_text;
+    }
+  }
+
+  // Render Footer Elements
+  if (data.personal) {
+    if (document.getElementById('footer-logo')) document.getElementById('footer-logo').textContent = data.personal.footer_logo || 'MANAN | CONTENT STRATEGIST';
+    if (document.getElementById('footer-subtext')) document.getElementById('footer-subtext').textContent = data.personal.footer_subtext || '© 2026 Gurgaon, India. Built with structured logic.';
+  }
   // Render Full Case Studies (Tier 1)
   const caseStudiesContainer = document.getElementById('pow-case-studies-container');
   const fullProjects = data.projects.filter(p => p.type === 'full');

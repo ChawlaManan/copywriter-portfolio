@@ -29,11 +29,11 @@
   <!-- Proof of Work Hero -->
   <main class="container">
     <section class="pow-hero fade-in">
-      <h1 style="position: relative; display: inline-block;">
+      <h1 id="pow-title" style="position: relative; display: inline-block;">
         Proof of Work
         <svg style="position: absolute; bottom: -8px; left: 0; width: 45%; height: 10px; pointer-events: none;" viewBox="0 0 100 10" preserveAspectRatio="none"><path d="M0,5 Q50,9 100,5" stroke="var(--ink-accent)" stroke-width="4" fill="none" stroke-linecap="round"/></svg>
       </h1>
-      <p style="margin-top: 1rem; color: var(--text-muted);">
+      <p id="pow-subtext" style="margin-top: 1rem; color: var(--text-muted);">
         Every project below was treated as a business objective, not a writing exercise. Toggle the full case studies to view the diagnosis, strategic approach, and before/after copies.
       </p>
     </section>
@@ -64,10 +64,10 @@
     <!-- Section Title for Project Cards -->
     <div class="section-title-wrapper fade-in" style="margin-bottom: 2rem;">
       <h2 class="section-title">
-        <span class="hand-drawn-label">[ Campaign Cards ]</span>
-        Focused Engagements & Copy Assets
+        <span class="hand-drawn-label" id="pow-cards-tag">[ Campaign Cards ]</span>
+        <span id="pow-cards-title">Focused Engagements & Copy Assets</span>
       </h2>
-      <span class="project-count" style="font-family: var(--font-hand); font-size: 1.25rem;">Tactical positioning & copy execution</span>
+      <span class="project-count" id="pow-cards-subtitle" style="font-family: var(--font-hand); font-size: 1.25rem;">Tactical positioning & copy execution</span>
     </div>
 
     <!-- Tier 2: Project Cards Grid (smaller layout) -->
@@ -76,12 +76,12 @@
     </section>
 
     <!-- Closing CTA Area -->
-    <section class="whiteboard-card fade-in" style="margin: 5rem 0; text-align: center; background-color: var(--note-bg);">
-      <h2 style="font-size: 2rem; margin-bottom: 1rem; color: var(--ink-accent);">Why isn't your content turning into customers?</h2>
-      <p style="max-width: 700px; margin: 0 auto 1.5rem auto; font-size: 1.05rem; line-height: 1.5;">
+    <section class="whiteboard-card fade-in" id="pow-cta-container" style="margin: 5rem 0; text-align: center; background-color: var(--note-bg);">
+      <h2 id="pow-cta-headline" style="font-size: 2rem; margin-bottom: 1rem; color: var(--ink-accent);">Why isn't your content turning into customers?</h2>
+      <p id="pow-cta-subhead" style="max-width: 700px; margin: 0 auto 1.5rem auto; font-size: 1.05rem; line-height: 1.5;">
         Most content problems aren't a writing problem. They're a strategy gap: wrong audience, wrong platform mix, or no clear line from content to conversion. In one session, we'll find exactly where yours is leaking value.
       </p>
-      <a href="index.html#contact" class="btn btn-primary">Let's Talk</a>
+      <a href="index.html#contact" class="btn btn-primary" id="pow-cta-btn">Let's Talk</a>
     </section>
 
   </main>
@@ -89,8 +89,8 @@
   <!-- Footer -->
   <footer>
     <div class="container">
-      <div class="footer-logo">MANAN | CONTENT STRATEGIST</div>
-      <p style="font-size: 0.85rem; margin-top: 0.5rem;">© 2026 Gurgaon, India. Built with structured logic.</p>
+      <div class="footer-logo" id="footer-logo">MANAN | CONTENT STRATEGIST</div>
+      <p id="footer-subtext" style="font-size: 0.85rem; margin-top: 0.5rem;">© 2026 Gurgaon, India. Built with structured logic.</p>
     </div>
   </footer>
 

@@ -222,7 +222,10 @@
     <!-- Navigation Tabs -->
     <div class="nav-tabs">
       <button class="tab-btn active" onclick="switchTab('profile')">PROFILE & HERO</button>
-      <button class="tab-btn" onclick="switchTab('stats')">STATS & ABOUT</button>
+      <button class="tab-btn" onclick="switchTab('capabilities')">CAPABILITIES</button>
+      <button class="tab-btn" onclick="switchTab('process')">PROCESS & INDUSTRIES</button>
+      <button class="tab-btn" onclick="switchTab('about')">ABOUT & CONTACT</button>
+      <button class="tab-btn" onclick="switchTab('pow')">POW PAGE COPY</button>
       <button class="tab-btn" onclick="switchTab('projects')">PROJECTS INDEX</button>
     </div>
 
@@ -249,8 +252,22 @@
           <input type="text" id="profile-tagline" placeholder="e.g. Senior Copywriter & Content Strategist">
         </div>
       </div>
+      <div class="grid-2">
+        <div class="form-group">
+          <label for="footer-logo-input">Footer Brand Logo Text</label>
+          <input type="text" id="footer-logo-input" placeholder="e.g. MANAN | CONTENT STRATEGIST">
+        </div>
+        <div class="form-group">
+          <label for="footer-subtext-input">Footer Copyright Statement</label>
+          <input type="text" id="footer-subtext-input" placeholder="e.g. © 2026 Gurgaon, India. Built with structured logic.">
+        </div>
+      </div>
       
-      <h3 style="font-family: Lora, serif; font-size: 1.5rem; margin-top: 2rem; margin-bottom: 1.5rem;">Hero Section Headline</h3>
+      <h3 style="font-family: Lora, serif; font-size: 1.5rem; margin-top: 2rem; margin-bottom: 1.5rem;">Hero Section Headline & CTAs</h3>
+      <div class="form-group">
+        <label for="hero-tag-input">Hero Tag Label</label>
+        <input type="text" id="hero-tag-input" placeholder="e.g. [ About Me ]">
+      </div>
       <div class="form-group">
         <label for="hero-headline">Headline (Use [word] for red marker underlines)</label>
         <textarea id="hero-headline" style="min-height: 80px;"></textarea>
@@ -259,16 +276,67 @@
         <label for="hero-subhead">Hero Subhead / Summary Paragraph</label>
         <textarea id="hero-subhead" style="min-height: 80px;"></textarea>
       </div>
+      <div class="grid-2">
+        <div class="form-group">
+          <label for="hero-btn-p-input">Primary Button Text</label>
+          <input type="text" id="hero-btn-p-input" placeholder="e.g. See the work">
+        </div>
+        <div class="form-group">
+          <label for="hero-btn-s-input">Secondary Button Text</label>
+          <input type="text" id="hero-btn-s-input" placeholder="e.g. Get in touch">
+        </div>
+      </div>
     </div>
 
-    <!-- TAB 2: Stats & About -->
-    <div id="tab-stats" class="tab-content">
-      <h3 style="margin-top: 0; font-family: Lora, serif; font-size: 1.5rem; margin-bottom: 1.5rem;">Whiteboard Performance Statistics</h3>
-      <div id="stats-container">
-        <!-- Dyn Loaded -->
+    <!-- TAB 2: Capabilities -->
+    <div id="tab-capabilities" class="tab-content">
+      <h3 style="margin-top: 0; font-family: Lora, serif; font-size: 1.5rem; margin-bottom: 1.5rem;">Capabilities Section Headers</h3>
+      <div class="grid-3">
+        <div class="form-group">
+          <label for="cap-tag-input">Tag Label</label>
+          <input type="text" id="cap-tag-input" placeholder="e.g. [ Capabilities ]">
+        </div>
+        <div class="form-group">
+          <label for="cap-title-input">Section Title</label>
+          <input type="text" id="cap-title-input" placeholder="e.g. Core Strategic Directives">
+        </div>
+        <div class="form-group">
+          <label for="cap-sub-input">Hand-Drawn Subtitle</label>
+          <input type="text" id="cap-sub-input" placeholder="e.g. Diagnose first, execute second">
+        </div>
       </div>
 
-      <h3 style="font-family: Lora, serif; font-size: 1.5rem; margin-top: 2rem; margin-bottom: 1.5rem;">About Me & Framework</h3>
+      <h3 style="font-family: Lora, serif; font-size: 1.5rem; margin-top: 2rem; margin-bottom: 1.5rem;">Strategic Directives (4 Cards)</h3>
+      <div id="capabilities-admin-container">
+        <!-- Dynamically Loaded -->
+      </div>
+    </div>
+
+    <!-- TAB 3: Process & Industries -->
+    <div id="tab-process" class="tab-content">
+      <h3 style="margin-top: 0; font-family: Lora, serif; font-size: 1.5rem; margin-bottom: 1.5rem;">How We Work (Process Timeline)</h3>
+      <div class="form-group">
+        <label for="process-tag-input">Process Section Header Tag</label>
+        <input type="text" id="process-tag-input" placeholder="e.g. [ HOW WE WORK ]">
+      </div>
+      <div id="process-steps-admin-container">
+        <!-- Dynamically Loaded -->
+      </div>
+
+      <h3 style="font-family: Lora, serif; font-size: 1.5rem; margin-top: 2rem; margin-bottom: 1.5rem;">Industries Served & Message Alignment</h3>
+      <div class="form-group">
+        <label for="ind-title-input">Industries Section Title</label>
+        <input type="text" id="ind-title-input" placeholder="e.g. INDUSTRIES SERVED & MESSAGE ALIGNMENT">
+      </div>
+      <div class="form-group">
+        <label for="ind-tags-input">Industry Tags (Comma Separated)</label>
+        <input type="text" id="ind-tags-input" placeholder="Tech/SaaS, Finance/B2B, Healthcare/D2C, FMCG, Fashion/Lifestyle, E-Commerce">
+      </div>
+    </div>
+
+    <!-- TAB 4: About & Contact -->
+    <div id="tab-about" class="tab-content">
+      <h3 style="margin-top: 0; font-family: Lora, serif; font-size: 1.5rem; margin-bottom: 1.5rem;">About Me Framework</h3>
       <div class="form-group">
         <label for="about-headline">About Headline</label>
         <input type="text" id="about-headline">
@@ -285,9 +353,67 @@
         <label for="about-p3">Paragraph 3</label>
         <textarea id="about-p3"></textarea>
       </div>
+
+      <h3 style="font-family: Lora, serif; font-size: 1.5rem; margin-top: 2rem; margin-bottom: 1.5rem;">Whiteboard Performance Statistics</h3>
+      <div id="stats-container">
+        <!-- Dyn Loaded -->
+      </div>
+
+      <h3 style="font-family: Lora, serif; font-size: 1.5rem; margin-top: 2rem; margin-bottom: 1.5rem;">Contact Section Copy</h3>
+      <div class="form-group">
+        <label for="contact-headline-input">Contact Section Headline</label>
+        <input type="text" id="contact-headline-input" placeholder="e.g. Let's build a structured message.">
+      </div>
+      <div class="form-group">
+        <label for="contact-subtext-input">Contact Paragraph Description</label>
+        <textarea id="contact-subtext-input" style="min-height: 70px;"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="contact-prompt-input">Direct Email Subprompt</label>
+        <input type="text" id="contact-prompt-input" placeholder="e.g. Or drop an email directly:">
+      </div>
     </div>
 
-    <!-- TAB 3: Projects Index -->
+    <!-- TAB 5: Proof of Work Page Copy -->
+    <div id="tab-pow" class="tab-content">
+      <h3 style="margin-top: 0; font-family: Lora, serif; font-size: 1.5rem; margin-bottom: 1.5rem;">Proof of Work Page Header</h3>
+      <div class="form-group">
+        <label for="pow-subtext-input">Page Description Subtext</label>
+        <textarea id="pow-subtext-input" style="min-height: 80px;"></textarea>
+      </div>
+
+      <h3 style="font-family: Lora, serif; font-size: 1.5rem; margin-top: 2rem; margin-bottom: 1.5rem;">Campaign Cards Section Title</h3>
+      <div class="grid-3">
+        <div class="form-group">
+          <label for="pow-cards-tag-input">Header Tag</label>
+          <input type="text" id="pow-cards-tag-input" placeholder="e.g. [ Campaign Cards ]">
+        </div>
+        <div class="form-group">
+          <label for="pow-cards-title-input">Section Title</label>
+          <input type="text" id="pow-cards-title-input" placeholder="e.g. Focused Engagements & Copy Assets">
+        </div>
+        <div class="form-group">
+          <label for="pow-cards-sub-input">Hand-Drawn Subtitle</label>
+          <input type="text" id="pow-cards-sub-input" placeholder="e.g. Tactical positioning & copy execution">
+        </div>
+      </div>
+
+      <h3 style="font-family: Lora, serif; font-size: 1.5rem; margin-top: 2rem; margin-bottom: 1.5rem;">Closing CTA Section</h3>
+      <div class="form-group">
+        <label for="pow-cta-title-input">CTA Headline</label>
+        <input type="text" id="pow-cta-title-input" placeholder="e.g. Why isn't your content turning into customers?">
+      </div>
+      <div class="form-group">
+        <label for="pow-cta-subhead-input">CTA Subhead Description</label>
+        <textarea id="pow-cta-subhead-input" style="min-height: 80px;"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="pow-cta-btn-input">CTA Button Text</label>
+        <input type="text" id="pow-cta-btn-input" placeholder="e.g. Let's Talk">
+      </div>
+    </div>
+
+    <!-- TAB 6: Projects Index -->
     <div id="tab-projects" class="tab-content">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
         <h3 style="margin: 0; font-family: Lora, serif; font-size: 1.5rem;">Projects & Case Studies</h3>
@@ -475,18 +601,104 @@
     function populateForm() {
       if (!registry) return;
 
+      // Ensure defaults for optional nested schemas
+      if (!registry.personal.footer_logo) registry.personal.footer_logo = 'MANAN | CONTENT STRATEGIST';
+      if (!registry.personal.footer_subtext) registry.personal.footer_subtext = '© 2026 Gurgaon, India. Built with structured logic.';
+
+      if (!registry.homepage.hero.tag) registry.homepage.hero.tag = '[ About Me ]';
+      if (!registry.homepage.hero.primary_btn_text) registry.homepage.hero.primary_btn_text = 'See the work';
+      if (!registry.homepage.hero.secondary_btn_text) registry.homepage.hero.secondary_btn_text = 'Get in touch';
+
+      if (!registry.homepage.capabilities_header) {
+        registry.homepage.capabilities_header = { tag: '[ Capabilities ]', title: 'Core Strategic Directives', subtitle: 'Diagnose first, execute second' };
+      }
+      if (!registry.homepage.industries_served) {
+        registry.homepage.industries_served = { title: 'INDUSTRIES SERVED & MESSAGE ALIGNMENT', tags: ['Tech/SaaS', 'Finance/B2B', 'Healthcare/D2C', 'FMCG', 'Fashion/Lifestyle', 'E-Commerce'] };
+      }
+      if (!registry.homepage.process) {
+        registry.homepage.process = { tag: '[ HOW WE WORK ]', steps: [] };
+      }
+      if (!registry.homepage.contact_section) {
+        registry.homepage.contact_section = { headline: "Let's build a structured message.", subtext: 'Inquire about project availability...', email_prompt: 'Or drop an email directly:' };
+      }
+      if (!registry.proof_of_work_page) {
+        registry.proof_of_work_page = { title: 'Proof of Work', subtext: 'Every project below...', campaign_cards_header: { tag: '[ Campaign Cards ]', title: 'Focused Engagements & Copy Assets', subtitle: 'Tactical positioning & copy execution' }, cta: { headline: "Why isn't your content turning into customers?", subhead: "Most content problems...", btn_text: "Let's Talk" } };
+      }
+
       // Tab 1: Profile & Hero
       document.getElementById('profile-name').value = registry.personal.name || '';
       document.getElementById('profile-email').value = registry.personal.email || '';
       document.getElementById('profile-location').value = registry.personal.location || '';
       document.getElementById('profile-tagline').value = registry.personal.tagline || '';
+      document.getElementById('footer-logo-input').value = registry.personal.footer_logo || '';
+      document.getElementById('footer-subtext-input').value = registry.personal.footer_subtext || '';
       
+      document.getElementById('hero-tag-input').value = registry.homepage.hero.tag || '';
       document.getElementById('hero-headline').value = registry.homepage.hero.headline || '';
       document.getElementById('hero-subhead').value = registry.homepage.hero.subhead || '';
+      document.getElementById('hero-btn-p-input').value = registry.homepage.hero.primary_btn_text || '';
+      document.getElementById('hero-btn-s-input').value = registry.homepage.hero.secondary_btn_text || '';
 
-      // Tab 2: Stats & About
+      // Tab 2: Capabilities
+      document.getElementById('cap-tag-input').value = registry.homepage.capabilities_header.tag || '';
+      document.getElementById('cap-title-input').value = registry.homepage.capabilities_header.title || '';
+      document.getElementById('cap-sub-input').value = registry.homepage.capabilities_header.subtitle || '';
+
+      const capContainer = document.getElementById('capabilities-admin-container');
+      capContainer.innerHTML = (registry.homepage.capabilities || []).map((cap, i) => `
+        <div style="border: 1px solid #1c1c1c; padding: 1.25rem; margin-bottom: 1.25rem; background: #fff;">
+          <h4 style="margin: 0 0 1rem 0; font-family: 'IBM Plex Mono', monospace;">CAPABILITY DIRECTIVE #${i + 1}</h4>
+          <div class="grid-2">
+            <div class="form-group">
+              <label>Number Vector Label</label>
+              <input type="text" id="cap-num-${i}" value="${cap.num || ''}" placeholder="e.g. 01/">
+            </div>
+            <div class="form-group">
+              <label>Directive Title</label>
+              <input type="text" id="cap-title-${i}" value="${cap.title || ''}">
+            </div>
+          </div>
+          <div class="form-group" style="margin: 0;">
+            <label>Directive Description</label>
+            <textarea id="cap-desc-${i}" style="min-height: 50px;">${cap.desc || ''}</textarea>
+          </div>
+        </div>
+      `).join('');
+
+      // Tab 3: Process & Industries
+      document.getElementById('process-tag-input').value = registry.homepage.process.tag || '[ HOW WE WORK ]';
+      const processAdminContainer = document.getElementById('process-steps-admin-container');
+      processAdminContainer.innerHTML = (registry.homepage.process.steps || []).map((step, i) => `
+        <div style="border: 1px solid #1c1c1c; padding: 1.25rem; margin-bottom: 1.25rem; background: #fff;">
+          <h4 style="margin: 0 0 1rem 0; font-family: 'IBM Plex Mono', monospace;">PROCESS STEP #${i + 1}</h4>
+          <div class="grid-2">
+            <div class="form-group">
+              <label>Step Number</label>
+              <input type="text" id="proc-num-${i}" value="${step.num || (i + 1)}" placeholder="e.g. 1">
+            </div>
+            <div class="form-group">
+              <label>Step Title</label>
+              <input type="text" id="proc-title-${i}" value="${step.title || ''}">
+            </div>
+          </div>
+          <div class="form-group" style="margin: 0;">
+            <label>Step Explanation</label>
+            <textarea id="proc-desc-${i}" style="min-height: 50px;">${step.desc || ''}</textarea>
+          </div>
+        </div>
+      `).join('');
+
+      document.getElementById('ind-title-input').value = registry.homepage.industries_served.title || '';
+      document.getElementById('ind-tags-input').value = (registry.homepage.industries_served.tags || []).join(', ');
+
+      // Tab 4: About & Contact
+      document.getElementById('about-headline').value = registry.homepage.about.headline || '';
+      document.getElementById('about-p1').value = registry.homepage.about.p1 || '';
+      document.getElementById('about-p2').value = registry.homepage.about.p2 || '';
+      document.getElementById('about-p3').value = registry.homepage.about.p3 || '';
+
       const statsContainer = document.getElementById('stats-container');
-      statsContainer.innerHTML = registry.homepage.proof_strip.map((stat, i) => `
+      statsContainer.innerHTML = (registry.homepage.proof_strip || []).map((stat, i) => `
         <div style="border: 1px solid #1c1c1c; padding: 1.25rem; margin-bottom: 1.25rem; background: #fff;">
           <h4 style="margin: 0 0 1rem 0; font-family: 'IBM Plex Mono', monospace;">STAT CARD #${i + 1}</h4>
           <div class="grid-2">
@@ -509,12 +721,21 @@
         </div>
       `).join('');
 
-      document.getElementById('about-headline').value = registry.homepage.about.headline || '';
-      document.getElementById('about-p1').value = registry.homepage.about.p1 || '';
-      document.getElementById('about-p2').value = registry.homepage.about.p2 || '';
-      document.getElementById('about-p3').value = registry.homepage.about.p3 || '';
+      document.getElementById('contact-headline-input').value = registry.homepage.contact_section.headline || '';
+      document.getElementById('contact-subtext-input').value = registry.homepage.contact_section.subtext || '';
+      document.getElementById('contact-prompt-input').value = registry.homepage.contact_section.email_prompt || '';
 
-      // Tab 3: Projects List
+      // Tab 5: POW Page Copy
+      document.getElementById('pow-subtext-input').value = registry.proof_of_work_page.subtext || '';
+      document.getElementById('pow-cards-tag-input').value = registry.proof_of_work_page.campaign_cards_header.tag || '';
+      document.getElementById('pow-cards-title-input').value = registry.proof_of_work_page.campaign_cards_header.title || '';
+      document.getElementById('pow-cards-sub-input').value = registry.proof_of_work_page.campaign_cards_header.subtitle || '';
+
+      document.getElementById('pow-cta-title-input').value = registry.proof_of_work_page.cta.headline || '';
+      document.getElementById('pow-cta-subhead-input').value = registry.proof_of_work_page.cta.subhead || '';
+      document.getElementById('pow-cta-btn-input').value = registry.proof_of_work_page.cta.btn_text || '';
+
+      // Tab 6: Projects List
       renderProjectsList();
     }
 
@@ -662,29 +883,80 @@
         return;
       }
 
-      // Collect profile elements
+      // 1. Collect Tab 1: Profile, Hero & Footer
       registry.personal.name = document.getElementById('profile-name').value.trim();
       registry.personal.email = document.getElementById('profile-email').value.trim();
       registry.personal.location = document.getElementById('profile-location').value.trim();
       registry.personal.tagline = document.getElementById('profile-tagline').value.trim();
+      registry.personal.footer_logo = document.getElementById('footer-logo-input').value.trim();
+      registry.personal.footer_subtext = document.getElementById('footer-subtext-input').value.trim();
 
-      // Collect hero elements
+      registry.homepage.hero.tag = document.getElementById('hero-tag-input').value.trim();
       registry.homepage.hero.headline = document.getElementById('hero-headline').value.trim();
       registry.homepage.hero.subhead = document.getElementById('hero-subhead').value.trim();
+      registry.homepage.hero.primary_btn_text = document.getElementById('hero-btn-p-input').value.trim();
+      registry.homepage.hero.secondary_btn_text = document.getElementById('hero-btn-s-input').value.trim();
 
-      // Collect stats elements
-      registry.homepage.proof_strip = registry.homepage.proof_strip.map((stat, i) => ({
-        num: stat.num,
+      // 2. Collect Tab 2: Capabilities
+      registry.homepage.capabilities_header = {
+        tag: document.getElementById('cap-tag-input').value.trim(),
+        title: document.getElementById('cap-title-input').value.trim(),
+        subtitle: document.getElementById('cap-sub-input').value.trim()
+      };
+      registry.homepage.capabilities = (registry.homepage.capabilities || []).map((cap, i) => ({
+        num: document.getElementById(`cap-num-${i}`).value.trim(),
+        title: document.getElementById(`cap-title-${i}`).value.trim(),
+        desc: document.getElementById(`cap-desc-${i}`).value.trim()
+      }));
+
+      // 3. Collect Tab 3: Process & Industries
+      registry.homepage.process = {
+        tag: document.getElementById('process-tag-input').value.trim(),
+        steps: (registry.homepage.process.steps || []).map((step, i) => ({
+          num: document.getElementById(`proc-num-${i}`).value.trim(),
+          title: document.getElementById(`proc-title-${i}`).value.trim(),
+          desc: document.getElementById(`proc-desc-${i}`).value.trim()
+        }))
+      };
+      registry.homepage.industries_served = {
+        title: document.getElementById('ind-title-input').value.trim(),
+        tags: document.getElementById('ind-tags-input').value.split(',').map(t => t.trim()).filter(Boolean)
+      };
+
+      // 4. Collect Tab 4: About & Contact
+      registry.homepage.about.headline = document.getElementById('about-headline').value.trim();
+      registry.homepage.about.p1 = document.getElementById('about-p1').value.trim();
+      registry.homepage.about.p2 = document.getElementById('about-p2').value.trim();
+      registry.homepage.about.p3 = document.getElementById('about-p3').value.trim();
+
+      registry.homepage.proof_strip = (registry.homepage.proof_strip || []).map((stat, i) => ({
+        id: stat.id,
         stat: document.getElementById(`stat-val-${i}`).value.trim(),
         circled: document.getElementById(`stat-circle-${i}`).value === 'true',
         desc: document.getElementById(`stat-desc-${i}`).value.trim()
       }));
 
-      // Collect about me elements
-      registry.homepage.about.headline = document.getElementById('about-headline').value.trim();
-      registry.homepage.about.p1 = document.getElementById('about-p1').value.trim();
-      registry.homepage.about.p2 = document.getElementById('about-p2').value.trim();
-      registry.homepage.about.p3 = document.getElementById('about-p3').value.trim();
+      registry.homepage.contact_section = {
+        headline: document.getElementById('contact-headline-input').value.trim(),
+        subtext: document.getElementById('contact-subtext-input').value.trim(),
+        email_prompt: document.getElementById('contact-prompt-input').value.trim()
+      };
+
+      // 5. Collect Tab 5: POW Page Copy
+      registry.proof_of_work_page = {
+        title: 'Proof of Work',
+        subtext: document.getElementById('pow-subtext-input').value.trim(),
+        campaign_cards_header: {
+          tag: document.getElementById('pow-cards-tag-input').value.trim(),
+          title: document.getElementById('pow-cards-title-input').value.trim(),
+          subtitle: document.getElementById('pow-cards-sub-input').value.trim()
+        },
+        cta: {
+          headline: document.getElementById('pow-cta-title-input').value.trim(),
+          subhead: document.getElementById('pow-cta-subhead-input').value.trim(),
+          btn_text: document.getElementById('pow-cta-btn-input').value.trim()
+        }
+      };
 
       log('Sending payload to /api/save-content database...');
 

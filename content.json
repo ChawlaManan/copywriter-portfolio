@@ -3,12 +3,22 @@
     "name": "Manan",
     "email": "chawlamanan@outlook.com",
     "location": "Gurgaon, India",
-    "tagline": "Senior Copywriter & Content Strategist"
+    "tagline": "Senior Copywriter & Content Strategist",
+    "footer_logo": "MANAN | CONTENT STRATEGIST",
+    "footer_subtext": "© 2026 Gurgaon, India. Built with structured logic."
   },
   "homepage": {
     "hero": {
+      "tag": "[ About Me ]",
       "headline": "My journey started from creating affiliate marketing channel to now creating full blown marketing system. I have always focused on serving [clarity with creativity].",
-      "subhead": "I have worked as copywriter, content marketing strategist for 7+ years helping brands grow organically, & build systems that bring trust & sales."
+      "subhead": "I have worked as copywriter, content marketing strategist for 7+ years helping brands grow organically, & build systems that bring trust & sales.",
+      "primary_btn_text": "See the work",
+      "secondary_btn_text": "Get in touch"
+    },
+    "capabilities_header": {
+      "tag": "[ Capabilities ]",
+      "title": "Core Strategic Directives",
+      "subtitle": "Diagnose first, execute second"
     },
     "capabilities": [
       {
@@ -52,11 +62,59 @@
         "desc": "Reduction in customer acquisition cost (CAC) through email flow optimization"
       }
     ],
+    "industries_served": {
+      "title": "INDUSTRIES SERVED & MESSAGE ALIGNMENT",
+      "tags": ["Tech/SaaS", "Finance/B2B", "Healthcare/D2C", "FMCG", "Fashion/Lifestyle", "E-Commerce"]
+    },
     "about": {
       "headline": "The Strategist Framework",
       "p1": "I am a Gurgaon-based content strategist and copywriter with over five years of active experience shipping copy that works. I do not describe myself as a 'storyteller' or offer 'words that sell.'",
       "p2": "Instead, I treat copy as an engineering problem. Most copywriting fails because it starts with drafting headlines. I start by auditing your conversion metrics, interviewing your target audience, and aligning value propositions with direct buyer motivations.",
       "p3": "Whether working directly with growth marketing leads, founders, or agency creative directors, my focus is to provide absolute strategic clarity. No generic fluff, no creative compromise, just measurable pipeline impact."
+    },
+    "process": {
+      "tag": "[ HOW WE WORK ]",
+      "steps": [
+        {
+          "num": "1",
+          "title": "Audit & Discovery",
+          "desc": "We analyze existing performance drops, customer reviews, and competitors to locate messaging gaps."
+        },
+        {
+          "num": "2",
+          "title": "Value Framing",
+          "desc": "Structuring a logical messaging hierarchy and voice guidelines before writing a single word of draft."
+        },
+        {
+          "num": "3",
+          "title": "Copywriting Delivery",
+          "desc": "Shipping clean, punchy, benefit-driven wireframe copies for web, onboarding flows, and product assets."
+        },
+        {
+          "num": "4",
+          "title": "Iterate & Measure",
+          "desc": "Deploying copies, assessing real-world performance metrics, and adjusting lines to maximize conversion yield."
+        }
+      ]
+    },
+    "contact_section": {
+      "headline": "Let's build a structured message.",
+      "subtext": "Inquire about project availability, retainer consultation bookings, or positioning audits. Expect a direct, fluff-free response in under 24 business hours.",
+      "email_prompt": "Or drop an email directly:"
+    }
+  },
+  "proof_of_work_page": {
+    "title": "Proof of Work",
+    "subtext": "Every project below was treated as a business objective, not a writing exercise. Toggle the full case studies to view the diagnosis, strategic approach, and before/after copies.",
+    "campaign_cards_header": {
+      "tag": "[ Campaign Cards ]",
+      "title": "Focused Engagements & Copy Assets",
+      "subtitle": "Tactical positioning & copy execution"
+    },
+    "cta": {
+      "headline": "Why isn't your content turning into customers?",
+      "subhead": "Most content problems aren't a writing problem. They're a strategy gap: wrong audience, wrong platform mix, or no clear line from content to conversion. In one session, we'll find exactly where yours is leaking value.",
+      "btn_text": "Let's Talk"
     }
   },
   "projects": [
