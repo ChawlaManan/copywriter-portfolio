@@ -288,6 +288,9 @@ function renderProofOfWorkPage(data) {
                       <circle cx="68" cy="105" r="3.5" fill="var(--route-rust)" class="branch-dot-draw" />
                       <circle cx="85" cy="145" r="3.5" fill="var(--route-red)" class="branch-dot-draw" />
                       
+                      <!-- Line continuation down to teaser waypoint -->
+                      <line x1="50" y1="120" x2="50" y2="180" stroke="var(--route-rust)" stroke-width="2" class="branch-path" />
+
                       <text x="15" y="101" font-family="'IBM Plex Mono', monospace" font-size="6" text-anchor="middle" fill="var(--route-slate)">BC</text>
                       <text x="32" y="116" font-family="'IBM Plex Mono', monospace" font-size="6" text-anchor="middle" fill="var(--route-slate)">ON</text>
                       <text x="50" y="131" font-family="'IBM Plex Mono', monospace" font-size="6" text-anchor="middle" fill="var(--route-slate)">QC</text>
@@ -308,6 +311,19 @@ function renderProofOfWorkPage(data) {
                     <div class="mobile-branch-item"><span class="dot"></span><span class="label">AB (Alberta)</span></div>
                     <div class="mobile-branch-item"><span class="dot dashed"></span><span class="label intl">INTL (International Travel-Insurance Leads)</span></div>
                   </div>
+                </div>
+              </div>
+
+              <!-- Wiseconomy Email Strategy Teaser Addendum -->
+              <div class="route-beat-row route-teaser-row">
+                <div class="route-timeline-col">
+                  <div class="route-dot teaser-dot"></div>
+                </div>
+                <div class="route-content-col" style="padding-bottom: 0;">
+                  <a href="${proj.email_teaser ? proj.email_teaser.url : 'wiseconomy-email-strategy.html'}" class="route-teaser-link">
+                    <span class="teaser-text">${proj.email_teaser ? proj.email_teaser.text : 'Focused Email Strategy to Convert Dead Leads.'}</span>
+                    <span class="teaser-arrow">→</span>
+                  </a>
                 </div>
               </div>
 

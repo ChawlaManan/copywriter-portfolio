@@ -1378,6 +1378,61 @@ footer {
   border: 1.5px dashed var(--route-rust);
 }
 
+/* Wiseconomy Email Strategy Teaser Addendum */
+.route-teaser-row {
+  margin-top: 2.5rem;
+  margin-bottom: 0.5rem;
+  align-items: center;
+}
+
+.teaser-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--route-rust);
+  z-index: 2;
+  position: relative;
+}
+
+.route-teaser-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--route-slate);
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+  line-height: 1.4;
+  outline: none;
+}
+
+.route-teaser-link .teaser-text {
+  color: var(--route-slate);
+}
+
+.route-teaser-link .teaser-arrow {
+  color: var(--route-rust);
+  font-weight: 700;
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+
+.route-teaser-link:hover .teaser-arrow,
+.route-teaser-link:focus .teaser-arrow {
+  transform: translateX(4px);
+}
+
+.route-teaser-link:focus-visible {
+  outline: 2px solid var(--route-rust);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
+
 .mobile-branch-item .label.intl {
   color: var(--route-red);
   font-weight: 700;

@@ -130,7 +130,11 @@
       "objective": "Bridge the critical trust gap between the advisory brand and Canadian consumers (especially newcomers encountering credit, RRSPs, TFSAs, and life insurance policies for the first time). In this Your Money or Your Life (YMYL) category, establishing deep regulatory credibility and personal authority outweighs clever marketing slogans.",
       "strategy": "Deployed an integrated content pipeline across web and social channels centered on a founder-led video series. The founder shared his own experience navigating the Canadian financial system as a newcomer, unpacking insurance nuances and savings frameworks to educate visitors and humanize the advisory process.",
       "founder_quote": "his own experience navigating the Canadian financial system as a newcomer",
-      "outcome": "Transformed a local Surrey-only business into a trusted national brand. By converting web visitors into advisory calls, the brand now captures qualified insurance and investment leads from every Canadian province, alongside international travel-insurance leads from families abroad organizing coverage for visiting relatives."
+      "outcome": "Transformed a local Surrey-only business into a trusted national brand. By converting web visitors into advisory calls, the brand now captures qualified insurance and investment leads from every Canadian province, alongside international travel-insurance leads from families abroad organizing coverage for visiting relatives.",
+      "email_teaser": {
+        "text": "Focused Email Strategy to Convert Dead Leads.",
+        "url": "wiseconomy-email-strategy.html"
+      }
     },
     {
       "id": "hardypaw",
