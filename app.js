@@ -232,7 +232,7 @@ function renderProofOfWorkPage(data) {
                 </div>
                 <div class="route-content-col">
                   <span class="route-label-mono">SECTION 01 / CONTEXT</span>
-                  <h2>About the Brand</h2>
+                  <h3>About the Brand</h3>
                   <p>${proj.about_brand}</p>
                 </div>
               </div>
@@ -245,7 +245,7 @@ function renderProofOfWorkPage(data) {
                 </div>
                 <div class="route-content-col">
                   <span class="route-label-mono">SECTION 02 / GOAL</span>
-                   <h2>Objective</h2>
+                  <h3>Objective</h3>
                   <p>${proj.objective}</p>
                 </div>
               </div>
@@ -258,7 +258,7 @@ function renderProofOfWorkPage(data) {
                 </div>
                 <div class="route-content-col">
                   <span class="route-label-mono">SECTION 03 / METHOD</span>
-                  <h2>Strategy</h2>
+                  <h3>Strategy</h3>
                   <p>
                     ${proj.strategy.replace(proj.founder_quote, `</p><div class="route-pull-quote">"${proj.founder_quote}"</div><p>`)}
                   </p>
@@ -301,7 +301,7 @@ function renderProofOfWorkPage(data) {
                 </div>
                 <div class="route-content-col">
                   <span class="route-label-mono">SECTION 04 / REACH</span>
-                  <h2>Outcome</h2>
+                  <h3>Outcome</h3>
                   <p>${proj.outcome}</p>
                   
                   <div class="route-branching-mobile">

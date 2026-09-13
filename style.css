@@ -1243,7 +1243,8 @@ footer {
   margin-bottom: 0.5rem;
 }
 
-.route-content-col h2 {
+.route-content-col h2,
+.route-content-col h3 {
   font-family: var(--font-serif);
   font-size: 1.5rem;
   font-weight: 700;
