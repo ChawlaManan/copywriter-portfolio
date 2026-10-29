@@ -1,3 +1,9 @@
+// Map any alternative connection strings to POSTGRES_URL
+const connectionString = process.env.POSTGRES_URL || process.env.DATABASE_URL || process.env.POSTGRES_PRISMA_URL || process.env.POSTGRES_URL_NON_POOLING;
+if (connectionString && !process.env.POSTGRES_URL) {
+  process.env.POSTGRES_URL = connectionString;
+}
+
 const { sql } = require('@vercel/postgres');
 
 module.exports = async function handler(req, res) {
@@ -50,42 +56,11 @@ module.exports = async function handler(req, res) {
 
     const recipientEmail = 'chawlamanan@outlook.com';
     let emailDispatched = false;
+    let needsActivation = false;
+    let activationMessage = '';
     let dbSaved = false;
 
-    // 5. Forward inquiry directly to Manan's email address via FormSubmit
-    try {
-      if (typeof fetch === 'function') {
-        const emailRes = await fetch(`https://formsubmit.co/ajax/${recipientEmail}`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          },
-          body: JSON.stringify({
-            name: name.trim(),
-            email: email.trim(),
-            _replyto: email.trim(),
-            _subject: `New Strategy Inquiry: ${name.trim()} (${project_type.trim()})`,
-            'Client Name': name.trim(),
-            'Work Email': email.trim(),
-            'Project Requirement': project_type.trim(),
-            'Project Description': message.trim(),
-            _template: 'table',
-            _captcha: 'false'
-          })
-        });
-        if (emailRes.ok) {
-          emailDispatched = true;
-          console.log('[Email Dispatch] Inquiry successfully dispatched to inbox.');
-        } else {
-          console.warn('[Email Dispatch] FormSubmit returned status:', emailRes.status);
-        }
-      }
-    } catch (mailError) {
-      console.warn('[Email Dispatch Error]', mailError.message);
-    }
-
-    // 6. Database Archiving: If Postgres is configured on Vercel, record the inquiry
+    // 5. Database Archiving: Store in Postgres for the CMS
     if (process.env.POSTGRES_URL) {
       try {
         // Automatically ensure table exists
@@ -105,16 +80,113 @@ module.exports = async function handler(req, res) {
           VALUES (${name.trim()}, ${email.trim()}, ${project_type.trim()}, ${message.trim()});
         `;
         dbSaved = true;
-        console.log('[Database] Inquiry stored in contact_submissions.');
+        console.log('[CMS Database] Inquiry successfully recorded in contact_submissions.');
       } catch (dbError) {
-        console.warn('[Database Error] Failed to persist submission:', dbError.message);
+        console.warn('[CMS Database Warning] Failed to persist submission:', dbError.message);
       }
     }
 
-    // 7. Return Success Response
+    // 6. Support Resend API if configured in Vercel environment variables
+    if (process.env.RESEND_API_KEY) {
+      try {
+        const resendRes = await fetch('https://api.resend.com/emails', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${process.env.RESEND_API_KEY}`
+          },
+          body: JSON.stringify({
+            from: process.env.RESEND_FROM || 'Portfolio Inquiry <onboarding@resend.dev>',
+            to: recipientEmail,
+            reply_to: email.trim(),
+            subject: `New Strategy Inquiry: ${name.trim()} (${project_type.trim()})`,
+            html: `
+              <h2>New Portfolio Strategy Inquiry</h2>
+              <p><strong>Client Name:</strong> ${name.trim()}</p>
+              <p><strong>Work Email:</strong> <a href="mailto:${email.trim()}">${email.trim()}</a></p>
+              <p><strong>Requirement:</strong> ${project_type.trim()}</p>
+              <p><strong>Scope & Metrics Needed:</strong></p>
+              <blockquote style="background: #f4f4f4; padding: 12px; border-left: 3px solid #1c1c1c; font-family: sans-serif; white-space: pre-wrap;">${message.trim()}</blockquote>
+            `
+          })
+        });
+        if (resendRes.ok) {
+          emailDispatched = true;
+          console.log('[Email Dispatch] Successfully sent via Resend API.');
+        }
+      } catch (resendErr) {
+        console.warn('[Resend API Error]', resendErr.message);
+      }
+    }
+
+    // 7. Forward inquiry to Manan's email address via FormSubmit (if not sent via Resend)
+    if (!emailDispatched) {
+      try {
+        if (typeof fetch === 'function') {
+          const emailRes = await fetch(`https://formsubmit.co/ajax/${recipientEmail}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+              name: name.trim(),
+              email: email.trim(),
+              _replyto: email.trim(),
+              _subject: `New Strategy Inquiry: ${name.trim()} (${project_type.trim()})`,
+              'Client Name': name.trim(),
+              'Work Email': email.trim(),
+              'Project Requirement': project_type.trim(),
+              'Project Description': message.trim(),
+              _template: 'table',
+              _captcha: 'false'
+            })
+          });
+
+          if (emailRes.ok) {
+            const emailData = await emailRes.json();
+            if (emailData.success === 'true' || emailData.success === true) {
+              emailDispatched = true;
+              console.log('[Email Dispatch] Inquiry successfully dispatched to inbox.');
+            } else if (emailData.message && (emailData.message.toLowerCase().includes('confirm') || emailData.message.toLowerCase().includes('activat'))) {
+              needsActivation = true;
+              activationMessage = emailData.message;
+            }
+          }
+        }
+      } catch (mailError) {
+        console.warn('[Email Dispatch Error]', mailError.message);
+      }
+    }
+
+    // 8. Return Response
+    if (needsActivation && !dbSaved) {
+      return res.status(200).json({
+        success: true,
+        dbSaved: false,
+        requiresActivation: true,
+        message: 'Action Required: FormSubmit sent a one-time activation link to chawlamanan@outlook.com. Please check your Outlook Junk/Spam folder and click "Activate Form" once to start receiving all client inquiries.',
+        inquiry: {
+          name: name.trim(),
+          email: email.trim(),
+          project_type: project_type.trim(),
+          message: message.trim(),
+          created_at: new Date().toISOString()
+        }
+      });
+    }
+
     return res.status(200).json({
       success: true,
-      message: 'Inquiry delivered. Manan will review your requirements and reply in under 24 business hours.'
+      dbSaved: dbSaved,
+      message: 'Inquiry delivered. Manan will review your requirements and reply in under 24 business hours.',
+      inquiry: {
+        name: name.trim(),
+        email: email.trim(),
+        project_type: project_type.trim(),
+        message: message.trim(),
+        created_at: new Date().toISOString()
+      }
     });
 
   } catch (error) {

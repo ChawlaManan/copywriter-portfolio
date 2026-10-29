@@ -1,3 +1,9 @@
+// Map any alternative connection strings to POSTGRES_URL
+const connectionString = process.env.POSTGRES_URL || process.env.DATABASE_URL || process.env.POSTGRES_PRISMA_URL || process.env.POSTGRES_URL_NON_POOLING;
+if (connectionString && !process.env.POSTGRES_URL) {
+  process.env.POSTGRES_URL = connectionString;
+}
+
 const { sql } = require('@vercel/postgres');
 const fs = require('fs');
 const path = require('path');

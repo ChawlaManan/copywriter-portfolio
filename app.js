@@ -666,6 +666,7 @@ function initContactForm(data) {
     };
 
     let delivered = false;
+    let isActivationNotice = false;
     let confirmationMsg = 'Inquiry delivered. Manan will review your requirements and reply in under 24 business hours.';
 
     // 1. Primary Channel: Local Serverless API Route (/api/submit-contact)
@@ -683,6 +684,7 @@ function initContactForm(data) {
         if (result && result.success) {
           delivered = true;
           if (result.message) confirmationMsg = result.message;
+          if (result.requiresActivation) isActivationNotice = true;
         }
       }
     } catch (apiErr) {
@@ -716,6 +718,10 @@ function initContactForm(data) {
           const backupResult = await backupResponse.json();
           if (backupResult && (backupResult.success === 'true' || backupResult.success === true)) {
             delivered = true;
+          } else if (backupResult && backupResult.message && (backupResult.message.toLowerCase().includes('confirm') || backupResult.message.toLowerCase().includes('activat'))) {
+            delivered = true;
+            isActivationNotice = true;
+            confirmationMsg = 'Action Required: FormSubmit sent a verification email to ' + recipientEmail + '. Please check your Outlook Junk/Spam folder and click "Activate Form" once to complete setup.';
           }
         }
       } catch (backupErr) {
@@ -727,9 +733,36 @@ function initContactForm(data) {
     submitBtn.disabled = false;
 
     if (delivered) {
-      statusMessage.className = 'form-status success';
-      statusMessage.textContent = confirmationMsg;
+      // Save local backup so inquiries are immediately visible in the CMS
+      try {
+        const localList = JSON.parse(localStorage.getItem('portfolio_inquiries_local') || '[]');
+        localList.unshift({
+          name,
+          email,
+          project_type: projectType,
+          message,
+          created_at: new Date().toISOString()
+        });
+        if (localList.length > 50) localList.length = 50;
+        localStorage.setItem('portfolio_inquiries_local', JSON.stringify(localList));
+      } catch (storageErr) {
+        // ignore
+      }
+
       statusMessage.style.display = 'block';
+      if (isActivationNotice) {
+        statusMessage.className = 'form-status';
+        statusMessage.style.backgroundColor = '#FEF9E7';
+        statusMessage.style.borderColor = '#F1C40F';
+        statusMessage.style.color = '#7D6608';
+        statusMessage.innerHTML = `<strong>One-Time Setup Required:</strong> ${confirmationMsg}`;
+      } else {
+        statusMessage.className = 'form-status success';
+        statusMessage.style.backgroundColor = '';
+        statusMessage.style.borderColor = '';
+        statusMessage.style.color = '';
+        statusMessage.textContent = confirmationMsg;
+      }
       trackAnalyticsEvent('Form Submission Success', projectType);
       form.reset();
     } else {

@@ -1,3 +1,9 @@
+// Map any alternative connection strings to POSTGRES_URL
+const connectionString = process.env.POSTGRES_URL || process.env.DATABASE_URL || process.env.POSTGRES_PRISMA_URL || process.env.POSTGRES_URL_NON_POOLING;
+if (connectionString && !process.env.POSTGRES_URL) {
+  process.env.POSTGRES_URL = connectionString;
+}
+
 const { sql } = require('@vercel/postgres');
 
 module.exports = async function handler(req, res) {
@@ -8,7 +14,17 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    const password = req.method === 'POST' ? req.body?.password : req.query?.password;
+    let body = req.body;
+    if (typeof body === 'string') {
+      try {
+        body = JSON.parse(body);
+      } catch (e) {
+        body = {};
+      }
+    }
+    body = body || {};
+
+    const password = req.method === 'POST' ? body.password : req.query?.password;
     const adminPassword = process.env.ADMIN_PASSWORD;
 
     // 1. Password verification
@@ -29,7 +45,7 @@ module.exports = async function handler(req, res) {
         success: true,
         postgresActive: false,
         submissions: [],
-        message: 'Postgres database is not connected. Inquiries are being forwarded directly to chawlamanan@outlook.com.'
+        message: 'Vercel Postgres database is not connected. Inquiries will appear here as soon as Postgres is linked in your Vercel Dashboard.'
       });
     }
 
@@ -45,7 +61,15 @@ module.exports = async function handler(req, res) {
       );
     `;
 
-    // 4. Fetch submissions
+    // 4. Handle Delete Action
+    if (body.action === 'delete' && body.id) {
+      await sql`
+        DELETE FROM contact_submissions WHERE id = ${body.id};
+      `;
+      return res.status(200).json({ success: true, message: 'Inquiry deleted successfully.' });
+    }
+
+    // 5. Fetch submissions
     const result = await sql`
       SELECT id, name, email, project_type, message, created_at
       FROM contact_submissions
