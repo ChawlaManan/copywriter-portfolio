@@ -227,6 +227,7 @@
       <button class="tab-btn" onclick="switchTab('about')">ABOUT & CONTACT</button>
       <button class="tab-btn" onclick="switchTab('pow')">POW PAGE COPY</button>
       <button class="tab-btn" onclick="switchTab('projects')">PROJECTS INDEX</button>
+      <button class="tab-btn" onclick="switchTab('submissions')" id="tab-btn-submissions">INQUIRIES (<span id="inquiries-count">0</span>)</button>
     </div>
 
     <!-- TAB 1: Profile & Hero -->
@@ -425,6 +426,22 @@
       </div>
     </div>
 
+    <!-- TAB 7: Client Inquiries -->
+    <div id="tab-submissions" class="tab-content">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <div>
+          <h2 style="margin: 0; font-family: Lora, serif; font-size: 1.5rem;">Client Inquiries & Leads</h2>
+          <p style="margin: 0.25rem 0 0 0; font-size: 0.85rem; color: #555;">Inquiries received from your portfolio contact form.</p>
+        </div>
+        <button class="btn btn-secondary btn-sm" onclick="loadSubmissions()">↻ Refresh Inquiries</button>
+      </div>
+
+      <div id="submissions-status" style="margin-bottom: 1rem; font-family: monospace; font-size: 0.85rem; color: #666;"></div>
+      <div id="submissions-list-container">
+        <!-- Dyn Loaded -->
+      </div>
+    </div>
+
     <!-- Save & Logout Footer -->
     <div style="border-top: 2px solid #1c1c1c; margin-top: 3rem; padding-top: 2rem; display: flex; justify-content: space-between; align-items: center;">
       <button class="btn btn-secondary" onclick="logoutCMS()" style="margin: 0; padding: 0.75rem 1.5rem;">Logout</button>
@@ -553,6 +570,8 @@
           registry = data;
           populateForm();
           log('Registry successfully loaded!');
+          // Silently load submissions count badge
+          loadSubmissions(true);
         })
         .catch(err => {
           log('Error loading registry data: ' + err.message, true);
@@ -762,8 +781,103 @@
       document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
       document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
 
-      event.target.classList.add('active');
-      document.getElementById('tab-' + tabId).classList.add('active');
+      const activeBtn = document.querySelector(`.tab-btn[onclick*="'${tabId}'"]`);
+      if (activeBtn) activeBtn.classList.add('active');
+      const targetPanel = document.getElementById('tab-' + tabId);
+      if (targetPanel) targetPanel.classList.add('active');
+
+      if (tabId === 'submissions') {
+        loadSubmissions(false);
+      }
+    }
+
+    // Fetch and display client inquiries
+    function loadSubmissions(silent = false) {
+      const container = document.getElementById('submissions-list-container');
+      const statusEl = document.getElementById('submissions-status');
+      const countEl = document.getElementById('inquiries-count');
+      const password = sessionStorage.getItem('cms_admin_password');
+
+      if (!password) return;
+
+      if (!silent && container) {
+        container.innerHTML = '<div style="padding: 2rem; text-align: center; color: #666; font-family: monospace;">Fetching inquiries...</div>';
+      }
+
+      fetch('/api/get-submissions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password })
+      })
+      .then(async res => {
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        return res.json();
+      })
+      .then(data => {
+        if (!data.success) {
+          if (!silent && container) {
+            container.innerHTML = `<div style="padding: 1.5rem; border: 1px solid #c0392b; background: #fadbd8; color: #900;">${data.message}</div>`;
+          }
+          return;
+        }
+
+        const list = data.submissions || [];
+        if (countEl) countEl.textContent = list.length;
+
+        if (statusEl) {
+          if (!data.postgresActive) {
+            statusEl.innerHTML = `<strong>Delivery Status:</strong> Direct Email Forwarding Active. All form submissions are routed directly to <strong>chawlamanan@outlook.com</strong>. (Connect Vercel Postgres storage to also retain an archival database log here).`;
+          } else {
+            statusEl.innerHTML = `<strong>Database Connected:</strong> Showing <strong>${list.length}</strong> archived inquiry${list.length === 1 ? '' : 's'}. All submissions are also forwarded to <strong>chawlamanan@outlook.com</strong>.`;
+          }
+        }
+
+        if (silent || !container) return;
+
+        if (list.length === 0) {
+          container.innerHTML = `
+            <div style="border: 2px dashed #1c1c1c; padding: 3rem 1.5rem; text-align: center; background: #fff;">
+              <div style="font-family: Lora, serif; font-size: 1.25rem; font-weight: 600; margin-bottom: 0.5rem;">No Inquiries Logged in Database</div>
+              <p style="font-size: 0.9rem; color: #555; max-width: 540px; margin: 0 auto; line-height: 1.6;">
+                When prospective clients submit your contact form, inquiries arrive immediately in your email inbox (<strong>chawlamanan@outlook.com</strong>). Database logging will also record them here whenever Postgres is connected.
+              </p>
+            </div>
+          `;
+          return;
+        }
+
+        container.innerHTML = list.map(item => {
+          const dateStr = item.created_at ? new Date(item.created_at).toLocaleString() : 'Recent';
+          const replySubject = encodeURIComponent(`Re: Your Strategy Inquiry (${item.project_type || 'Copywriting'})`);
+          const mailto = `mailto:${item.email}?subject=${replySubject}`;
+
+          return `
+            <div style="border: 1px solid #1c1c1c; background: #fff; padding: 1.5rem; margin-bottom: 1.25rem;">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; border-bottom: 1px solid #eee; padding-bottom: 0.75rem;">
+                <div>
+                  <h3 style="margin: 0 0 0.25rem 0; font-family: Lora, serif; font-size: 1.2rem;">${item.name}</h3>
+                  <div style="font-family: monospace; font-size: 0.85rem; color: #555;">
+                    <a href="${mailto}" style="color: #1c1c1c; font-weight: 600; text-decoration: underline;">${item.email}</a>
+                    &bull; Requirement: <strong>${item.project_type || 'N/A'}</strong>
+                  </div>
+                </div>
+                <div style="text-align: right;">
+                  <span style="font-family: monospace; font-size: 0.8rem; color: #777;">${dateStr}</span>
+                  <div style="margin-top: 0.5rem;">
+                    <a href="${mailto}" class="btn btn-primary btn-sm" style="display: inline-block; padding: 0.35rem 0.75rem; font-size: 0.75rem;">Reply via Email →</a>
+                  </div>
+                </div>
+              </div>
+              <div style="font-size: 0.95rem; line-height: 1.6; color: #222; white-space: pre-wrap; background: #fdfdfd; border: 1px solid #eee; padding: 1rem;">${item.message}</div>
+            </div>
+          `;
+        }).join('');
+      })
+      .catch(err => {
+        if (!silent && container) {
+          container.innerHTML = `<div style="padding: 1.5rem; border: 1px solid #c0392b; background: #fadbd8; color: #900;">Inquiries could not be retrieved: ${err.message}</div>`;
+        }
+      });
     }
 
     // Modal Operations

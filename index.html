@@ -99,7 +99,12 @@
 
         <!-- Form Card styled like a Whiteboard Card -->
         <div class="whiteboard-card">
-          <form id="portfolio-contact-form" class="contact-form">
+          <form id="portfolio-contact-form" class="contact-form" action="https://formsubmit.co/chawlamanan@outlook.com" method="POST">
+            <!-- FormSubmit configuration options for zero-JS fallback -->
+            <input type="hidden" name="_subject" value="New Strategy Inquiry (Portfolio Contact Form)">
+            <input type="hidden" name="_captcha" value="false">
+            <input type="hidden" name="_template" value="table">
+
             <!-- Honeypot field (hidden from users, traps automated spambots) -->
             <div style="display: none;" aria-hidden="true">
               <label for="website">Leave this field blank</label>

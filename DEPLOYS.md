@@ -56,30 +56,20 @@ To connect your project to a GitHub repository so that Vercel automatically depl
 
 ---
 
-## postgres DATABASE CONFIGURATION (Required for Contact Form)
+## CONTACT FORM & INQUIRIES DELIVERY
 
-Once your project is initialized on Vercel:
+The contact form is configured with a resilient, multi-tiered transmission architecture:
 
-1.  **Link Database**:
-    *   Inside your project dashboard on Vercel, navigate to the **Storage** tab.
-    *   Click **Connect Database**, select **Postgres**, and click **Create**.
-    *   This will link a Postgres cluster to your project, injecting the database environment variables automatically.
-2.  **Create SQL Table**:
-    *   Under the **Storage** tab, click **Query Console**.
-    *   Paste and run this SQL query to initialize the database:
-        ```sql
-        CREATE TABLE IF NOT EXISTS contact_submissions (
-            id SERIAL PRIMARY KEY,
-            name VARCHAR(255) NOT NULL,
-            email VARCHAR(255) NOT NULL,
-            project_type VARCHAR(100),
-            message TEXT NOT NULL,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        );
-        ```
-3.  **Local Environment Fetching (Optional)**:
-    If you ever want to check connection strings locally, install the CLI, link your project, and pull the configurations:
-    ```powershell
-    vercel link
-    vercel env pull .env.local
-    ```
+### 1. Direct Email Delivery to Your Inbox (Zero-Config, Works Out of the Box)
+- Every submission is automatically formatted and forwarded directly to **`chawlamanan@outlook.com`**.
+- **First-Time Activation**: The very first time a submission is sent through the form, FormSubmit sends a quick one-time verification email to `chawlamanan@outlook.com` with an "Activate Form" button. Click it once, and all future client inquiries will land directly in your inbox instantly.
+- The sender's email is set as `Reply-To`, allowing you to reply to prospective clients with a single click.
+
+### 2. Database Archiving & CMS Inbox (Optional with Vercel Postgres)
+- If you have linked a Vercel Postgres database to your project, submissions are also stored in a database table (`contact_submissions`).
+- The table is **created automatically** by the API on first submission—no manual SQL queries are required.
+- You can review all past client inquiries anytime inside your CMS console at `/admin.html` under the **INQUIRIES** tab.
+
+### 3. Client-Side & Offline Fallbacks
+- If the serverless API is offline (e.g. running locally via a simple static web server), the browser automatically routes the submission through the direct client-side delivery bridge.
+- If network connection fails completely, the form surfaces a one-click pre-filled email draft button directly to your email address.

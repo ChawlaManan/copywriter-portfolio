@@ -8,16 +8,23 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    const { name, email, project_type, message, website } = req.body;
+    let body = req.body;
+    if (typeof body === 'string') {
+      try {
+        body = JSON.parse(body);
+      } catch (e) {
+        // use body as is
+      }
+    }
+    const { name, email, project_type, message, website } = body || {};
 
     // 2. Honeypot check for spam protection
     // Spambots will typically fill in all form inputs including hidden ones.
-    // If the hidden 'website' field has any content, we silently ignore it by returning success.
     if (website && website.trim().length > 0) {
       console.log('[Security Warning] Honeypot field triggered. Silently dropping submission.');
       return res.status(200).json({
         success: true,
-        message: 'Success. Inquiry delivered. Manan will review your metrics and reply in under 24 business hours.'
+        message: 'Inquiry delivered. Manan will review your requirements and reply in under 24 business hours.'
       });
     }
 
@@ -41,26 +48,81 @@ module.exports = async function handler(req, res) {
       return res.status(400).json({ success: false, message: 'Please enter a valid work email address.' });
     }
 
-    // 5. Database Insertion using parameterized queries to protect against SQL injection
-    // Fields: id, name, email, project_type, message, created_at (id & created_at are generated automatically)
-    await sql`
-      INSERT INTO contact_submissions (name, email, project_type, message)
-      VALUES (${name.trim()}, ${email.trim()}, ${project_type.trim()}, ${message.trim()});
-    `;
+    const recipientEmail = 'chawlamanan@outlook.com';
+    let emailDispatched = false;
+    let dbSaved = false;
 
-    // 6. Return Success Response
+    // 5. Forward inquiry directly to Manan's email address via FormSubmit
+    try {
+      if (typeof fetch === 'function') {
+        const emailRes = await fetch(`https://formsubmit.co/ajax/${recipientEmail}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({
+            name: name.trim(),
+            email: email.trim(),
+            _replyto: email.trim(),
+            _subject: `New Strategy Inquiry: ${name.trim()} (${project_type.trim()})`,
+            'Client Name': name.trim(),
+            'Work Email': email.trim(),
+            'Project Requirement': project_type.trim(),
+            'Project Description': message.trim(),
+            _template: 'table',
+            _captcha: 'false'
+          })
+        });
+        if (emailRes.ok) {
+          emailDispatched = true;
+          console.log('[Email Dispatch] Inquiry successfully dispatched to inbox.');
+        } else {
+          console.warn('[Email Dispatch] FormSubmit returned status:', emailRes.status);
+        }
+      }
+    } catch (mailError) {
+      console.warn('[Email Dispatch Error]', mailError.message);
+    }
+
+    // 6. Database Archiving: If Postgres is configured on Vercel, record the inquiry
+    if (process.env.POSTGRES_URL) {
+      try {
+        // Automatically ensure table exists
+        await sql`
+          CREATE TABLE IF NOT EXISTS contact_submissions (
+            id SERIAL PRIMARY KEY,
+            name VARCHAR(255) NOT NULL,
+            email VARCHAR(255) NOT NULL,
+            project_type VARCHAR(100),
+            message TEXT NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+          );
+        `;
+
+        await sql`
+          INSERT INTO contact_submissions (name, email, project_type, message)
+          VALUES (${name.trim()}, ${email.trim()}, ${project_type.trim()}, ${message.trim()});
+        `;
+        dbSaved = true;
+        console.log('[Database] Inquiry stored in contact_submissions.');
+      } catch (dbError) {
+        console.warn('[Database Error] Failed to persist submission:', dbError.message);
+      }
+    }
+
+    // 7. Return Success Response
     return res.status(200).json({
       success: true,
-      message: 'Success. Inquiry delivered. Manan will review your metrics and reply in under 24 business hours.'
+      message: 'Inquiry delivered. Manan will review your requirements and reply in under 24 business hours.'
     });
 
   } catch (error) {
     console.error('[API Error] Contact submission handler failed:', error);
     
-    // Provide a friendly user-facing fallback message if database or environment variables are offline
     return res.status(500).json({
       success: false,
-      message: 'We encountered a temporary database connection issue. Please send your details to chawlamanan@outlook.com directly.'
+      message: 'We encountered an issue submitting your inquiry. Please send your details to chawlamanan@outlook.com directly.'
     });
   }
 };

@@ -606,7 +606,7 @@ function initFilters() {
 }
 
 /**
- * 5. Client-Side Contact Form Handling & Simulation
+ * 5. Client-Side Contact Form Handling & Multi-Tier Transmission
  */
 function initContactForm(data) {
   const form = document.getElementById('portfolio-contact-form');
@@ -614,68 +614,139 @@ function initContactForm(data) {
   
   if (!form) return;
   
-  form.addEventListener('submit', (e) => {
+  const recipientEmail = (data && data.personal && data.personal.email) ? data.personal.email : 'chawlamanan@outlook.com';
+
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
     
-    const name = document.getElementById('name').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const projectType = document.getElementById('project-type').value;
-    const message = document.getElementById('message').value.trim();
-    const website = document.getElementById('website').value;
+    const nameEl = document.getElementById('name');
+    const emailEl = document.getElementById('email');
+    const projectTypeEl = document.getElementById('project-type');
+    const messageEl = document.getElementById('message');
+    const websiteEl = document.getElementById('website');
     const submitBtn = form.querySelector('.form-submit-btn');
+
+    const name = nameEl ? nameEl.value.trim() : '';
+    const email = emailEl ? emailEl.value.trim() : '';
+    const projectType = projectTypeEl ? projectTypeEl.value : '';
+    const message = messageEl ? messageEl.value.trim() : '';
+    const website = websiteEl ? websiteEl.value : '';
     
     statusMessage.className = 'form-status';
     statusMessage.textContent = '';
+    statusMessage.style.display = 'none';
     
     if (!name || !email || !projectType || !message) {
-      statusMessage.classList.add('error');
+      statusMessage.className = 'form-status error';
       statusMessage.textContent = 'Please complete all required fields.';
+      statusMessage.style.display = 'block';
       return;
     }
     
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      statusMessage.className = 'form-status error';
+      statusMessage.textContent = 'Please enter a valid work email address.';
+      statusMessage.style.display = 'block';
+      return;
+    }
+
     const originalText = submitBtn.textContent;
     submitBtn.textContent = 'Transmitting Strategy Request...';
     submitBtn.disabled = true;
     
     trackAnalyticsEvent('Form Submission Started', projectType);
     
-    fetch('/api/submit-contact', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        name,
-        email,
-        project_type: projectType,
-        message,
-        website
-      })
-    })
-    .then(async (response) => {
-      const result = await response.json();
-      submitBtn.textContent = originalText;
-      submitBtn.disabled = false;
+    const payload = {
+      name,
+      email,
+      project_type: projectType,
+      message,
+      website
+    };
 
-      if (response.ok && result.success) {
-        statusMessage.classList.add('success');
-        statusMessage.textContent = result.message;
-        trackAnalyticsEvent('Form Submission Success', projectType);
-        form.reset();
-      } else {
-        statusMessage.classList.add('error');
-        statusMessage.textContent = result.message || 'An error occurred during submission.';
-        trackAnalyticsEvent('Form Submission Failed', result.message);
+    let delivered = false;
+    let confirmationMsg = 'Inquiry delivered. Manan will review your requirements and reply in under 24 business hours.';
+
+    // 1. Primary Channel: Local Serverless API Route (/api/submit-contact)
+    try {
+      const response = await fetch('/api/submit-contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+      
+      if (response.ok) {
+        const result = await response.json();
+        if (result && result.success) {
+          delivered = true;
+          if (result.message) confirmationMsg = result.message;
+        }
       }
-    })
-    .catch((err) => {
-      console.error('Submission error:', err);
-      submitBtn.textContent = originalText;
-      submitBtn.disabled = false;
-      statusMessage.classList.add('error');
-      statusMessage.textContent = 'We encountered a temporary database connection issue. Please send your details to chawlamanan@outlook.com directly.';
-      trackAnalyticsEvent('Form Submission Error', err.message);
-    });
+    } catch (apiErr) {
+      console.warn('[Contact Form] Primary API endpoint offline or local development, attempting direct fallback...', apiErr);
+    }
+
+    // 2. Secondary Channel: Direct FormSubmit fallback if API route failed or returned error
+    if (!delivered) {
+      try {
+        const backupResponse = await fetch(`https://formsubmit.co/ajax/${recipientEmail}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({
+            name,
+            email,
+            _replyto: email,
+            _subject: `New Strategy Inquiry: ${name} (${projectType})`,
+            'Client Name': name,
+            'Work Email': email,
+            'Project Requirement': projectType,
+            'Project Description': message,
+            _template: 'table',
+            _captcha: 'false'
+          })
+        });
+
+        if (backupResponse.ok) {
+          const backupResult = await backupResponse.json();
+          if (backupResult && (backupResult.success === 'true' || backupResult.success === true)) {
+            delivered = true;
+          }
+        }
+      } catch (backupErr) {
+        console.warn('[Contact Form] Direct delivery backup failed:', backupErr);
+      }
+    }
+
+    submitBtn.textContent = originalText;
+    submitBtn.disabled = false;
+
+    if (delivered) {
+      statusMessage.className = 'form-status success';
+      statusMessage.textContent = confirmationMsg;
+      statusMessage.style.display = 'block';
+      trackAnalyticsEvent('Form Submission Success', projectType);
+      form.reset();
+    } else {
+      const subject = encodeURIComponent(`Strategy Inquiry: ${name} (${projectType})`);
+      const bodyText = encodeURIComponent(`Hi Manan,\n\nName: ${name}\nEmail: ${email}\nRequirement: ${projectType}\n\nProject Scope & Metrics:\n${message}\n`);
+      const mailtoUrl = `mailto:${recipientEmail}?subject=${subject}&body=${bodyText}`;
+
+      statusMessage.className = 'form-status error';
+      statusMessage.innerHTML = `
+        Unable to transmit automatically. 
+        <a href="${mailtoUrl}" style="display: block; margin-top: 6px; font-weight: 600; text-decoration: underline; color: #1c1c1c;">
+          Click here to send directly via email (${recipientEmail}) →
+        </a>
+      `;
+      statusMessage.style.display = 'block';
+      trackAnalyticsEvent('Form Submission Fallback Triggered', projectType);
+    }
   });
 }
 
