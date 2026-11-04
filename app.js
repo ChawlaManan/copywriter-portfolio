@@ -205,18 +205,18 @@ function renderProofOfWorkPage(data) {
       return `
         <div class="case-study-card route-case-study fade-in" data-project-id="${proj.id}" data-industries="${proj.filterClass}">
           <div class="case-study-header" style="text-align: left;">
-            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; letter-spacing: 1.5px; color: #7D8B96; text-transform: uppercase; margin-bottom: 0.5rem;">
+            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; letter-spacing: 1.5px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.5rem;">
               ${proj.category}
             </div>
-            <h2 style="font-family: var(--font-serif); font-size: 2rem; color: #22303F; margin: 0 0 0.5rem 0; font-weight: 700;">
+            <h2 style="font-family: var(--font-serif); font-size: 2rem; color: var(--text); margin: 0 0 0.5rem 0; font-weight: 700;">
                ${proj.brand}
             </h2>
-            <p class="case-study-brief" style="color: #7D8B96; margin: 0 0 1.5rem 0;">
+            <p class="case-study-brief" style="color: var(--text-muted); margin: 0 0 1.5rem 0;">
               ${proj.brief}
             </p>
             <div class="case-study-expand-trigger" style="justify-content: flex-start; gap: 0.5rem; padding: 0.5rem 0 0 0;">
               <span>[ EXPAND ROUTE DIAGNOSIS ]</span>
-              <span class="arrow-icon" style="color: #B4532B; transform: rotate(0deg); transition: transform 0.2s ease;">↓</span>
+              <span class="arrow-icon" style="color: var(--accent); transform: rotate(0deg); transition: transform 0.2s ease;">↓</span>
             </div>
           </div>
 
@@ -367,17 +367,17 @@ function renderProofOfWorkPage(data) {
             
             <div class="ownership-scope-grid">
               ${proj.scope_areas.map((area, index) => {
-                const noteColors = ['#FEF9E7', '#E8F8F5', '#EBF5FB', '#FDEDEC', '#EAFAF1', '#FEF5E7', '#F5EEF8'];
+                const noteColors = ['var(--surface)', '#FAFAFA', '#F0F0F0'];
                 const color = noteColors[index % noteColors.length];
                 const rotateDeg = (index % 2 === 0 ? -0.8 : 0.8);
                 return `
-                  <div style="background-color: ${color}; border: 1px solid rgba(28,28,28,0.1); padding: 1.75rem; box-shadow: 3px 6px 12px rgba(0,0,0,0.02); transform: rotate(${rotateDeg}deg); position: relative; min-height: 220px; display: flex; flex-direction: column; gap: 0.75rem; border-radius: 4px; text-align: left;">
-                    <h4 style="font-family: var(--font-sans); font-size: 1rem; font-weight: 700; color: var(--ink-primary); display: flex; align-items: center; gap: 0.5rem;">
-                      <span style="font-family: var(--font-hand); color: var(--ink-accent); font-size: 1.5rem; font-weight: 700;">0${index + 1}</span>
+                  <div style="background-color: ${color}; border: 1px solid var(--border); padding: 1.75rem; box-shadow: 2px 4px 10px rgba(0,0,0,0.02); transform: rotate(${rotateDeg}deg); position: relative; min-height: 220px; display: flex; flex-direction: column; gap: 0.75rem; border-radius: 6px; text-align: left;">
+                    <h4 style="font-family: var(--font-sans); font-size: 1rem; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 0.5rem;">
+                      <span style="font-family: var(--font-hand); color: var(--accent); font-size: 1.5rem; font-weight: 700;">0${index + 1}</span>
                       ${area.title}
                     </h4>
                     <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.4rem; font-size: 0.85rem; color: var(--text-muted); line-height: 1.4;">
-                      ${area.bullets.map(b => `<li style="position: relative; padding-left: 1rem;"><span style="position: absolute; left: 0; color: var(--ink-accent);">•</span>${b}</li>`).join('')}
+                      ${area.bullets.map(b => `<li style="position: relative; padding-left: 1rem;"><span style="position: absolute; left: 0; color: var(--accent);">•</span>${b}</li>`).join('')}
                     </ul>
                   </div>
                 `;

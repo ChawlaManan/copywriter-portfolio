@@ -7,21 +7,22 @@
   <link rel="stylesheet" href="style.css">
   <style>
     body {
-      background-color: #f7f6f0;
-      color: #1c1c1c;
+      background-color: var(--surface);
+      color: var(--text);
       font-family: 'Plus Jakarta Sans', sans-serif;
     }
     .admin-container {
       max-width: 1000px;
       margin: 4rem auto;
       padding: 2.5rem;
-      background: #faf8f5;
-      border: 2px solid #1c1c1c;
-      box-shadow: 6px 6px 0px #1c1c1c;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      box-shadow: 4px 4px 0px var(--border);
+      border-radius: 8px;
       position: relative;
     }
     .admin-header {
-      border-bottom: 2px dashed rgba(28, 28, 28, 0.15);
+      border-bottom: 1px solid var(--border);
       padding-bottom: 1.5rem;
       margin-bottom: 2rem;
       display: flex;
@@ -32,19 +33,20 @@
       font-family: 'Lora', serif;
       font-size: 2.25rem;
       font-weight: 700;
+      color: var(--text);
       margin: 0;
     }
     .admin-subtitle {
       font-family: 'IBM Plex Mono', monospace;
       font-size: 0.8rem;
-      color: #7d8b96;
+      color: var(--text-muted);
       margin-top: 0.25rem;
     }
     .nav-tabs {
       display: flex;
       gap: 0.5rem;
       margin-bottom: 2rem;
-      border-bottom: 2px solid #1c1c1c;
+      border-bottom: 1px solid var(--border);
       padding-bottom: 0.5rem;
     }
     .tab-btn {
@@ -55,17 +57,20 @@
       font-size: 0.9rem;
       cursor: pointer;
       font-weight: 700;
+      color: var(--text-muted);
       transition: all 0.2s ease;
+      border-radius: 4px 4px 0 0;
     }
     .tab-btn:hover {
-      background: rgba(224, 83, 60, 0.05);
+      background: rgba(34, 208, 108, 0.08);
+      color: var(--ink);
     }
     .tab-btn.active {
-      border: 2px solid #1c1c1c;
-      border-bottom: 2px solid #faf8f5;
-      margin-bottom: -10px;
-      background: #faf8f5;
-      color: #e0533c;
+      border: 1px solid var(--border);
+      border-bottom: 1px solid var(--bg);
+      margin-bottom: -9px;
+      background: var(--bg);
+      color: var(--ink);
     }
     .tab-content {
       display: none;
