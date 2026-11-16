@@ -619,7 +619,7 @@ function renderTabContent(typeId, samples, container) {
         ${items.map(item => `
           <a href="${item.url}" target="_blank" rel="noopener noreferrer" class="blog-sample-card">
             <div class="blog-card-content">
-              <span class="sample-brand-tag">${item.brand}</span>
+              <span class="sample-brand-tag">${item.brand || ''}${item.industry ? ` · ${item.industry}` : ''}</span>
               <h2 class="blog-card-title">${item.title}</h2>
             </div>
             <div class="sample-card-footer">

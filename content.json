@@ -370,23 +370,65 @@
     {
       "id": "blog-1",
       "type": "blogs",
-      "title": "[Placeholder] B2B SaaS Onboarding Teardown: Why Users Churn Before Day 3",
-      "brand": "[Placeholder] CloudScale",
-      "url": "https://example.com/blog-1"
+      "title": "What is the Difference Between B.E. and B.Tech?",
+      "brand": "CUCHD",
+      "url": "https://www.cuchd.in/blogs/what-is-the-difference-between-be-and-btech.php"
     },
     {
       "id": "blog-2",
       "type": "blogs",
-      "title": "[Placeholder] The Zero-CAC Flywheel: Scaling D2C Organic Search Authority",
-      "brand": "[Placeholder] Terra Flora",
-      "url": "https://example.com/blog-2"
+      "title": "30 Congratulations Messages for a Promotion That Truly Celebrate the Moment",
+      "brand": "Sendwishonline",
+      "url": "https://sendwishonline.com/en/articles/30-congratulations-messages-for-promotion"
     },
     {
       "id": "blog-3",
       "type": "blogs",
-      "title": "[Placeholder] Demystifying Algorithmic Trading for First-Time Retail Investors",
-      "brand": "[Placeholder] Apex Wealth",
-      "url": "https://example.com/blog-3"
+      "title": "Seven Reasons Why Solar Panels Are Valuable for Your Lifestyle",
+      "brand": "Intersolar Systems",
+      "url": "https://intersolarsystems.com/seven-reasons-why-solar-panels-are-valuable-for-your-lifestyle/"
+    },
+    {
+      "id": "blog-4",
+      "type": "blogs",
+      "title": "Ganesh Chaturthi 2025: Significance, Rituals & Festive Gifts",
+      "brand": "Ethnic India",
+      "url": "https://ethnicindiahandicrafts.com/blogs/ethnicindia/ganesh-chaturthi-2025-date-puja-timings-rituals-gifts"
+    },
+    {
+      "id": "blog-5",
+      "type": "blogs",
+      "title": "Celebrate This Sharad Navratri 2025 With Brass Maa Durga Idols",
+      "brand": "Ethnic India",
+      "url": "https://ethnicindiahandicrafts.com/blogs/ethnicindia/sharad-navratri-2025-dates-significance-rituals-brass-durga-idols"
+    },
+    {
+      "id": "blog-6",
+      "type": "blogs",
+      "title": "Vijayadashami 2025 (Dussehra): Date, Rituals & Celebration",
+      "brand": "Ethnic India",
+      "url": "https://ethnicindiahandicrafts.com/blogs/ethnicindia/vijayadashami-2025-dussehra-date-rituals-celebration"
+    },
+    {
+      "id": "blog-7",
+      "type": "blogs",
+      "title": "The Advantages of Solar PV Panels For Homes and Businesses",
+      "brand": "Intersolar Systems",
+      "url": "https://intersolarsystems.com/the-advantages-of-solar-pv-panels-for-homes-and-businesses/"
+    },
+    {
+      "id": "blog-8",
+      "type": "blogs",
+      "title": "The 5 Tallest Statues of Lord Shiva In India",
+      "brand": "Ethnic India",
+      "url": "https://ethnicindiahandicrafts.com/blogs/ethnicindia/biggest-lord-shiva-statues-india"
+    },
+    {
+      "id": "blog-9",
+      "type": "blogs",
+      "title": "Nag Panchami 2025: Date, Significance, Rituals & Why You Should Buy a Brass Nag Idol",
+      "brand": "Ethnic India",
+      "url": "https://ethnicindiahandicrafts.com/blogs/ethnicindia/nag-panchami-2025-date-significance-pooja-vidhi"
     },
     {
       "id": "reel-1",
