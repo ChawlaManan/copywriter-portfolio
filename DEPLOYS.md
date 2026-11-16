@@ -65,10 +65,9 @@ The contact form is configured with a resilient, multi-tiered transmission archi
 - **First-Time Activation**: The very first time a submission is sent through the form, FormSubmit sends a quick one-time verification email to `chawlamanan@outlook.com` with an "Activate Form" button. Click it once, and all future client inquiries will land directly in your inbox instantly.
 - The sender's email is set as `Reply-To`, allowing you to reply to prospective clients with a single click.
 
-### 2. Database Archiving & CMS Inbox (Optional with Vercel Postgres)
-- If you have linked a Vercel Postgres database to your project, submissions are also stored in a database table (`contact_submissions`).
+### 2. Database Archiving (Optional with Vercel Postgres)
+- If you have linked a Vercel Postgres database to your project, submissions are also stored in a database table (`contact_submissions`) for archiving and backup.
 - The table is **created automatically** by the API on first submission—no manual SQL queries are required.
-- You can review all past client inquiries anytime inside your CMS console at `/admin.html` under the **INQUIRIES** tab.
 
 ### 3. Client-Side & Offline Fallbacks
 - If the serverless API is offline (e.g. running locally via a simple static web server), the browser automatically routes the submission through the direct client-side delivery bridge.

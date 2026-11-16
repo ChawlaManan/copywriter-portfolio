@@ -1,15 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // Fetch central data registry (try database-backed API first, fall back to static file)
-  fetch('/api/get-content')
+  // Fetch central data registry directly from static content.json
+  fetch('content.json')
     .then(response => {
       if (!response.ok) {
-        throw new Error('API request failed');
+        throw new Error(`Failed to load content.json (${response.status})`);
       }
       return response.json();
-    })
-    .catch(err => {
-      console.log('[CMS Fallback] Database API offline or local development. Fetching static content.json...');
-      return fetch('content.json').then(res => res.json());
     })
     .then(data => {
       // Initialize layout rendering
