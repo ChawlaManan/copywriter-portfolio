@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Proof of Work | Case Studies & Strategic Campaigns</title>
-  <meta name="description" content="Outcome-led strategic case studies and conversion copy projects across Fintech, Tech, D2C, and E-commerce. Proof of work over fluff.">
+  <title>Proof of Work — Work Samples | Senior Copywriter</title>
+  <meta name="description" content="Browse direct copy samples across blogs, social posts, video reels, and conversion email drips. Strategy-led writing samples for high-growth brands.">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -24,6 +24,7 @@
           <ul class="nav-links">
             <li><a href="index.html">Home</a></li>
             <li><a href="proof-of-work.html" class="active">Proof of Work</a></li>
+            <li><a href="case-studies.html">Case Studies</a></li>
             <li><a href="index.html#about">About</a></li>
             <li><a href="index.html#contact" class="nav-cta">Contact</a></li>
           </ul>
@@ -32,62 +33,80 @@
     </div>
   </header>
 
-  <!-- Proof of Work Hero -->
+  <!-- Work Samples Hero -->
   <main class="container">
     <section class="pow-hero fade-in">
-      <h1 id="pow-title" style="position: relative; display: inline-block;">
+      <h1 id="ws-title" style="position: relative; display: inline-block;">
         Proof of Work
         <svg style="position: absolute; bottom: -8px; left: 0; width: 45%; height: 10px; pointer-events: none;" viewBox="0 0 100 10" preserveAspectRatio="none"><path d="M0,5 Q50,9 100,5" stroke="var(--ink-accent)" stroke-width="4" fill="none" stroke-linecap="round"/></svg>
       </h1>
-      <p id="pow-subtext" style="margin-top: 1rem; color: var(--text-muted);">
-        Every project below was treated as a business objective, not a writing exercise. Toggle the full case studies to view the diagnosis, strategic approach, and before/after copies.
+      <p id="ws-subtext" style="margin-top: 1rem; color: var(--text-muted);">
+        Looking for strategy and results? <a href="case-studies.html" class="inline-link" style="color: var(--text); font-weight: 600; text-decoration: underline; text-underline-offset: 3px;">See Case Studies →</a>
       </p>
     </section>
 
-    <!-- Project Filter Bar -->
-    <section class="filter-container fade-in delay-1">
-      <div class="filter-buttons">
-        <button class="filter-btn active" data-filter="all">All Projects</button>
-        <button class="filter-btn" data-filter="tech-saas">Tech/SaaS</button>
-        <button class="filter-btn" data-filter="finance-b2b">Finance/B2B</button>
-        <button class="filter-btn" data-filter="healthcare-d2c">Healthcare/D2C</button>
-        <button class="filter-btn" data-filter="fashion-lifestyle">Fashion/Lifestyle</button>
-        <button class="filter-btn" data-filter="agency-creative">Agency/Creative</button>
-        <button class="filter-btn" data-filter="education">Education</button>
-        <button class="filter-btn" data-filter="manufacturing">Manufacturing</button>
+    <!-- Work Samples Tab Bar -->
+    <section class="work-tabs-container fade-in delay-1" style="margin: 2.5rem 0 2rem 0;">
+      <div class="tabs-scroll-container" role="tablist" aria-label="Work sample categories" id="work-samples-tablist">
+        <button class="filter-btn active" role="tab" id="tab-blogs" aria-selected="true" aria-controls="work-samples-panel" tabindex="0" data-type="blogs">Blogs</button>
+        <button class="filter-btn" role="tab" id="tab-reels" aria-selected="false" aria-controls="work-samples-panel" tabindex="-1" data-type="reels">Reels</button>
+        <button class="filter-btn" role="tab" id="tab-social" aria-selected="false" aria-controls="work-samples-panel" tabindex="-1" data-type="social">Social Posts</button>
+        <button class="filter-btn" role="tab" id="tab-emails" aria-selected="false" aria-controls="work-samples-panel" tabindex="-1" data-type="emails">Emails</button>
       </div>
-      <div class="project-count" id="project-count-display">Loading projects...</div>
     </section>
 
-    <!-- Grid containing case studies (Tier 1) -->
-    <section class="pow-grid" id="pow-case-studies-container">
-      <!-- Dynamically loaded -->
-    </section>
+    <!-- Content Area (role="tabpanel") -->
+    <section id="work-samples-panel" role="tabpanel" aria-labelledby="tab-blogs" class="fade-in delay-2" style="min-height: 400px; margin-bottom: 5rem;">
+      <!-- Static-First Pre-rendered Default Tab (Blogs) for instant load & SEO -->
+      <div class="work-samples-grid-blogs" id="blogs-grid">
+        <a href="https://example.com/blog-1" target="_blank" rel="noopener noreferrer" class="blog-sample-card">
+          <div class="blog-card-content">
+            <span class="sample-brand-tag">[Placeholder] CloudScale</span>
+            <h2 class="blog-card-title">[Placeholder] B2B SaaS Onboarding Teardown: Why Users Churn Before Day 3</h2>
+          </div>
+          <div class="sample-card-footer">
+            <span class="sample-action-text">Read article</span>
+            <span class="sample-arrow">→</span>
+          </div>
+        </a>
+        <a href="https://example.com/blog-2" target="_blank" rel="noopener noreferrer" class="blog-sample-card">
+          <div class="blog-card-content">
+            <span class="sample-brand-tag">[Placeholder] Terra Flora</span>
+            <h2 class="blog-card-title">[Placeholder] The Zero-CAC Flywheel: Scaling D2C Organic Search Authority</h2>
+          </div>
+          <div class="sample-card-footer">
+            <span class="sample-action-text">Read article</span>
+            <span class="sample-arrow">→</span>
+          </div>
+        </a>
+        <a href="https://example.com/blog-3" target="_blank" rel="noopener noreferrer" class="blog-sample-card">
+          <div class="blog-card-content">
+            <span class="sample-brand-tag">[Placeholder] Apex Wealth</span>
+            <h2 class="blog-card-title">[Placeholder] Demystifying Algorithmic Trading for First-Time Retail Investors</h2>
+          </div>
+          <div class="sample-card-footer">
+            <span class="sample-action-text">Read article</span>
+            <span class="sample-arrow">→</span>
+          </div>
+        </a>
+      </div>
 
-    <!-- Divider Line -->
-    <div style="border-bottom: 2px dashed rgba(28, 28, 28, 0.1); margin-bottom: 3.5rem;"></div>
-
-    <!-- Section Title for Project Cards -->
-    <div class="section-title-wrapper fade-in" style="margin-bottom: 2rem;">
-      <h2 class="section-title">
-        <span class="hand-drawn-label" id="pow-cards-tag">[ Campaign Cards ]</span>
-        <span id="pow-cards-title">Focused Engagements & Copy Assets</span>
-      </h2>
-      <span class="project-count" id="pow-cards-subtitle" style="font-family: var(--font-hand); font-size: 1.25rem;">Tactical positioning & copy execution</span>
-    </div>
-
-    <!-- Tier 2: Project Cards Grid (smaller layout) -->
-    <section class="project-cards-container" id="pow-project-cards-container">
-      <!-- Dynamically loaded -->
+      <noscript>
+        <div style="margin-top: 2rem; padding: 1.5rem; background: var(--surface); border: 1px solid var(--border); border-radius: 8px;">
+          <p style="margin: 0; color: var(--text-muted); font-size: 0.95rem;">
+            JavaScript is disabled. The samples above showcase selected articles. To view Reels, Social Posts, and Email samples, enable JavaScript in your browser settings.
+          </p>
+        </div>
+      </noscript>
     </section>
 
     <!-- Closing CTA Area -->
-    <section class="whiteboard-card fade-in" id="pow-cta-container" style="margin: 5rem 0; text-align: center; background-color: var(--surface);">
-      <h2 id="pow-cta-headline" style="font-size: 2rem; margin-bottom: 1rem; color: var(--text);">Why isn't your content turning into customers?</h2>
-      <p id="pow-cta-subhead" style="max-width: 700px; margin: 0 auto 1.5rem auto; font-size: 1.05rem; line-height: 1.5;">
+    <section class="whiteboard-card fade-in" id="ws-cta-container" style="margin: 5rem 0; text-align: center; background-color: var(--surface);">
+      <h2 id="ws-cta-headline" style="font-size: 2rem; margin-bottom: 1rem; color: var(--text);">Why isn't your content turning into customers?</h2>
+      <p id="ws-cta-subhead" style="max-width: 700px; margin: 0 auto 1.5rem auto; font-size: 1.05rem; line-height: 1.5;">
         Most content problems aren't a writing problem. They're a strategy gap: wrong audience, wrong platform mix, or no clear line from content to conversion. In one session, we'll find exactly where yours is leaking value.
       </p>
-      <a href="index.html#contact" class="btn btn-primary" id="pow-cta-btn">Let's Talk</a>
+      <a href="index.html#contact" class="btn btn-primary" id="ws-cta-btn">Let's Talk</a>
     </section>
 
   </main>

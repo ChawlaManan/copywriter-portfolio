@@ -64,7 +64,14 @@
     ],
     "industries_served": {
       "title": "INDUSTRIES SERVED & MESSAGE ALIGNMENT",
-      "tags": ["Tech/SaaS", "Finance/B2B", "Healthcare/D2C", "FMCG", "Fashion/Lifestyle", "E-Commerce"]
+      "tags": [
+        "Tech/SaaS",
+        "Finance/B2B",
+        "Healthcare/D2C",
+        "FMCG",
+        "Fashion/Lifestyle",
+        "E-Commerce"
+      ]
     },
     "about": {
       "headline": "The Strategist Framework",
@@ -101,20 +108,6 @@
       "headline": "Let's build a structured message.",
       "subtext": "Inquire about project availability, retainer consultation bookings, or positioning audits. Expect a direct, fluff-free response in under 24 business hours.",
       "email_prompt": "Or drop an email directly:"
-    }
-  },
-  "proof_of_work_page": {
-    "title": "Proof of Work",
-    "subtext": "Every project below was treated as a business objective, not a writing exercise. Toggle the full case studies to view the diagnosis, strategic approach, and before/after copies.",
-    "campaign_cards_header": {
-      "tag": "[ Campaign Cards ]",
-      "title": "Focused Engagements & Copy Assets",
-      "subtitle": "Tactical positioning & copy execution"
-    },
-    "cta": {
-      "headline": "Why isn't your content turning into customers?",
-      "subhead": "Most content problems aren't a writing problem. They're a strategy gap: wrong audience, wrong platform mix, or no clear line from content to conversion. In one session, we'll find exactly where yours is leaking value.",
-      "btn_text": "Let's Talk"
     }
   },
   "projects": [
@@ -326,6 +319,149 @@
         "Positioning strategy documentation"
       ],
       "quote": "Celebrate workplace milestones with shared, digital-first cards."
+    }
+  ],
+  "case_studies_page": {
+    "title": "Case Studies",
+    "subtext": "Every project below was treated as a business objective, not a writing exercise. Toggle the full case studies to view the diagnosis, strategic approach, and before/after copies.",
+    "campaign_cards_header": {
+      "tag": "[ Campaign Cards ]",
+      "title": "Focused Engagements & Copy Assets",
+      "subtitle": "Tactical positioning & copy execution"
+    },
+    "cta": {
+      "headline": "Why isn't your content turning into customers?",
+      "subhead": "Most content problems aren't a writing problem. They're a strategy gap: wrong audience, wrong platform mix, or no clear line from content to conversion. In one session, we'll find exactly where yours is leaking value.",
+      "btn_text": "Let's Talk"
+    }
+  },
+  "work_samples_page": {
+    "title": "Proof of Work",
+    "subtext": "Looking for strategy and results? <a href=\"case-studies.html\">See Case Studies →</a>",
+    "cta": {
+      "headline": "Why isn't your content turning into customers?",
+      "subhead": "Most content problems aren't a writing problem. They're a strategy gap: wrong audience, wrong platform mix, or no clear line from content to conversion. In one session, we'll find exactly where yours is leaking value.",
+      "btn_text": "Let's Talk"
+    },
+    "categories": [
+      {
+        "id": "blogs",
+        "label": "Blogs",
+        "order": 1
+      },
+      {
+        "id": "reels",
+        "label": "Reels",
+        "order": 2
+      },
+      {
+        "id": "social",
+        "label": "Social Posts",
+        "order": 3
+      },
+      {
+        "id": "emails",
+        "label": "Emails",
+        "order": 4
+      }
+    ]
+  },
+  "work_samples": [
+    {
+      "id": "blog-1",
+      "type": "blogs",
+      "title": "[Placeholder] B2B SaaS Onboarding Teardown: Why Users Churn Before Day 3",
+      "brand": "[Placeholder] CloudScale",
+      "url": "https://example.com/blog-1"
+    },
+    {
+      "id": "blog-2",
+      "type": "blogs",
+      "title": "[Placeholder] The Zero-CAC Flywheel: Scaling D2C Organic Search Authority",
+      "brand": "[Placeholder] Terra Flora",
+      "url": "https://example.com/blog-2"
+    },
+    {
+      "id": "blog-3",
+      "type": "blogs",
+      "title": "[Placeholder] Demystifying Algorithmic Trading for First-Time Retail Investors",
+      "brand": "[Placeholder] Apex Wealth",
+      "url": "https://example.com/blog-3"
+    },
+    {
+      "id": "reel-1",
+      "type": "reels",
+      "brand": "[Placeholder] Lumina Coffee",
+      "screenshot": "assets/work/reel-placeholder-1.svg",
+      "live_url": "https://instagram.com",
+      "platform": "Instagram"
+    },
+    {
+      "id": "reel-2",
+      "type": "reels",
+      "brand": "[Placeholder] Velocity App",
+      "screenshot": "assets/work/reel-placeholder-2.svg",
+      "live_url": "https://instagram.com",
+      "platform": "Instagram"
+    },
+    {
+      "id": "reel-3",
+      "type": "reels",
+      "brand": "[Placeholder] EcoStride",
+      "screenshot": "assets/work/reel-placeholder-3.svg",
+      "live_url": "https://instagram.com",
+      "platform": "Instagram"
+    },
+    {
+      "id": "social-1",
+      "type": "social",
+      "brand": "[Placeholder] SaaSTrack",
+      "screenshot": "assets/work/social-placeholder-1.svg",
+      "live_url": "https://linkedin.com",
+      "platform": "LinkedIn"
+    },
+    {
+      "id": "social-2",
+      "type": "social",
+      "brand": "[Placeholder] CraftDesign Co",
+      "screenshot": "assets/work/social-placeholder-2.svg",
+      "live_url": "https://instagram.com",
+      "platform": "Instagram"
+    },
+    {
+      "id": "social-3",
+      "type": "social",
+      "brand": "[Placeholder] B2B Growth Lab",
+      "screenshot": "assets/work/social-placeholder-3.svg",
+      "live_url": "https://twitter.com",
+      "platform": "X (Twitter)"
+    },
+    {
+      "id": "email-1",
+      "type": "emails",
+      "brand": "[Placeholder] FintechFlow",
+      "challenge": "High cart abandonment at KYC document verification step.",
+      "icp": "First-time crypto and equity retail investors (24-35).",
+      "resolution": "3-touch reassuring security drip clarifying regulatory compliance.",
+      "draft_url": "https://example.com/draft-1"
+    },
+    {
+      "id": "email-2",
+      "type": "emails",
+      "brand": "[Placeholder] PetCare Direct",
+      "challenge": "Dormant subscriber base after initial welcome discount.",
+      "icp": "Multi-pet households purchasing chronic healthcare supplies.",
+      "resolution": "Predictive refill prompt series aligned with seasonal pet health cycles.",
+      "draft_url": "https://example.com/draft-2"
+    },
+    {
+      "id": "email-3",
+      "type": "emails",
+      "brand": "[Placeholder] DevSprint",
+      "challenge": "Low trial-to-paid conversion for developer analytics CLI.",
+      "icp": "Lead backend engineers and DevOps team leads.",
+      "resolution": "Action-oriented terminal cheat sheet sequence with copy-paste commands.",
+      "draft_url": "https://example.com/draft-3"
     }
   ]
 }

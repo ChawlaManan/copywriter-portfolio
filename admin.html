@@ -230,7 +230,8 @@
       <button class="tab-btn" onclick="switchTab('capabilities')">CAPABILITIES</button>
       <button class="tab-btn" onclick="switchTab('process')">PROCESS & INDUSTRIES</button>
       <button class="tab-btn" onclick="switchTab('about')">ABOUT & CONTACT</button>
-      <button class="tab-btn" onclick="switchTab('pow')">POW PAGE COPY</button>
+      <button class="tab-btn" onclick="switchTab('pow')">CASE STUDIES PAGE</button>
+      <button class="tab-btn" onclick="switchTab('work-samples')">WORK SAMPLES</button>
       <button class="tab-btn" onclick="switchTab('projects')">PROJECTS INDEX</button>
       <button class="tab-btn" onclick="switchTab('submissions')" id="tab-btn-submissions">INQUIRIES (<span id="inquiries-count">0</span>)</button>
     </div>
@@ -380,9 +381,9 @@
       </div>
     </div>
 
-    <!-- TAB 5: Proof of Work Page Copy -->
+    <!-- TAB 5: Case Studies Page Copy -->
     <div id="tab-pow" class="tab-content">
-      <h2 style="margin-top: 0; font-family: Lora, serif; font-size: 1.5rem; margin-bottom: 1.5rem;">Proof of Work Page Header</h2>
+      <h2 style="margin-top: 0; font-family: Lora, serif; font-size: 1.5rem; margin-bottom: 1.5rem;">Case Studies Page Header (case-studies.html)</h2>
       <div class="form-group">
         <label for="pow-subtext-input">Page Description Subtext</label>
         <textarea id="pow-subtext-input" style="min-height: 80px;"></textarea>
@@ -416,6 +417,41 @@
       <div class="form-group">
         <label for="pow-cta-btn-input">CTA Button Text</label>
         <input type="text" id="pow-cta-btn-input" placeholder="e.g. Let's Talk">
+      </div>
+    </div>
+
+    <!-- TAB 6: Work Samples Page Copy & Items -->
+    <div id="tab-work-samples" class="tab-content">
+      <h2 style="margin-top: 0; font-family: Lora, serif; font-size: 1.5rem; margin-bottom: 1.5rem;">Work Samples Page (proof-of-work.html)</h2>
+      <div class="form-group">
+        <label for="ws-subtext-input">Page Subtext Copy (supports HTML link to Case Studies)</label>
+        <textarea id="ws-subtext-input" style="min-height: 60px;"></textarea>
+      </div>
+
+      <h2 style="font-family: Lora, serif; font-size: 1.5rem; margin-top: 2rem; margin-bottom: 1.5rem;">Closing CTA Section</h2>
+      <div class="form-group">
+        <label for="ws-cta-title-input">CTA Headline</label>
+        <input type="text" id="ws-cta-title-input" placeholder="e.g. Why isn't your content turning into customers?">
+      </div>
+      <div class="form-group">
+        <label for="ws-cta-subhead-input">CTA Subhead Description</label>
+        <textarea id="ws-cta-subhead-input" style="min-height: 70px;"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="ws-cta-btn-input">CTA Button Text</label>
+        <input type="text" id="ws-cta-btn-input" placeholder="e.g. Let's Talk">
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; margin: 2.5rem 0 1.5rem 0; border-top: 1px dashed rgba(28,28,28,0.15); padding-top: 1.5rem;">
+        <div>
+          <h2 style="margin: 0; font-family: Lora, serif; font-size: 1.5rem;">Work Samples (<span id="ws-total-count">0</span>)</h2>
+          <p style="margin: 0.25rem 0 0 0; font-size: 0.85rem; color: #555;">Add, edit, reorder or delete sample items across Blogs, Reels, Social Posts, and Emails.</p>
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="openWorkSampleModal()">+ Add Work Sample</button>
+      </div>
+
+      <div id="work-samples-list-container">
+        <!-- Dynamically loaded -->
       </div>
     </div>
 
@@ -554,6 +590,109 @@
     </div>
   </div>
 
+  <!-- Work Sample Edit Modal -->
+  <div class="modal" id="work-sample-modal">
+    <div class="modal-content">
+      <h3 id="ws-modal-title" style="margin-top: 0; font-family: Lora, serif; font-size: 1.5rem; border-bottom: 2px solid #1c1c1c; padding-bottom: 0.5rem;">Add/Edit Work Sample</h3>
+      
+      <input type="hidden" id="ws-modal-index">
+      
+      <div class="grid-2">
+        <div class="form-group">
+          <label for="ws-modal-id">Unique ID</label>
+          <input type="text" id="ws-modal-id" placeholder="e.g. blog-1, reel-1">
+        </div>
+        <div class="form-group">
+          <label for="ws-modal-type">Category Tab</label>
+          <select id="ws-modal-type" onchange="onWorkSampleTypeChange()">
+            <option value="blogs">Blogs</option>
+            <option value="reels">Reels</option>
+            <option value="social">Social Posts</option>
+            <option value="emails">Emails</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="ws-modal-brand">Brand / Client Name</label>
+        <input type="text" id="ws-modal-brand" placeholder="e.g. CloudScale or Lumina Coffee">
+      </div>
+
+      <!-- Dynamic Fields for Blogs -->
+      <div id="ws-fields-blogs" class="ws-type-fields">
+        <div class="form-group">
+          <label for="ws-modal-title-input">Blog / Article Title</label>
+          <input type="text" id="ws-modal-title-input" placeholder="e.g. B2B SaaS Onboarding Teardown: Why Users Churn Before Day 3">
+        </div>
+        <div class="form-group">
+          <label for="ws-modal-url">Live Blog Article URL</label>
+          <input type="text" id="ws-modal-url" placeholder="https://example.com/blog-post">
+        </div>
+      </div>
+
+      <!-- Dynamic Fields for Emails -->
+      <div id="ws-fields-emails" class="ws-type-fields" style="display: none;">
+        <div class="form-group">
+          <label for="ws-modal-challenge">Challenge (One line)</label>
+          <input type="text" id="ws-modal-challenge" placeholder="e.g. High cart abandonment at KYC document verification step.">
+        </div>
+        <div class="form-group">
+          <label for="ws-modal-icp">ICP (One line)</label>
+          <input type="text" id="ws-modal-icp" placeholder="e.g. First-time crypto and equity retail investors (24-35).">
+        </div>
+        <div class="form-group">
+          <label for="ws-modal-resolution">Resolution (One or two lines)</label>
+          <textarea id="ws-modal-resolution" style="min-height: 60px;" placeholder="e.g. 3-touch reassuring security drip clarifying regulatory compliance."></textarea>
+        </div>
+        <div class="form-group">
+          <label for="ws-modal-draft-url">Email Draft Document / Figma / Drive URL</label>
+          <input type="text" id="ws-modal-draft-url" placeholder="https://example.com/email-draft">
+        </div>
+      </div>
+
+      <!-- Dynamic Fields for Reels -->
+      <div id="ws-fields-reels" class="ws-type-fields" style="display: none;">
+        <div class="form-group">
+          <label for="ws-modal-reel-screenshot">Screenshot Path or URL (9:16 vertical)</label>
+          <input type="text" id="ws-modal-reel-screenshot" placeholder="assets/work/reel-placeholder-1.svg">
+        </div>
+        <div class="grid-2">
+          <div class="form-group">
+            <label for="ws-modal-reel-url">Live Reel URL</label>
+            <input type="text" id="ws-modal-reel-url" placeholder="https://instagram.com/reel/...">
+          </div>
+          <div class="form-group">
+            <label for="ws-modal-reel-platform">Platform Name</label>
+            <input type="text" id="ws-modal-reel-platform" placeholder="e.g. Instagram">
+          </div>
+        </div>
+      </div>
+
+      <!-- Dynamic Fields for Social Posts -->
+      <div id="ws-fields-social" class="ws-type-fields" style="display: none;">
+        <div class="form-group">
+          <label for="ws-modal-social-screenshot">Screenshot Path or URL (natural aspect ratio)</label>
+          <input type="text" id="ws-modal-social-screenshot" placeholder="assets/work/social-placeholder-1.svg">
+        </div>
+        <div class="grid-2">
+          <div class="form-group">
+            <label for="ws-modal-social-url">Live Social Post URL</label>
+            <input type="text" id="ws-modal-social-url" placeholder="https://linkedin.com/posts/...">
+          </div>
+          <div class="form-group">
+            <label for="ws-modal-social-platform">Platform Tag</label>
+            <input type="text" id="ws-modal-social-platform" placeholder="e.g. LinkedIn, Instagram, X (Twitter)">
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn btn-secondary btn-sm" onclick="closeWorkSampleModal()">Cancel</button>
+        <button class="btn btn-primary btn-sm" onclick="saveWorkSampleItem()">Save Work Sample</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     let registry = null;
 
@@ -660,8 +799,29 @@
       if (!registry.homepage.contact_section) {
         registry.homepage.contact_section = { headline: "Let's build a structured message.", subtext: 'Inquire about project availability...', email_prompt: 'Or drop an email directly:' };
       }
-      if (!registry.proof_of_work_page) {
-        registry.proof_of_work_page = { title: 'Proof of Work', subtext: 'Every project below...', campaign_cards_header: { tag: '[ Campaign Cards ]', title: 'Focused Engagements & Copy Assets', subtitle: 'Tactical positioning & copy execution' }, cta: { headline: "Why isn't your content turning into customers?", subhead: "Most content problems...", btn_text: "Let's Talk" } };
+      if (!registry.case_studies_page) {
+        registry.case_studies_page = registry.proof_of_work_page || { 
+          title: 'Case Studies', 
+          subtext: 'Every project below was treated as a business objective, not a writing exercise. Toggle the full case studies to view the diagnosis, strategic approach, and before/after copies.', 
+          campaign_cards_header: { tag: '[ Campaign Cards ]', title: 'Focused Engagements & Copy Assets', subtitle: 'Tactical positioning & copy execution' }, 
+          cta: { headline: "Why isn't your content turning into customers?", subhead: "Most content problems...", btn_text: "Let's Talk" } 
+        };
+      }
+      if (!registry.work_samples_page) {
+        registry.work_samples_page = {
+          title: 'Proof of Work',
+          subtext: 'Looking for strategy and results? <a href="case-studies.html">See Case Studies →</a>',
+          cta: { headline: "Why isn't your content turning into customers?", subhead: "Most content problems...", btn_text: "Let's Talk" },
+          categories: [
+            { id: 'blogs', label: 'Blogs', order: 1 },
+            { id: 'reels', label: 'Reels', order: 2 },
+            { id: 'social', label: 'Social Posts', order: 3 },
+            { id: 'emails', label: 'Emails', order: 4 }
+          ]
+        };
+      }
+      if (!registry.work_samples) {
+        registry.work_samples = [];
       }
 
       // Tab 1: Profile & Hero
@@ -764,18 +924,248 @@
       document.getElementById('contact-subtext-input').value = registry.homepage.contact_section.subtext || '';
       document.getElementById('contact-prompt-input').value = registry.homepage.contact_section.email_prompt || '';
 
-      // Tab 5: POW Page Copy
-      document.getElementById('pow-subtext-input').value = registry.proof_of_work_page.subtext || '';
-      document.getElementById('pow-cards-tag-input').value = registry.proof_of_work_page.campaign_cards_header.tag || '';
-      document.getElementById('pow-cards-title-input').value = registry.proof_of_work_page.campaign_cards_header.title || '';
-      document.getElementById('pow-cards-sub-input').value = registry.proof_of_work_page.campaign_cards_header.subtitle || '';
+      // Tab 5: Case Studies Page Copy
+      const csPage = registry.case_studies_page || registry.proof_of_work_page || {};
+      document.getElementById('pow-subtext-input').value = csPage.subtext || '';
+      document.getElementById('pow-cards-tag-input').value = (csPage.campaign_cards_header && csPage.campaign_cards_header.tag) || '';
+      document.getElementById('pow-cards-title-input').value = (csPage.campaign_cards_header && csPage.campaign_cards_header.title) || '';
+      document.getElementById('pow-cards-sub-input').value = (csPage.campaign_cards_header && csPage.campaign_cards_header.subtitle) || '';
 
-      document.getElementById('pow-cta-title-input').value = registry.proof_of_work_page.cta.headline || '';
-      document.getElementById('pow-cta-subhead-input').value = registry.proof_of_work_page.cta.subhead || '';
-      document.getElementById('pow-cta-btn-input').value = registry.proof_of_work_page.cta.btn_text || '';
+      document.getElementById('pow-cta-title-input').value = (csPage.cta && csPage.cta.headline) || '';
+      document.getElementById('pow-cta-subhead-input').value = (csPage.cta && csPage.cta.subhead) || '';
+      document.getElementById('pow-cta-btn-input').value = (csPage.cta && csPage.cta.btn_text) || '';
 
-      // Tab 6: Projects List
+      // Tab 6: Work Samples Page Copy
+      const wsPage = registry.work_samples_page || {};
+      document.getElementById('ws-subtext-input').value = wsPage.subtext || '';
+      document.getElementById('ws-cta-title-input').value = (wsPage.cta && wsPage.cta.headline) || '';
+      document.getElementById('ws-cta-subhead-input').value = (wsPage.cta && wsPage.cta.subhead) || '';
+      document.getElementById('ws-cta-btn-input').value = (wsPage.cta && wsPage.cta.btn_text) || '';
+
+      // Render Work Samples & Projects Lists
+      renderWorkSamplesList();
       renderProjectsList();
+    }
+
+    // =========================================================================
+    // WORK SAMPLES MANAGER (CRUD & Reorder)
+    // =========================================================================
+
+    function renderWorkSamplesList() {
+      const container = document.getElementById('work-samples-list-container');
+      const countEl = document.getElementById('ws-total-count');
+      const samples = registry.work_samples || [];
+      if (countEl) countEl.textContent = samples.length;
+      if (!container) return;
+
+      if (samples.length === 0) {
+        container.innerHTML = `
+          <div style="border: 2px dashed #1c1c1c; padding: 2.5rem; text-align: center; background: #fff;">
+            <p style="margin: 0 0 1rem 0; font-family: Lora, serif; font-size: 1.15rem;">No work samples added yet.</p>
+            <button class="btn btn-primary btn-sm" onclick="openWorkSampleModal()">+ Add First Work Sample</button>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = samples.map((sample, i) => {
+        const typeLabels = { blogs: 'BLOG', reels: 'REEL', social: 'SOCIAL', emails: 'EMAIL' };
+        const displayLabel = typeLabels[sample.type] || sample.type.toUpperCase();
+        const mainTitle = sample.title || sample.brand || 'Untitled Sample';
+        const isFirst = i === 0;
+        const isLast = i === samples.length - 1;
+
+        return `
+          <div class="project-card-item">
+            <div style="max-width: 65%;">
+              <div class="project-card-title">${mainTitle}</div>
+              <div class="project-card-meta">
+                TYPE: ${displayLabel} | BRAND: ${sample.brand || 'N/A'} ${sample.platform ? '| PLATFORM: ' + sample.platform : ''}
+              </div>
+            </div>
+            <div style="display: flex; gap: 0.35rem; align-items: center; flex-wrap: wrap;">
+              <button class="btn btn-secondary btn-sm" style="margin: 0; padding: 0.25rem 0.5rem;" ${isFirst ? 'disabled style="opacity: 0.4;"' : ''} onclick="moveWorkSample(${i}, -1)" title="Move Up">▲</button>
+              <button class="btn btn-secondary btn-sm" style="margin: 0; padding: 0.25rem 0.5rem;" ${isLast ? 'disabled style="opacity: 0.4;"' : ''} onclick="moveWorkSample(${i}, 1)" title="Move Down">▼</button>
+              <button class="btn btn-secondary btn-sm" style="margin: 0;" onclick="openWorkSampleModal(${i})">Edit</button>
+              <button class="btn btn-danger btn-sm" style="margin: 0;" onclick="deleteWorkSample(${i})">Delete</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function moveWorkSample(index, direction) {
+      const targetIndex = index + direction;
+      if (targetIndex < 0 || targetIndex >= registry.work_samples.length) return;
+      const item = registry.work_samples[index];
+      registry.work_samples.splice(index, 1);
+      registry.work_samples.splice(targetIndex, 0, item);
+      log(`Reordered work sample: "${item.title || item.brand}"`);
+      renderWorkSamplesList();
+    }
+
+    function deleteWorkSample(index) {
+      const item = registry.work_samples[index];
+      const name = item.title || item.brand || `Sample #${index + 1}`;
+      if (confirm(`Are you sure you want to delete work sample "${name}"?`)) {
+        registry.work_samples.splice(index, 1);
+        log(`Locally deleted work sample: "${name}"`);
+        renderWorkSamplesList();
+      }
+    }
+
+    function onWorkSampleTypeChange() {
+      const selectedType = document.getElementById('ws-modal-type').value;
+      const types = ['blogs', 'emails', 'reels', 'social'];
+      types.forEach(t => {
+        const el = document.getElementById(`ws-fields-${t}`);
+        if (el) {
+          el.style.display = (t === selectedType) ? 'block' : 'none';
+        }
+      });
+    }
+
+    function openWorkSampleModal(index = null) {
+      const modal = document.getElementById('work-sample-modal');
+      const title = document.getElementById('ws-modal-title');
+      
+      // Populate dropdown options from work_samples_page.categories if present
+      const typeSelect = document.getElementById('ws-modal-type');
+      if (registry.work_samples_page && registry.work_samples_page.categories) {
+        typeSelect.innerHTML = registry.work_samples_page.categories.map(cat => `
+          <option value="${cat.id}">${cat.label}</option>
+        `).join('');
+      }
+
+      if (index !== null && index !== undefined && registry.work_samples[index]) {
+        const item = registry.work_samples[index];
+        title.textContent = 'Edit Work Sample: ' + (item.brand || item.title || 'Item');
+        document.getElementById('ws-modal-index').value = index;
+        document.getElementById('ws-modal-id').value = item.id || '';
+        document.getElementById('ws-modal-type').value = item.type || 'blogs';
+        document.getElementById('ws-modal-brand').value = item.brand || '';
+
+        // Reset and populate specific fields
+        document.getElementById('ws-modal-title-input').value = item.title || '';
+        document.getElementById('ws-modal-url').value = item.url || '';
+
+        document.getElementById('ws-modal-challenge').value = item.challenge || '';
+        document.getElementById('ws-modal-icp').value = item.icp || '';
+        document.getElementById('ws-modal-resolution').value = item.resolution || '';
+        document.getElementById('ws-modal-draft-url').value = item.draft_url || '';
+
+        document.getElementById('ws-modal-reel-screenshot').value = item.screenshot || '';
+        document.getElementById('ws-modal-reel-url').value = item.live_url || '';
+        document.getElementById('ws-modal-reel-platform').value = item.platform || 'Instagram';
+
+        document.getElementById('ws-modal-social-screenshot').value = item.screenshot || '';
+        document.getElementById('ws-modal-social-url').value = item.live_url || '';
+        document.getElementById('ws-modal-social-platform').value = item.platform || 'LinkedIn';
+      } else {
+        title.textContent = 'Add New Work Sample';
+        document.getElementById('ws-modal-index').value = '';
+        document.getElementById('ws-modal-id').value = 'sample-' + Date.now();
+        document.getElementById('ws-modal-type').value = 'blogs';
+        document.getElementById('ws-modal-brand').value = '';
+
+        document.getElementById('ws-modal-title-input').value = '';
+        document.getElementById('ws-modal-url').value = '';
+
+        document.getElementById('ws-modal-challenge').value = '';
+        document.getElementById('ws-modal-icp').value = '';
+        document.getElementById('ws-modal-resolution').value = '';
+        document.getElementById('ws-modal-draft-url').value = '';
+
+        document.getElementById('ws-modal-reel-screenshot').value = 'assets/work/reel-placeholder-1.svg';
+        document.getElementById('ws-modal-reel-url').value = '';
+        document.getElementById('ws-modal-reel-platform').value = 'Instagram';
+
+        document.getElementById('ws-modal-social-screenshot').value = 'assets/work/social-placeholder-1.svg';
+        document.getElementById('ws-modal-social-url').value = '';
+        document.getElementById('ws-modal-social-platform').value = 'LinkedIn';
+      }
+
+      onWorkSampleTypeChange();
+      modal.classList.add('active');
+    }
+
+    function closeWorkSampleModal() {
+      document.getElementById('work-sample-modal').classList.remove('active');
+    }
+
+    function saveWorkSampleItem() {
+      const idx = document.getElementById('ws-modal-index').value;
+      const id = document.getElementById('ws-modal-id').value.trim();
+      const type = document.getElementById('ws-modal-type').value;
+      const brand = document.getElementById('ws-modal-brand').value.trim();
+
+      if (!id || !brand) {
+        alert('Unique ID and Brand Name are required!');
+        return;
+      }
+
+      let item = { id, type, brand };
+
+      if (type === 'blogs') {
+        const title = document.getElementById('ws-modal-title-input').value.trim();
+        const url = document.getElementById('ws-modal-url').value.trim();
+        if (!title || !url) {
+          alert('Article title and URL are required for blog samples.');
+          return;
+        }
+        item.title = title;
+        item.url = url;
+      } else if (type === 'emails') {
+        const challenge = document.getElementById('ws-modal-challenge').value.trim();
+        const icp = document.getElementById('ws-modal-icp').value.trim();
+        const resolution = document.getElementById('ws-modal-resolution').value.trim();
+        const draft_url = document.getElementById('ws-modal-draft-url').value.trim();
+        if (!challenge || !icp || !resolution || !draft_url) {
+          alert('Challenge, ICP, Resolution, and Draft URL are required for email samples.');
+          return;
+        }
+        item.challenge = challenge;
+        item.icp = icp;
+        item.resolution = resolution;
+        item.draft_url = draft_url;
+      } else if (type === 'reels') {
+        const screenshot = document.getElementById('ws-modal-reel-screenshot').value.trim();
+        const live_url = document.getElementById('ws-modal-reel-url').value.trim();
+        const platform = document.getElementById('ws-modal-reel-platform').value.trim() || 'Instagram';
+        if (!screenshot || !live_url) {
+          alert('Screenshot path and Live URL are required for reel samples.');
+          return;
+        }
+        item.screenshot = screenshot;
+        item.live_url = live_url;
+        item.platform = platform;
+      } else if (type === 'social') {
+        const screenshot = document.getElementById('ws-modal-social-screenshot').value.trim();
+        const live_url = document.getElementById('ws-modal-social-url').value.trim();
+        const platform = document.getElementById('ws-modal-social-platform').value.trim() || 'LinkedIn';
+        if (!screenshot || !live_url) {
+          alert('Screenshot path and Live URL are required for social post samples.');
+          return;
+        }
+        item.screenshot = screenshot;
+        item.live_url = live_url;
+        item.platform = platform;
+      }
+
+      if (!registry.work_samples) {
+        registry.work_samples = [];
+      }
+
+      if (idx !== '') {
+        registry.work_samples[parseInt(idx)] = item;
+        log(`Locally updated work sample: "${brand}"`);
+      } else {
+        registry.work_samples.push(item);
+        log(`Locally added work sample: "${brand}"`);
+      }
+
+      renderWorkSamplesList();
+      closeWorkSampleModal();
     }
 
     function renderProjectsList() {
@@ -1217,9 +1607,9 @@
         email_prompt: document.getElementById('contact-prompt-input').value.trim()
       };
 
-      // 5. Collect Tab 5: POW Page Copy
-      registry.proof_of_work_page = {
-        title: 'Proof of Work',
+      // 5. Collect Tab 5: Case Studies Page Copy
+      registry.case_studies_page = {
+        title: 'Case Studies',
         subtext: document.getElementById('pow-subtext-input').value.trim(),
         campaign_cards_header: {
           tag: document.getElementById('pow-cards-tag-input').value.trim(),
@@ -1231,6 +1621,26 @@
           subhead: document.getElementById('pow-cta-subhead-input').value.trim(),
           btn_text: document.getElementById('pow-cta-btn-input').value.trim()
         }
+      };
+      // Keep legacy fallback synced
+      registry.proof_of_work_page = Object.assign({}, registry.case_studies_page);
+
+      // 6. Collect Tab 6: Work Samples Page Copy
+      const existingCategories = (registry.work_samples_page && registry.work_samples_page.categories) || [
+        { id: "blogs", label: "Blogs", order: 1 },
+        { id: "reels", label: "Reels", order: 2 },
+        { id: "social", label: "Social Posts", order: 3 },
+        { id: "emails", label: "Emails", order: 4 }
+      ];
+      registry.work_samples_page = {
+        title: 'Proof of Work',
+        subtext: document.getElementById('ws-subtext-input').value.trim(),
+        cta: {
+          headline: document.getElementById('ws-cta-title-input').value.trim(),
+          subhead: document.getElementById('ws-cta-subhead-input').value.trim(),
+          btn_text: document.getElementById('ws-cta-btn-input').value.trim()
+        },
+        categories: existingCategories
       };
 
       log('Sending payload to /api/save-content database...');

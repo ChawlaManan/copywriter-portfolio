@@ -16,8 +16,11 @@ document.addEventListener('DOMContentLoaded', () => {
       if (document.getElementById('hero-headline')) {
         renderHomePage(data);
       }
-      if (document.getElementById('pow-case-studies-container')) {
-        renderProofOfWorkPage(data);
+      if (document.getElementById('cs-case-studies-container') || document.getElementById('pow-case-studies-container')) {
+        renderCaseStudiesPage(data);
+      }
+      if (document.getElementById('work-samples-panel')) {
+        renderWorkSamplesPage(data);
       }
       
       // Initialize core behaviors
@@ -91,7 +94,7 @@ function renderHomePage(data) {
         `;
       }
       return `
-        <a href="proof-of-work.html?project=${item.id}" class="proof-item">
+        <a href="case-studies.html?project=${item.id}" class="proof-item">
           <div class="stat-number">${statHtml}</div>
           <div class="stat-description">${item.desc}</div>
           <span class="stat-link">Read case study details</span>
@@ -167,27 +170,34 @@ function renderHomePage(data) {
 }
 
 /**
- * 2. Render Proof of Work Case Studies & Campaigns Dynamically
+ * 2. Render Case Studies Page Dynamically (case-studies.html)
  */
-function renderProofOfWorkPage(data) {
-  // Render Proof of Work Hero Text
-  if (data.proof_of_work_page) {
-    if (document.getElementById('pow-subtext')) {
-      document.getElementById('pow-subtext').textContent = data.proof_of_work_page.subtext;
+function renderCaseStudiesPage(data) {
+  const pageData = data.case_studies_page || data.proof_of_work_page;
+  if (pageData) {
+    const subtextEl = document.getElementById('cs-subtext') || document.getElementById('pow-subtext');
+    if (subtextEl) {
+      subtextEl.textContent = pageData.subtext;
     }
     
     // Render Campaign Cards Header
-    if (data.proof_of_work_page.campaign_cards_header) {
-      if (document.getElementById('pow-cards-tag')) document.getElementById('pow-cards-tag').textContent = data.proof_of_work_page.campaign_cards_header.tag;
-      if (document.getElementById('pow-cards-title')) document.getElementById('pow-cards-title').textContent = data.proof_of_work_page.campaign_cards_header.title;
-      if (document.getElementById('pow-cards-subtitle')) document.getElementById('pow-cards-subtitle').textContent = data.proof_of_work_page.campaign_cards_header.subtitle;
+    if (pageData.campaign_cards_header) {
+      const tagEl = document.getElementById('cs-cards-tag') || document.getElementById('pow-cards-tag');
+      const titleEl = document.getElementById('cs-cards-title') || document.getElementById('pow-cards-title');
+      const subEl = document.getElementById('cs-cards-subtitle') || document.getElementById('pow-cards-subtitle');
+      if (tagEl) tagEl.textContent = pageData.campaign_cards_header.tag;
+      if (titleEl) titleEl.textContent = pageData.campaign_cards_header.title;
+      if (subEl) subEl.textContent = pageData.campaign_cards_header.subtitle;
     }
 
     // Render Bottom CTA
-    if (data.proof_of_work_page.cta) {
-      if (document.getElementById('pow-cta-headline')) document.getElementById('pow-cta-headline').textContent = data.proof_of_work_page.cta.headline;
-      if (document.getElementById('pow-cta-subhead')) document.getElementById('pow-cta-subhead').textContent = data.proof_of_work_page.cta.subhead;
-      if (document.getElementById('pow-cta-btn')) document.getElementById('pow-cta-btn').textContent = data.proof_of_work_page.cta.btn_text;
+    if (pageData.cta) {
+      const headlineEl = document.getElementById('cs-cta-headline') || document.getElementById('pow-cta-headline');
+      const subheadEl = document.getElementById('cs-cta-subhead') || document.getElementById('pow-cta-subhead');
+      const btnEl = document.getElementById('cs-cta-btn') || document.getElementById('pow-cta-btn');
+      if (headlineEl) headlineEl.textContent = pageData.cta.headline;
+      if (subheadEl) subheadEl.textContent = pageData.cta.subhead;
+      if (btnEl) btnEl.textContent = pageData.cta.btn_text;
     }
   }
 
@@ -196,9 +206,12 @@ function renderProofOfWorkPage(data) {
     if (document.getElementById('footer-logo')) document.getElementById('footer-logo').textContent = data.personal.footer_logo || 'MANAN | CONTENT STRATEGIST';
     if (document.getElementById('footer-subtext')) document.getElementById('footer-subtext').textContent = data.personal.footer_subtext || '© 2026 Gurgaon, India. Built with structured logic.';
   }
+
   // Render Full Case Studies (Tier 1)
-  const caseStudiesContainer = document.getElementById('pow-case-studies-container');
-  const fullProjects = data.projects.filter(p => p.type === 'full');
+  const caseStudiesContainer = document.getElementById('cs-case-studies-container') || document.getElementById('pow-case-studies-container');
+  if (!caseStudiesContainer) return;
+
+  const fullProjects = (data.projects || []).filter(p => p.type === 'full');
   
   caseStudiesContainer.innerHTML = fullProjects.map(proj => {
     if (proj.layout === 'route') {
@@ -418,101 +431,278 @@ function renderProofOfWorkPage(data) {
           </div>
         </div>
       `;
-    } else {
-      return `
-        <div class="case-study-card fade-in" data-project-id="${proj.id}" data-industries="${proj.filterClass}">
-          <div class="case-study-header">
-            <div class="case-study-title-row">
-              <div class="industry-tags" style="margin-bottom: 0.25rem;">
-                <span class="industry-tag accent-tag">${proj.category}</span>
-              </div>
-              <h2>${proj.brand}</h2>
-            </div>
-            <p class="case-study-brief">
-              ${proj.brief}
-            </p>
-            <div class="case-study-expand-trigger">
-              <span>[ EXPAND STRATEGIC DIAGNOSIS ]</span>
-              <span class="arrow-icon">↓</span>
-            </div>
-          </div>
-
-          <!-- Expanded Detail -->
-          <div class="case-study-detail" id="detail-${proj.id}">
-            <div class="strategy-section-grid">
-              <div class="strategy-block">
-                <h3>Client Snapshot</h3>
-                <p>${proj.snapshot}</p>
-              </div>
-              <div class="strategy-block">
-                <h3>The Brief / The Problem</h3>
-                <p>${proj.problem}</p>
-              </div>
-              <div class="strategy-block">
-                <h3>The Strategic Approach</h3>
-                <p>${proj.approach}</p>
-              </div>
-              <div class="strategy-block">
-                <h3>What was delivered</h3>
-                <ul>
-                  ${proj.deliverables.map(del => `<li>${del}</li>`).join('')}
-                </ul>
-              </div>
-            </div>
-
-            <!-- Before/After Compare -->
-            <div class="before-after-container">
-              <div class="ba-card">
-                <span class="ba-label before">Before</span>
-                <p class="ba-text italic">"${proj.before.replace(/\[(.*?)\]/g, '<span class=\"marker-highlight\">$1</span>')}"</p>
-              </div>
-              <div class="ba-card">
-                <span class="ba-label after">After (Written by ${data.personal.name})</span>
-                <p class="ba-text">"${proj.after.replace(/\[(.*?)\]/g, '<span class=\"marker-highlight\">$1</span>')}"</p>
-              </div>
-            </div>
-
-            <!-- Metrics block -->
-            <div class="case-study-outcome">
-              <div class="outcome-stat" style="position: relative; display: inline-block;">
-                ${proj.metric}
-                <svg style="position: absolute; top: -10%; left: -10%; width: 120%; height: 120%; pointer-events: none;" viewBox="0 0 100 100" fill="none"><path d="M50,5 C78,5 95,25 93,50 C91,72 72,92 50,92 C28,92 8,72 6,48 C4,24 25,8 55,9" stroke="var(--ink-accent)" stroke-width="2" stroke-linecap="round"/></svg>
-              </div>
-              <div class="outcome-text">
-                ${proj.metric_desc}
-              </div>
-            </div>
-          </div>
-        </div>
-      `;
     }
   }).join('');
 
   // Render Smaller Campaign Cards (Tier 2)
-  const cardsContainer = document.getElementById('pow-project-cards-container');
-  const cardProjects = data.projects.filter(p => p.type === 'card');
+  const cardsContainer = document.getElementById('cs-project-cards-container') || document.getElementById('pow-project-cards-container');
+  const cardProjects = (data.projects || []).filter(p => p.type === 'card');
   
-  cardsContainer.innerHTML = cardProjects.map(proj => `
-    <div class="project-card" data-industries="${proj.filterClass}">
-      <div class="project-card-header">
-        <div class="project-card-title-row">
-          <span class="industry-tag" style="font-size: 0.65rem; margin-bottom: 0.4rem;">${proj.category}</span>
-          <h3>${proj.brand}</h3>
+  if (cardsContainer) {
+    cardsContainer.innerHTML = cardProjects.map(proj => `
+      <div class="project-card" data-industries="${proj.filterClass}">
+        <div class="project-card-header">
+          <div class="project-card-title-row">
+            <span class="industry-tag" style="font-size: 0.65rem; margin-bottom: 0.4rem;">${proj.category}</span>
+            <h3>${proj.brand}</h3>
+          </div>
+          <p class="description">
+            ${proj.brief}
+          </p>
+          <ul class="deliverables">
+            ${proj.deliverables.map(del => `<li>${del}</li>`).join('')}
+          </ul>
         </div>
-        <p class="description">
-          ${proj.brief}
-        </p>
-        <ul class="deliverables">
-          ${proj.deliverables.map(del => `<li>${del}</li>`).join('')}
-        </ul>
+        ${proj.quote ? `<p class="pull-quote">"${proj.quote}"</p>` : ''}
       </div>
-      ${proj.quote ? `<p class="pull-quote">"${proj.quote}"</p>` : ''}
-    </div>
-  `).join('');
+    `).join('');
+  }
 
   // Update total counts
-  const totalCount = fullProjects.length + cardProjects.length;
-  document.getElementById('project-count-display').textContent = `Showing ${totalCount} projects`;
+  const countDisplay = document.getElementById('project-count-display');
+  if (countDisplay) {
+    const totalCount = fullProjects.length + cardProjects.length;
+    countDisplay.textContent = `Showing ${totalCount} projects`;
+  }
+}
+
+/**
+ * 2b. Render Work Samples Page Dynamically (proof-of-work.html)
+ */
+function renderWorkSamplesPage(data) {
+  const pageData = data.work_samples_page || {};
+  const samples = data.work_samples || [];
+
+  // Render Hero Subtext
+  const subtextEl = document.getElementById('ws-subtext');
+  if (subtextEl && pageData.subtext) {
+    subtextEl.innerHTML = pageData.subtext;
+  }
+
+  // Render CTA
+  if (pageData.cta) {
+    const headlineEl = document.getElementById('ws-cta-headline');
+    const subheadEl = document.getElementById('ws-cta-subhead');
+    const btnEl = document.getElementById('ws-cta-btn');
+    if (headlineEl && pageData.cta.headline) headlineEl.textContent = pageData.cta.headline;
+    if (subheadEl && pageData.cta.subhead) subheadEl.textContent = pageData.cta.subhead;
+    if (btnEl && pageData.cta.btn_text) btnEl.textContent = pageData.cta.btn_text;
+  }
+
+  // Render Footer Elements
+  if (data.personal) {
+    if (document.getElementById('footer-logo')) document.getElementById('footer-logo').textContent = data.personal.footer_logo || 'MANAN | CONTENT STRATEGIST';
+    if (document.getElementById('footer-subtext')) document.getElementById('footer-subtext').textContent = data.personal.footer_subtext || '© 2026 Gurgaon, India. Built with structured logic.';
+  }
+
+  // Categories & Tabs
+  const rawCategories = pageData.categories || [
+    { id: 'blogs', label: 'Blogs', order: 1 },
+    { id: 'reels', label: 'Reels', order: 2 },
+    { id: 'social', label: 'Social Posts', order: 3 },
+    { id: 'emails', label: 'Emails', order: 4 }
+  ];
+  const sortedCategories = [...rawCategories].sort((a, b) => (a.order || 0) - (b.order || 0));
+
+  // Hide any tab that has zero items
+  const availableCategories = sortedCategories.filter(cat => {
+    return samples.some(s => s.type === cat.id);
+  });
+
+  if (availableCategories.length === 0) return;
+
+  // Determine active tab from URL query param ?type=<id>
+  const urlParams = new URLSearchParams(window.location.search);
+  const typeParam = urlParams.get('type');
+  let activeCategoryId = availableCategories[0].id;
+  if (typeParam && availableCategories.some(cat => cat.id === typeParam)) {
+    activeCategoryId = typeParam;
+  }
+
+  const tablist = document.getElementById('work-samples-tablist');
+  const panel = document.getElementById('work-samples-panel');
+
+  if (tablist) {
+    tablist.innerHTML = availableCategories.map(cat => {
+      const isActive = cat.id === activeCategoryId;
+      return `
+        <button 
+          class="filter-btn ${isActive ? 'active' : ''}" 
+          role="tab" 
+          id="tab-${cat.id}" 
+          aria-selected="${isActive ? 'true' : 'false'}" 
+          aria-controls="work-samples-panel" 
+          tabindex="${isActive ? '0' : '-1'}" 
+          data-type="${cat.id}">
+          ${cat.label}
+        </button>
+      `;
+    }).join('');
+
+    const tabButtons = tablist.querySelectorAll('[role="tab"]');
+
+    function setActiveTab(newTypeId, moveFocus = false) {
+      if (!availableCategories.some(c => c.id === newTypeId)) return;
+      activeCategoryId = newTypeId;
+
+      // Update URL query parameter without page reload
+      const newUrl = new URL(window.location);
+      newUrl.searchParams.set('type', newTypeId);
+      window.history.replaceState({ type: newTypeId }, '', newUrl.toString());
+
+      tabButtons.forEach(btn => {
+        const isMatch = btn.getAttribute('data-type') === newTypeId;
+        btn.classList.toggle('active', isMatch);
+        btn.setAttribute('aria-selected', isMatch ? 'true' : 'false');
+        btn.setAttribute('tabindex', isMatch ? '0' : '-1');
+        if (isMatch && moveFocus) {
+          btn.focus();
+        }
+      });
+
+      if (panel) {
+        panel.setAttribute('aria-labelledby', `tab-${newTypeId}`);
+        renderTabContent(newTypeId, samples, panel);
+      }
+    }
+
+    tabButtons.forEach((btn, index) => {
+      btn.addEventListener('click', () => {
+        const typeId = btn.getAttribute('data-type');
+        setActiveTab(typeId);
+      });
+
+      // Arrow-key keyboard navigation for accessibility
+      btn.addEventListener('keydown', (e) => {
+        let targetIndex = null;
+        if (e.key === 'ArrowRight') {
+          targetIndex = (index + 1) % tabButtons.length;
+        } else if (e.key === 'ArrowLeft') {
+          targetIndex = (index - 1 + tabButtons.length) % tabButtons.length;
+        } else if (e.key === 'Home') {
+          targetIndex = 0;
+        } else if (e.key === 'End') {
+          targetIndex = tabButtons.length - 1;
+        }
+
+        if (targetIndex !== null) {
+          e.preventDefault();
+          const targetBtn = tabButtons[targetIndex];
+          const newTypeId = targetBtn.getAttribute('data-type');
+          setActiveTab(newTypeId, true);
+        }
+      });
+    });
+  }
+
+  // Render initial tab content
+  if (panel) {
+    panel.setAttribute('aria-labelledby', `tab-${activeCategoryId}`);
+    renderTabContent(activeCategoryId, samples, panel);
+  }
+}
+
+/**
+ * 2c. Render Work Sample Items by Type
+ */
+function renderTabContent(typeId, samples, container) {
+  const items = samples.filter(s => s.type === typeId);
+
+  if (items.length === 0) {
+    container.innerHTML = `
+      <div style="padding: 3rem 1.5rem; text-align: center; background: var(--surface); border: 1px solid var(--border); border-radius: 8px;">
+        <p style="margin: 0; color: var(--text-muted);">No samples currently listed under this category.</p>
+      </div>
+    `;
+    return;
+  }
+
+  if (typeId === 'blogs') {
+    container.innerHTML = `
+      <div class="work-samples-grid-blogs">
+        ${items.map(item => `
+          <a href="${item.url}" target="_blank" rel="noopener noreferrer" class="blog-sample-card">
+            <div class="blog-card-content">
+              <span class="sample-brand-tag">${item.brand}</span>
+              <h2 class="blog-card-title">${item.title}</h2>
+            </div>
+            <div class="sample-card-footer">
+              <span class="sample-action-text">Read article</span>
+              <span class="sample-arrow">→</span>
+            </div>
+          </a>
+        `).join('')}
+      </div>
+    `;
+  } else if (typeId === 'emails') {
+    container.innerHTML = `
+      <div class="work-samples-grid-emails">
+        ${items.map(item => `
+          <div class="email-sample-card">
+            <div>
+              <h2 class="email-sample-brand">${item.brand}</h2>
+              <div class="email-meta-list">
+                <div class="email-meta-row">
+                  <span class="email-meta-label">Challenge</span>
+                  <p class="email-meta-value">${item.challenge}</p>
+                </div>
+                <div class="email-meta-row">
+                  <span class="email-meta-label">ICP</span>
+                  <p class="email-meta-value">${item.icp}</p>
+                </div>
+                <div class="email-meta-row">
+                  <span class="email-meta-label">Resolution</span>
+                  <p class="email-meta-value">${item.resolution}</p>
+                </div>
+              </div>
+            </div>
+            <a href="${item.draft_url}" target="_blank" rel="noopener noreferrer" class="email-draft-link">
+              View email draft <span class="arrow">→</span>
+            </a>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  } else if (typeId === 'reels') {
+    container.innerHTML = `
+      <div class="work-samples-grid-reels">
+        ${items.map(item => `
+          <div class="reel-sample-card">
+            <a href="${item.live_url}" target="_blank" rel="noopener noreferrer" class="reel-screenshot-link" aria-label="Watch live reel for ${item.brand}">
+              <img src="${item.screenshot}" alt="Instagram reel for ${item.brand}" class="reel-screenshot" loading="lazy" width="450" height="800">
+            </a>
+            <div class="reel-info-row">
+              <h2 class="reel-brand-name">${item.brand}</h2>
+              <a href="${item.live_url}" target="_blank" rel="noopener noreferrer" class="reel-watch-link">
+                Watch live →
+              </a>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  } else if (typeId === 'social') {
+    container.innerHTML = `
+      <div class="work-samples-masonry-social">
+        ${items.map(item => `
+          <div class="social-sample-card">
+            <a href="${item.live_url}" target="_blank" rel="noopener noreferrer" class="social-screenshot-link" aria-label="View social post for ${item.brand}">
+              <img src="${item.screenshot}" alt="Social post for ${item.brand} on ${item.platform || 'Social'}" class="social-screenshot" loading="lazy">
+            </a>
+            <div class="social-meta-row">
+              <div class="social-header-row">
+                <h2 class="social-brand-name">${item.brand}</h2>
+                ${item.platform ? `<span class="social-platform-pill">${item.platform}</span>` : ''}
+              </div>
+              <a href="${item.live_url}" target="_blank" rel="noopener noreferrer" class="social-view-link">
+                View post →
+              </a>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }
 }
 
 /**
@@ -560,7 +750,7 @@ function initCaseStudyToggles() {
  * 4. Industry Filtering Logic
  */
 function initFilters() {
-  const filterBtns = document.querySelectorAll('.filter-btn');
+  const filterBtns = document.querySelectorAll('.filter-buttons .filter-btn');
   const caseStudies = document.querySelectorAll('.case-study-card');
   const projectCards = document.querySelectorAll('.project-card');
   const countDisplay = document.getElementById('project-count-display');
@@ -570,6 +760,7 @@ function initFilters() {
   filterBtns.forEach(btn => {
     btn.addEventListener('click', () => {
       const filterValue = btn.getAttribute('data-filter');
+      if (!filterValue) return;
       
       filterBtns.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');

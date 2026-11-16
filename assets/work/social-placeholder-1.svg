@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 750" width="600" height="750">
+  <rect width="100%" height="100%" fill="#F5F5F5"/>
+  <rect x="2" y="2" width="596" height="746" fill="none" stroke="#D3D3D3" stroke-width="2" rx="8"/>
+  <rect x="50" y="50" width="500" height="40" fill="#EAEAEA" rx="6"/>
+  <circle cx="80" cy="70" r="12" fill="#22D06C"/>
+  <rect x="110" y="62" width="160" height="16" fill="#D3D3D3" rx="4"/>
+  <rect x="50" y="120" width="500" height="420" fill="#FFFFFF" stroke="#E5E5E5" stroke-width="1" rx="6"/>
+  <text x="300" y="320" font-family="'Plus Jakarta Sans', sans-serif" font-size="20" font-weight="700" fill="#282828" text-anchor="middle">[Placeholder Social Post 1]</text>
+  <text x="300" y="355" font-family="'IBM Plex Mono', monospace" font-size="13" fill="#717171" text-anchor="middle">LINKEDIN THOUGHT LEADERSHIP CAROUSEL</text>
+  <text x="300" y="390" font-family="'Plus Jakarta Sans', sans-serif" font-size="14" fill="#717171" text-anchor="middle">SaaSTrack Growth Strategy Breakdown</text>
+  <rect x="50" y="570" width="460" height="14" fill="#D3D3D3" rx="4"/>
+  <rect x="50" y="600" width="380" height="14" fill="#D3D3D3" rx="4"/>
+  <rect x="50" y="630" width="280" height="14" fill="#E5E5E5" rx="4"/>
+</svg>
