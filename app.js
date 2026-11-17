@@ -463,16 +463,86 @@ function renderCaseStudiesPage(data) {
 }
 
 /**
+ * Security & Sanitization Helpers for Dynamic Content
+ */
+function escapeHtml(str) {
+  if (str === null || str === undefined) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function sanitizeLinkUrl(url) {
+  if (!url || typeof url !== 'string') return '';
+  const trimmed = url.trim();
+  if (/^https?:\/\//i.test(trimmed)) {
+    return trimmed;
+  }
+  return '';
+}
+
+function sanitizeImageSrc(src) {
+  if (!src || typeof src !== 'string') return '';
+  const trimmed = src.trim();
+  if (/^assets\//i.test(trimmed) || /^https?:\/\//i.test(trimmed)) {
+    return trimmed;
+  }
+  return '';
+}
+
+function isRealSampleItem(item) {
+  if (!item || typeof item !== 'object') return false;
+  if (typeof item.brand === 'string' && item.brand.trim().startsWith('[Placeholder]')) return false;
+  if (typeof item.title === 'string' && item.title.trim().startsWith('[Placeholder]')) return false;
+  return true;
+}
+
+function getValidItemsForCategory(typeId, samples) {
+  return samples.filter(item => {
+    if (item.type !== typeId) return false;
+    if (!isRealSampleItem(item)) return false;
+    if (!item.brand || typeof item.brand !== 'string' || !item.brand.trim()) return false;
+
+    if (typeId === 'blogs') {
+      return !!sanitizeLinkUrl(item.url) && !!(item.title && typeof item.title === 'string' && item.title.trim());
+    }
+    if (typeId === 'emails') {
+      return !!sanitizeLinkUrl(item.draft_url);
+    }
+    if (typeId === 'reels') {
+      return !!sanitizeLinkUrl(item.live_url) && !!sanitizeImageSrc(item.screenshot);
+    }
+    if (typeId === 'social') {
+      return !!sanitizeLinkUrl(item.live_url) && !!sanitizeImageSrc(item.screenshot);
+    }
+    return false;
+  });
+}
+
+/**
  * 2b. Render Work Samples Page Dynamically (proof-of-work.html)
  */
 function renderWorkSamplesPage(data) {
   const pageData = data.work_samples_page || {};
   const samples = data.work_samples || [];
 
-  // Render Hero Subtext
+  // Render Hero Subtext (plain text without old link)
   const subtextEl = document.getElementById('ws-subtext');
   if (subtextEl && pageData.subtext) {
-    subtextEl.innerHTML = pageData.subtext;
+    subtextEl.textContent = pageData.subtext;
+  }
+
+  // Render Bridge Line (directly above CTA card)
+  const bridgeContainer = document.getElementById('ws-bridge-container');
+  if (bridgeContainer) {
+    const bridgeData = pageData.bridge_line || {};
+    const text = bridgeData.text || "Want the strategy behind the work?";
+    const linkText = bridgeData.link_text || "See Case Studies →";
+    const url = bridgeData.url || "case-studies.html";
+    bridgeContainer.innerHTML = `<p class="ws-bridge-text">${escapeHtml(text)} <a href="${escapeHtml(url)}" class="inline-link">${escapeHtml(linkText)}</a></p>`;
   }
 
   // Render CTA
@@ -491,46 +561,80 @@ function renderWorkSamplesPage(data) {
     if (document.getElementById('footer-subtext')) document.getElementById('footer-subtext').textContent = data.personal.footer_subtext || '© 2026 Gurgaon, India. Built with structured logic.';
   }
 
-  // Categories & Tabs
+  // Categories & Tabs Configuration
   const rawCategories = pageData.categories || [
-    { id: 'blogs', label: 'Blogs', order: 1 },
-    { id: 'reels', label: 'Reels', order: 2 },
-    { id: 'social', label: 'Social Posts', order: 3 },
-    { id: 'emails', label: 'Emails', order: 4 }
+    { id: 'blogs', label: 'Blogs', order: 1, note: 'Blogs written to rank on Google and bring in organic buyers.' },
+    { id: 'emails', label: 'Emails', order: 2, note: 'Each email starts with a real challenge and a clear audience.' },
+    { id: 'reels', label: 'Reels', order: 3, note: 'Short-form scripts that went live.' },
+    { id: 'social', label: 'Social Posts', order: 4, note: 'Posts written for brands, live on their channels.' }
   ];
   const sortedCategories = [...rawCategories].sort((a, b) => (a.order || 0) - (b.order || 0));
 
-  // Hide any tab that has zero items
-  const availableCategories = sortedCategories.filter(cat => {
-    return samples.some(s => s.type === cat.id);
+  // Determine which categories have at least one REAL, valid item
+  const visibleCategories = sortedCategories.filter(cat => {
+    return getValidItemsForCategory(cat.id, samples).length > 0;
   });
 
-  if (availableCategories.length === 0) return;
+  const tabSection = document.getElementById('work-tabs-section');
+  const tablist = document.getElementById('work-samples-tablist');
+  const panel = document.getElementById('work-samples-panel');
+  const noteEl = document.getElementById('ws-tab-note');
+
+  function updateCategoryNote(catId) {
+    if (!noteEl) return;
+    const activeCat = sortedCategories.find(c => c.id === catId);
+    if (activeCat && activeCat.note) {
+      noteEl.textContent = activeCat.note;
+      noteEl.style.display = 'block';
+    } else {
+      noteEl.textContent = '';
+      noteEl.style.display = 'none';
+    }
+  }
+
+  // If no categories have valid items, show empty message
+  if (visibleCategories.length === 0) {
+    if (tabSection) tabSection.style.display = 'none';
+    if (noteEl) noteEl.style.display = 'none';
+    if (panel) {
+      panel.innerHTML = `
+        <div style="padding: 3rem 1.5rem; text-align: center; background: var(--surface); border: 1px solid var(--border); border-radius: 8px;">
+          <p style="margin: 0; color: var(--text-muted);">No live work samples currently published.</p>
+        </div>
+      `;
+    }
+    return;
+  }
+
+  // If only one tab is visible, hide the tab bar entirely
+  if (visibleCategories.length <= 1) {
+    if (tabSection) tabSection.style.display = 'none';
+  } else {
+    if (tabSection) tabSection.style.display = '';
+  }
 
   // Determine active tab from URL query param ?type=<id>
   const urlParams = new URLSearchParams(window.location.search);
   const typeParam = urlParams.get('type');
-  let activeCategoryId = availableCategories[0].id;
-  if (typeParam && availableCategories.some(cat => cat.id === typeParam)) {
+  let activeCategoryId = visibleCategories[0].id;
+  if (typeParam && visibleCategories.some(cat => cat.id === typeParam)) {
     activeCategoryId = typeParam;
   }
 
-  const tablist = document.getElementById('work-samples-tablist');
-  const panel = document.getElementById('work-samples-panel');
-
-  if (tablist) {
-    tablist.innerHTML = availableCategories.map(cat => {
+  // Render Tab Buttons if more than one category is visible
+  if (visibleCategories.length > 1 && tablist) {
+    tablist.innerHTML = visibleCategories.map(cat => {
       const isActive = cat.id === activeCategoryId;
       return `
         <button 
           class="filter-btn ${isActive ? 'active' : ''}" 
           role="tab" 
-          id="tab-${cat.id}" 
+          id="tab-${escapeHtml(cat.id)}" 
           aria-selected="${isActive ? 'true' : 'false'}" 
           aria-controls="work-samples-panel" 
           tabindex="${isActive ? '0' : '-1'}" 
-          data-type="${cat.id}">
-          ${cat.label}
+          data-type="${escapeHtml(cat.id)}">
+          ${escapeHtml(cat.label)}
         </button>
       `;
     }).join('');
@@ -538,7 +642,7 @@ function renderWorkSamplesPage(data) {
     const tabButtons = tablist.querySelectorAll('[role="tab"]');
 
     function setActiveTab(newTypeId, moveFocus = false) {
-      if (!availableCategories.some(c => c.id === newTypeId)) return;
+      if (!visibleCategories.some(c => c.id === newTypeId)) return;
       activeCategoryId = newTypeId;
 
       // Update URL query parameter without page reload
@@ -555,6 +659,8 @@ function renderWorkSamplesPage(data) {
           btn.focus();
         }
       });
+
+      updateCategoryNote(newTypeId);
 
       if (panel) {
         panel.setAttribute('aria-labelledby', `tab-${newTypeId}`);
@@ -591,7 +697,9 @@ function renderWorkSamplesPage(data) {
     });
   }
 
-  // Render initial tab content
+  // Always show category note and content for active category
+  updateCategoryNote(activeCategoryId);
+
   if (panel) {
     panel.setAttribute('aria-labelledby', `tab-${activeCategoryId}`);
     renderTabContent(activeCategoryId, samples, panel);
@@ -602,12 +710,12 @@ function renderWorkSamplesPage(data) {
  * 2c. Render Work Sample Items by Type
  */
 function renderTabContent(typeId, samples, container) {
-  const items = samples.filter(s => s.type === typeId);
+  const items = getValidItemsForCategory(typeId, samples);
 
   if (items.length === 0) {
     container.innerHTML = `
       <div style="padding: 3rem 1.5rem; text-align: center; background: var(--surface); border: 1px solid var(--border); border-radius: 8px;">
-        <p style="margin: 0; color: var(--text-muted);">No samples currently listed under this category.</p>
+        <p style="margin: 0; color: var(--text-muted);">No live samples currently published under this category.</p>
       </div>
     `;
     return;
@@ -616,86 +724,115 @@ function renderTabContent(typeId, samples, container) {
   if (typeId === 'blogs') {
     container.innerHTML = `
       <div class="work-samples-grid-blogs">
-        ${items.map(item => `
-          <a href="${item.url}" target="_blank" rel="noopener noreferrer" class="blog-sample-card">
-            <div class="blog-card-content">
-              <span class="sample-brand-tag">${item.brand || ''}${item.industry ? ` · ${item.industry}` : ''}</span>
-              <h2 class="blog-card-title">${item.title}</h2>
-            </div>
-            <div class="sample-card-footer">
-              <span class="sample-action-text">Read article</span>
-              <span class="sample-arrow">→</span>
-            </div>
-          </a>
-        `).join('')}
+        ${items.map(item => {
+          const safeUrl = sanitizeLinkUrl(item.url);
+          const safeBrand = escapeHtml(item.brand || '');
+          const safeTitle = escapeHtml(item.title || '');
+          return `
+            <a href="${safeUrl}" target="_blank" rel="noopener noreferrer" class="blog-sample-card">
+              <div class="blog-card-content">
+                <span class="sample-brand-tag">${safeBrand}</span>
+                <h2 class="blog-card-title">${safeTitle}</h2>
+              </div>
+              <div class="sample-card-footer">
+                <span class="sample-action-text">Read article</span>
+                <span class="sample-arrow" aria-hidden="true">→</span>
+              </div>
+            </a>
+          `;
+        }).join('')}
       </div>
     `;
   } else if (typeId === 'emails') {
     container.innerHTML = `
       <div class="work-samples-grid-emails">
-        ${items.map(item => `
-          <div class="email-sample-card">
-            <div>
-              <h2 class="email-sample-brand">${item.brand}</h2>
-              <div class="email-meta-list">
-                <div class="email-meta-row">
-                  <span class="email-meta-label">Challenge</span>
-                  <p class="email-meta-value">${item.challenge}</p>
-                </div>
-                <div class="email-meta-row">
-                  <span class="email-meta-label">ICP</span>
-                  <p class="email-meta-value">${item.icp}</p>
-                </div>
-                <div class="email-meta-row">
-                  <span class="email-meta-label">Resolution</span>
-                  <p class="email-meta-value">${item.resolution}</p>
+        ${items.map(item => {
+          const safeDraftUrl = sanitizeLinkUrl(item.draft_url);
+          const safeBrand = escapeHtml(item.brand || '');
+          const safeChallenge = escapeHtml(item.challenge || '');
+          const safeIcp = escapeHtml(item.icp || '');
+          const safeResolution = escapeHtml(item.resolution || '');
+          return `
+            <div class="email-sample-card">
+              <div>
+                <h2 class="email-sample-brand">${safeBrand}</h2>
+                <div class="email-meta-list">
+                  ${safeChallenge ? `
+                    <div class="email-meta-row">
+                      <span class="email-meta-label">Challenge</span>
+                      <p class="email-meta-value">${safeChallenge}</p>
+                    </div>
+                  ` : ''}
+                  ${safeIcp ? `
+                    <div class="email-meta-row">
+                      <span class="email-meta-label">ICP</span>
+                      <p class="email-meta-value">${safeIcp}</p>
+                    </div>
+                  ` : ''}
+                  ${safeResolution ? `
+                    <div class="email-meta-row">
+                      <span class="email-meta-label">Resolution</span>
+                      <p class="email-meta-value">${safeResolution}</p>
+                    </div>
+                  ` : ''}
                 </div>
               </div>
+              <a href="${safeDraftUrl}" target="_blank" rel="noopener noreferrer" class="email-draft-link">
+                View email draft <span class="arrow" aria-hidden="true">→</span>
+              </a>
             </div>
-            <a href="${item.draft_url}" target="_blank" rel="noopener noreferrer" class="email-draft-link">
-              View email draft <span class="arrow">→</span>
-            </a>
-          </div>
-        `).join('')}
+          `;
+        }).join('')}
       </div>
     `;
   } else if (typeId === 'reels') {
     container.innerHTML = `
       <div class="work-samples-grid-reels">
-        ${items.map(item => `
-          <div class="reel-sample-card">
-            <a href="${item.live_url}" target="_blank" rel="noopener noreferrer" class="reel-screenshot-link" aria-label="Watch live reel for ${item.brand}">
-              <img src="${item.screenshot}" alt="Instagram reel for ${item.brand}" class="reel-screenshot" loading="lazy" width="450" height="800">
-            </a>
-            <div class="reel-info-row">
-              <h2 class="reel-brand-name">${item.brand}</h2>
-              <a href="${item.live_url}" target="_blank" rel="noopener noreferrer" class="reel-watch-link">
-                Watch live →
+        ${items.map(item => {
+          const safeLiveUrl = sanitizeLinkUrl(item.live_url);
+          const safeScreenshot = sanitizeImageSrc(item.screenshot);
+          const safeBrand = escapeHtml(item.brand || '');
+          return `
+            <div class="reel-sample-card">
+              <a href="${safeLiveUrl}" target="_blank" rel="noopener noreferrer" class="reel-screenshot-link" aria-label="Watch live reel for ${safeBrand}">
+                <img src="${safeScreenshot}" alt="Instagram reel for ${safeBrand}" class="reel-screenshot" loading="lazy" width="450" height="800">
               </a>
+              <div class="reel-info-row">
+                <h2 class="reel-brand-name">${safeBrand}</h2>
+                <a href="${safeLiveUrl}" target="_blank" rel="noopener noreferrer" class="reel-watch-link">
+                  Watch live <span aria-hidden="true">→</span>
+                </a>
+              </div>
             </div>
-          </div>
-        `).join('')}
+          `;
+        }).join('')}
       </div>
     `;
   } else if (typeId === 'social') {
     container.innerHTML = `
       <div class="work-samples-masonry-social">
-        ${items.map(item => `
-          <div class="social-sample-card">
-            <a href="${item.live_url}" target="_blank" rel="noopener noreferrer" class="social-screenshot-link" aria-label="View social post for ${item.brand}">
-              <img src="${item.screenshot}" alt="Social post for ${item.brand} on ${item.platform || 'Social'}" class="social-screenshot" loading="lazy">
-            </a>
-            <div class="social-meta-row">
-              <div class="social-header-row">
-                <h2 class="social-brand-name">${item.brand}</h2>
-                ${item.platform ? `<span class="social-platform-pill">${item.platform}</span>` : ''}
-              </div>
-              <a href="${item.live_url}" target="_blank" rel="noopener noreferrer" class="social-view-link">
-                View post →
+        ${items.map(item => {
+          const safeLiveUrl = sanitizeLinkUrl(item.live_url);
+          const safeScreenshot = sanitizeImageSrc(item.screenshot);
+          const safeBrand = escapeHtml(item.brand || '');
+          const safePlatform = escapeHtml(item.platform || '');
+          return `
+            <div class="social-sample-card">
+              <a href="${safeLiveUrl}" target="_blank" rel="noopener noreferrer" class="social-screenshot-link" aria-label="View social post for ${safeBrand}">
+                <img src="${safeScreenshot}" alt="Social post for ${safeBrand}${safePlatform ? ' on ' + safePlatform : ''}" class="social-screenshot" loading="lazy">
               </a>
+              <div class="social-meta-row">
+                <div class="social-header-row">
+                  <h2 class="social-brand-name">${safeBrand}</h2>
+                  ${safePlatform ? `<span class="social-platform-pill">${safePlatform}</span>` : ''}
+                </div>
+                <a href="${safeLiveUrl}" target="_blank" rel="noopener noreferrer" class="social-view-link">
+                  View post <span aria-hidden="true">→</span>
+                </a>
+              </div>
             </div>
-          </div>
-        `).join('')}
+          `;
+        }).join('')}
       </div>
     `;
   }

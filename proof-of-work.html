@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Proof of Work — Work Samples | Senior Copywriter</title>
-  <meta name="description" content="Browse direct copy samples across blogs, social posts, video reels, and conversion email drips. Strategy-led writing samples for high-growth brands.">
+  <title>Proof of Work | Blogs, Emails, Reels &amp; Social Posts</title>
+  <meta name="description" content="Blogs, emails, reels and social posts I've written for live brands.">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -41,127 +41,41 @@
         <svg style="position: absolute; bottom: -8px; left: 0; width: 45%; height: 10px; pointer-events: none;" viewBox="0 0 100 10" preserveAspectRatio="none"><path d="M0,5 Q50,9 100,5" stroke="var(--ink-accent)" stroke-width="4" fill="none" stroke-linecap="round"/></svg>
       </h1>
       <p id="ws-subtext" style="margin-top: 1rem; color: var(--text-muted);">
-        Looking for strategy and results? <a href="case-studies.html" class="inline-link" style="color: var(--text); font-weight: 600; text-decoration: underline; text-underline-offset: 3px;">See Case Studies →</a>
+        Live work across blogs, reels, social posts and emails.
       </p>
     </section>
 
-    <!-- Work Samples Tab Bar -->
-    <section class="work-tabs-container fade-in delay-1" style="margin: 2.5rem 0 2rem 0;">
+    <!-- Work Samples Tab Bar (Rendered from data; hidden when only one tab is visible) -->
+    <section class="work-tabs-container fade-in delay-1" id="work-tabs-section" style="margin: 2.5rem 0 1rem 0; display: none;">
       <div class="tabs-scroll-container" role="tablist" aria-label="Work sample categories" id="work-samples-tablist">
-        <button class="filter-btn active" role="tab" id="tab-blogs" aria-selected="true" aria-controls="work-samples-panel" tabindex="0" data-type="blogs">Blogs</button>
-        <button class="filter-btn" role="tab" id="tab-reels" aria-selected="false" aria-controls="work-samples-panel" tabindex="-1" data-type="reels">Reels</button>
-        <button class="filter-btn" role="tab" id="tab-social" aria-selected="false" aria-controls="work-samples-panel" tabindex="-1" data-type="social">Social Posts</button>
-        <button class="filter-btn" role="tab" id="tab-emails" aria-selected="false" aria-controls="work-samples-panel" tabindex="-1" data-type="emails">Emails</button>
+        <!-- Tab buttons rendered dynamically by app.js -->
       </div>
     </section>
 
-    <!-- Content Area (role="tabpanel") -->
-    <section id="work-samples-panel" role="tabpanel" aria-labelledby="tab-blogs" class="fade-in delay-2" style="min-height: 400px; margin-bottom: 5rem;">
-      <!-- Static-First Pre-rendered Default Tab (Blogs) for instant load & SEO -->
-      <div class="work-samples-grid-blogs" id="blogs-grid">
-        <a href="https://www.cuchd.in/blogs/what-is-the-difference-between-be-and-btech.php" target="_blank" rel="noopener noreferrer" class="blog-sample-card">
-          <div class="blog-card-content">
-            <span class="sample-brand-tag">CUCHD</span>
-            <h2 class="blog-card-title">What is the Difference Between B.E. and B.Tech?</h2>
-          </div>
-          <div class="sample-card-footer">
-            <span class="sample-action-text">Read article</span>
-            <span class="sample-arrow">→</span>
-          </div>
-        </a>
-        <a href="https://sendwishonline.com/en/articles/30-congratulations-messages-for-promotion" target="_blank" rel="noopener noreferrer" class="blog-sample-card">
-          <div class="blog-card-content">
-            <span class="sample-brand-tag">Sendwishonline</span>
-            <h2 class="blog-card-title">30 Congratulations Messages for a Promotion That Truly Celebrate the Moment</h2>
-          </div>
-          <div class="sample-card-footer">
-            <span class="sample-action-text">Read article</span>
-            <span class="sample-arrow">→</span>
-          </div>
-        </a>
-        <a href="https://intersolarsystems.com/seven-reasons-why-solar-panels-are-valuable-for-your-lifestyle/" target="_blank" rel="noopener noreferrer" class="blog-sample-card">
-          <div class="blog-card-content">
-            <span class="sample-brand-tag">Intersolar Systems</span>
-            <h2 class="blog-card-title">Seven Reasons Why Solar Panels Are Valuable for Your Lifestyle</h2>
-          </div>
-          <div class="sample-card-footer">
-            <span class="sample-action-text">Read article</span>
-            <span class="sample-arrow">→</span>
-          </div>
-        </a>
-        <a href="https://ethnicindiahandicrafts.com/blogs/ethnicindia/ganesh-chaturthi-2025-date-puja-timings-rituals-gifts" target="_blank" rel="noopener noreferrer" class="blog-sample-card">
-          <div class="blog-card-content">
-            <span class="sample-brand-tag">Ethnic India</span>
-            <h2 class="blog-card-title">Ganesh Chaturthi 2025: Significance, Rituals &amp; Festive Gifts</h2>
-          </div>
-          <div class="sample-card-footer">
-            <span class="sample-action-text">Read article</span>
-            <span class="sample-arrow">→</span>
-          </div>
-        </a>
-        <a href="https://ethnicindiahandicrafts.com/blogs/ethnicindia/sharad-navratri-2025-dates-significance-rituals-brass-durga-idols" target="_blank" rel="noopener noreferrer" class="blog-sample-card">
-          <div class="blog-card-content">
-            <span class="sample-brand-tag">Ethnic India</span>
-            <h2 class="blog-card-title">Celebrate This Sharad Navratri 2025 With Brass Maa Durga Idols</h2>
-          </div>
-          <div class="sample-card-footer">
-            <span class="sample-action-text">Read article</span>
-            <span class="sample-arrow">→</span>
-          </div>
-        </a>
-        <a href="https://ethnicindiahandicrafts.com/blogs/ethnicindia/vijayadashami-2025-dussehra-date-rituals-celebration" target="_blank" rel="noopener noreferrer" class="blog-sample-card">
-          <div class="blog-card-content">
-            <span class="sample-brand-tag">Ethnic India</span>
-            <h2 class="blog-card-title">Vijayadashami 2025 (Dussehra): Date, Rituals &amp; Celebration</h2>
-          </div>
-          <div class="sample-card-footer">
-            <span class="sample-action-text">Read article</span>
-            <span class="sample-arrow">→</span>
-          </div>
-        </a>
-        <a href="https://intersolarsystems.com/the-advantages-of-solar-pv-panels-for-homes-and-businesses/" target="_blank" rel="noopener noreferrer" class="blog-sample-card">
-          <div class="blog-card-content">
-            <span class="sample-brand-tag">Intersolar Systems</span>
-            <h2 class="blog-card-title">The Advantages of Solar PV Panels For Homes and Businesses</h2>
-          </div>
-          <div class="sample-card-footer">
-            <span class="sample-action-text">Read article</span>
-            <span class="sample-arrow">→</span>
-          </div>
-        </a>
-        <a href="https://ethnicindiahandicrafts.com/blogs/ethnicindia/biggest-lord-shiva-statues-india" target="_blank" rel="noopener noreferrer" class="blog-sample-card">
-          <div class="blog-card-content">
-            <span class="sample-brand-tag">Ethnic India</span>
-            <h2 class="blog-card-title">The 5 Tallest Statues of Lord Shiva In India</h2>
-          </div>
-          <div class="sample-card-footer">
-            <span class="sample-action-text">Read article</span>
-            <span class="sample-arrow">→</span>
-          </div>
-        </a>
-        <a href="https://ethnicindiahandicrafts.com/blogs/ethnicindia/nag-panchami-2025-date-significance-pooja-vidhi" target="_blank" rel="noopener noreferrer" class="blog-sample-card">
-          <div class="blog-card-content">
-            <span class="sample-brand-tag">Ethnic India</span>
-            <h2 class="blog-card-title">Nag Panchami 2025: Date, Significance, Rituals &amp; Why You Should Buy a Brass Nag Idol</h2>
-          </div>
-          <div class="sample-card-footer">
-            <span class="sample-action-text">Read article</span>
-            <span class="sample-arrow">→</span>
-          </div>
-        </a>
-      </div>
+    <!-- Category Note (changes per tab, visible even when tab bar is hidden) -->
+    <p id="ws-tab-note" class="ws-category-note fade-in">Blogs written to rank on Google and bring in organic buyers.</p>
 
+    <!-- Content Area (role="tabpanel") -->
+    <section id="work-samples-panel" role="tabpanel" aria-labelledby="tab-blogs" class="fade-in delay-2" style="min-height: 400px; margin-bottom: 2rem;">
+      <!-- Content grid rendered dynamically from content.json by app.js -->
       <noscript>
         <div style="margin-top: 2rem; padding: 1.5rem; background: var(--surface); border: 1px solid var(--border); border-radius: 8px;">
           <p style="margin: 0; color: var(--text-muted); font-size: 0.95rem;">
-            JavaScript is disabled. The samples above showcase selected articles. To view Reels, Social Posts, and Email samples, enable JavaScript in your browser settings.
+            JavaScript is required to display work samples. In the meantime, explore full <a href="case-studies.html" style="color: var(--text); font-weight: 600; text-decoration: underline;">Case Studies</a> or <a href="index.html#contact" style="color: var(--text); font-weight: 600; text-decoration: underline;">get in touch</a> directly.
           </p>
         </div>
       </noscript>
     </section>
 
+    <!-- Bridge Line directly above CTA card -->
+    <div id="ws-bridge-container" class="ws-bridge-line fade-in">
+      <p class="ws-bridge-text">
+        Want the strategy behind the work? <a href="case-studies.html" class="inline-link">See Case Studies →</a>
+      </p>
+    </div>
+
     <!-- Closing CTA Area -->
-    <section class="whiteboard-card fade-in" id="ws-cta-container" style="margin: 5rem 0; text-align: center; background-color: var(--surface);">
+    <section class="whiteboard-card fade-in" id="ws-cta-container" style="margin: 0 0 5rem 0; text-align: center; background-color: var(--surface);">
       <h2 id="ws-cta-headline" style="font-size: 2rem; margin-bottom: 1rem; color: var(--text);">Why isn't your content turning into customers?</h2>
       <p id="ws-cta-subhead" style="max-width: 700px; margin: 0 auto 1.5rem auto; font-size: 1.05rem; line-height: 1.5;">
         Most content problems aren't a writing problem. They're a strategy gap: wrong audience, wrong platform mix, or no clear line from content to conversion. In one session, we'll find exactly where yours is leaking value.

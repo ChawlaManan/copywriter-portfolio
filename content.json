@@ -337,7 +337,12 @@
   },
   "work_samples_page": {
     "title": "Proof of Work",
-    "subtext": "Looking for strategy and results? <a href=\"case-studies.html\">See Case Studies →</a>",
+    "subtext": "Live work across blogs, reels, social posts and emails.",
+    "bridge_line": {
+      "text": "Want the strategy behind the work?",
+      "link_text": "See Case Studies →",
+      "url": "case-studies.html"
+    },
     "cta": {
       "headline": "Why isn't your content turning into customers?",
       "subhead": "Most content problems aren't a writing problem. They're a strategy gap: wrong audience, wrong platform mix, or no clear line from content to conversion. In one session, we'll find exactly where yours is leaking value.",
@@ -347,22 +352,26 @@
       {
         "id": "blogs",
         "label": "Blogs",
-        "order": 1
-      },
-      {
-        "id": "reels",
-        "label": "Reels",
-        "order": 2
-      },
-      {
-        "id": "social",
-        "label": "Social Posts",
-        "order": 3
+        "order": 1,
+        "note": "Blogs written to rank on Google and bring in organic buyers."
       },
       {
         "id": "emails",
         "label": "Emails",
-        "order": 4
+        "order": 2,
+        "note": "Each email starts with a real challenge and a clear audience."
+      },
+      {
+        "id": "reels",
+        "label": "Reels",
+        "order": 3,
+        "note": "Short-form scripts that went live."
+      },
+      {
+        "id": "social",
+        "label": "Social Posts",
+        "order": 4,
+        "note": "Posts written for brands, live on their channels."
       }
     ]
   },
