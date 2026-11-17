@@ -478,7 +478,7 @@ function escapeHtml(str) {
 function sanitizeLinkUrl(url) {
   if (!url || typeof url !== 'string') return '';
   const trimmed = url.trim();
-  if (/^https?:\/\//i.test(trimmed)) {
+  if (/^https:\/\//i.test(trimmed)) {
     return trimmed;
   }
   return '';
@@ -786,28 +786,84 @@ function renderTabContent(typeId, samples, container) {
       </div>
     `;
   } else if (typeId === 'reels') {
+    // Group reels by item.group in order of first appearance
+    const groups = [];
+    const groupMap = new Map();
+
+    items.forEach(item => {
+      const groupName = item.group || item.brand || 'Featured Reels';
+      if (!groupMap.has(groupName)) {
+        const groupObj = { name: groupName, items: [] };
+        groupMap.set(groupName, groupObj);
+        groups.push(groupObj);
+      }
+      groupMap.get(groupName).items.push(item);
+    });
+
     container.innerHTML = `
-      <div class="work-samples-grid-reels">
-        ${items.map(item => {
-          const safeLiveUrl = sanitizeLinkUrl(item.live_url);
-          const safeScreenshot = sanitizeImageSrc(item.screenshot);
-          const safeBrand = escapeHtml(item.brand || '');
-          return `
-            <div class="reel-sample-card">
-              <a href="${safeLiveUrl}" target="_blank" rel="noopener noreferrer" class="reel-screenshot-link" aria-label="Watch live reel for ${safeBrand}">
-                <img src="${safeScreenshot}" alt="Instagram reel for ${safeBrand}" class="reel-screenshot" loading="lazy" width="450" height="800">
-              </a>
-              <div class="reel-info-row">
-                <h2 class="reel-brand-name">${safeBrand}</h2>
-                <a href="${safeLiveUrl}" target="_blank" rel="noopener noreferrer" class="reel-watch-link">
-                  Watch live <span aria-hidden="true">→</span>
-                </a>
-              </div>
+      <div class="work-samples-reels-container">
+        ${groups.map(group => `
+          <div class="reels-group-section">
+            <div class="reels-group-header">
+              <h2 class="reels-group-title">
+                <span class="hand-drawn-label">${escapeHtml(group.name)}</span>
+              </h2>
             </div>
-          `;
-        }).join('')}
+            <div class="work-samples-grid-reels">
+              ${group.items.map(item => {
+                const safeLiveUrl = sanitizeLinkUrl(item.live_url);
+                const safeScreenshot = sanitizeImageSrc(item.screenshot);
+                const safeBrand = escapeHtml(item.brand || '');
+                const safeAccount = escapeHtml(item.account || '');
+                return `
+                  <div class="reel-sample-card">
+                    <a href="${safeLiveUrl}" target="_blank" rel="noopener noreferrer" class="reel-screenshot-link" aria-label="Watch live reel for ${safeBrand}">
+                      <img 
+                        src="${safeScreenshot}" 
+                        alt="Instagram reel for ${safeBrand}" 
+                        class="reel-screenshot" 
+                        loading="lazy" 
+                        width="450" 
+                        height="800" 
+                        data-brand="${safeBrand}">
+                    </a>
+                    <div class="reel-info-row">
+                      <h3 class="reel-brand-name">${safeBrand}</h3>
+                      ${safeAccount ? `<span class="reel-account-name">@${safeAccount}</span>` : ''}
+                      <a href="${safeLiveUrl}" target="_blank" rel="noopener noreferrer" class="reel-watch-link">
+                        Watch live <span aria-hidden="true">→</span>
+                      </a>
+                    </div>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          </div>
+        `).join('')}
       </div>
     `;
+
+    // Attach error listeners to screenshots for fallback tiles (no inline handlers)
+    const reelImages = container.querySelectorAll('.reel-screenshot');
+    reelImages.forEach(img => {
+      const handleImageError = () => {
+        const brandName = img.getAttribute('data-brand') || '';
+        const fallback = document.createElement('div');
+        fallback.className = 'reel-fallback-tile';
+        fallback.setAttribute('role', 'img');
+        fallback.setAttribute('aria-label', `Instagram reel for ${brandName}`);
+        fallback.innerHTML = `
+          <span class="reel-fallback-brand">${escapeHtml(brandName)}</span>
+          <span class="reel-fallback-tag">Instagram Reel</span>
+        `;
+        img.replaceWith(fallback);
+      };
+
+      img.addEventListener('error', handleImageError, { once: true });
+      if (img.complete && img.naturalWidth === 0) {
+        handleImageError();
+      }
+    });
   } else if (typeId === 'social') {
     container.innerHTML = `
       <div class="work-samples-masonry-social">

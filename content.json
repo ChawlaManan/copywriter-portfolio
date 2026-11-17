@@ -440,27 +440,113 @@
       "url": "https://ethnicindiahandicrafts.com/blogs/ethnicindia/nag-panchami-2025-date-significance-pooja-vidhi"
     },
     {
-      "id": "reel-1",
+      "id": "hsa-1",
       "type": "reels",
-      "brand": "[Placeholder] Lumina Coffee",
-      "screenshot": "assets/work/reel-placeholder-1.svg",
-      "live_url": "https://instagram.com",
+      "brand": "HSA Edu World",
+      "group": "HSA Edu World (MBBS in Georgia & Uzbekistan)",
+      "account": "hsaeduworld",
+      "screenshot": "assets/work/reels/hsa-1.jpg",
+      "live_url": "https://www.instagram.com/hsaeduworld/reel/DLUq0LqojUH/",
       "platform": "Instagram"
     },
     {
-      "id": "reel-2",
+      "id": "hsa-2",
       "type": "reels",
-      "brand": "[Placeholder] Velocity App",
-      "screenshot": "assets/work/reel-placeholder-2.svg",
-      "live_url": "https://instagram.com",
+      "brand": "HSA Edu World",
+      "group": "HSA Edu World (MBBS in Georgia & Uzbekistan)",
+      "account": "hsaeduworld",
+      "screenshot": "assets/work/reels/hsa-2.jpg",
+      "live_url": "https://www.instagram.com/hsaeduworld/reel/DLT6NFehUCQ/",
       "platform": "Instagram"
     },
     {
-      "id": "reel-3",
+      "id": "hsa-3",
       "type": "reels",
-      "brand": "[Placeholder] EcoStride",
-      "screenshot": "assets/work/reel-placeholder-3.svg",
-      "live_url": "https://instagram.com",
+      "brand": "HSA Edu World",
+      "group": "HSA Edu World (MBBS in Georgia & Uzbekistan)",
+      "account": "hsaeduworld",
+      "screenshot": "assets/work/reels/hsa-3.jpg",
+      "live_url": "https://www.instagram.com/hsaeduworld/reel/DLopXa6JDB_/",
+      "platform": "Instagram"
+    },
+    {
+      "id": "hsa-4",
+      "type": "reels",
+      "brand": "HSA Edu World",
+      "group": "HSA Edu World (MBBS in Georgia & Uzbekistan)",
+      "account": "hsaeduworld",
+      "screenshot": "assets/work/reels/hsa-4.jpg",
+      "live_url": "https://www.instagram.com/hsaeduworld/reel/DLrzypyvAf3/",
+      "platform": "Instagram"
+    },
+    {
+      "id": "hsa-5",
+      "type": "reels",
+      "brand": "HSA Edu World",
+      "group": "HSA Edu World (MBBS in Georgia & Uzbekistan)",
+      "account": "hsaeduworld",
+      "screenshot": "assets/work/reels/hsa-5.jpg",
+      "live_url": "https://www.instagram.com/hsaeduworld/reel/DL6-P_qtAxe/",
+      "platform": "Instagram"
+    },
+    {
+      "id": "hsa-collab-1",
+      "type": "reels",
+      "brand": "HSA Edu World",
+      "group": "HSA Edu World · Instagram Collabs",
+      "account": "amritsarislive",
+      "screenshot": "assets/work/reels/hsa-collab-1.jpg",
+      "live_url": "https://www.instagram.com/amritsarislive/reel/DJoenC0zyWf/",
+      "platform": "Instagram"
+    },
+    {
+      "id": "hsa-collab-2",
+      "type": "reels",
+      "brand": "HSA Edu World",
+      "group": "HSA Edu World · Instagram Collabs",
+      "account": "youngster_of_chandigarh",
+      "screenshot": "assets/work/reels/hsa-collab-2.jpg",
+      "live_url": "https://www.instagram.com/youngster_of_chandigarh/reel/DJn6wP7yl67/",
+      "platform": "Instagram"
+    },
+    {
+      "id": "hsa-collab-3",
+      "type": "reels",
+      "brand": "HSA Edu World",
+      "group": "HSA Edu World · Instagram Collabs",
+      "account": "youngster_of_chandigarh",
+      "screenshot": "assets/work/reels/hsa-collab-3.jpg",
+      "live_url": "https://www.instagram.com/youngster_of_chandigarh/reel/DJY37acSSW4/",
+      "platform": "Instagram"
+    },
+    {
+      "id": "lavister-1",
+      "type": "reels",
+      "brand": "Lavister",
+      "group": "Lavister",
+      "account": "lavister.india",
+      "screenshot": "assets/work/reels/lavister-1.jpg",
+      "live_url": "https://www.instagram.com/lavister.india/reel/DZFFxVMiStF/",
+      "platform": "Instagram"
+    },
+    {
+      "id": "lavister-2",
+      "type": "reels",
+      "brand": "Lavister",
+      "group": "Lavister",
+      "account": "ruma.kat",
+      "screenshot": "assets/work/reels/lavister-2.jpg",
+      "live_url": "https://www.instagram.com/ruma.kat/reel/DXwNo-wMwyW/",
+      "platform": "Instagram"
+    },
+    {
+      "id": "lavister-3",
+      "type": "reels",
+      "brand": "Lavister",
+      "group": "Lavister",
+      "account": "lavister.india",
+      "screenshot": "assets/work/reels/lavister-3.jpg",
+      "live_url": "https://www.instagram.com/lavister.india/reel/DZb0Vy8lIl5/",
       "platform": "Instagram"
     },
     {

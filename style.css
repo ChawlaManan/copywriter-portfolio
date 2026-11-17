@@ -1840,6 +1840,27 @@ footer {
 }
 
 /* 4. Reels Tab (3-Column 9:16 Grid) */
+.reels-group-section {
+  margin-bottom: 3.5rem;
+}
+
+.reels-group-section:last-child {
+  margin-bottom: 0;
+}
+
+.reels-group-header {
+  margin-bottom: 1.5rem;
+}
+
+.reels-group-title {
+  font-family: var(--font-hand);
+  font-size: 1.65rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
+  letter-spacing: 0.25px;
+}
+
 .work-samples-grid-reels {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -1882,6 +1903,37 @@ footer {
   display: block;
 }
 
+.reel-fallback-tile {
+  width: 100%;
+  aspect-ratio: 9 / 16;
+  background-color: var(--surface);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem 1rem;
+  text-align: center;
+  gap: 0.5rem;
+  box-sizing: border-box;
+}
+
+.reel-fallback-brand {
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.reel-fallback-tag {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.75px;
+  color: var(--text-muted);
+}
+
 .reel-info-row {
   display: flex;
   flex-direction: column;
@@ -1894,6 +1946,13 @@ footer {
   font-weight: 700;
   color: var(--text);
   margin: 0;
+}
+
+.reel-account-name {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  line-height: 1.2;
 }
 
 .reel-watch-link {
