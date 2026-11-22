@@ -700,6 +700,10 @@ function renderWorkSamplesPage(data) {
   // Always show category note and content for active category
   updateCategoryNote(activeCategoryId);
 
+  // Initialize social posts lightbox (delegated events, single instance)
+  socialItemsData = getValidItemsForCategory('social', samples);
+  initSocialLightbox();
+
   if (panel) {
     panel.setAttribute('aria-labelledby', `tab-${activeCategoryId}`);
     renderTabContent(activeCategoryId, samples, panel);
@@ -865,33 +869,34 @@ function renderTabContent(typeId, samples, container) {
       }
     });
   } else if (typeId === 'social') {
+    socialItemsData = items;
     container.innerHTML = `
       <div class="work-samples-masonry-social">
-        ${items.map(item => {
-          const safeLiveUrl = sanitizeLinkUrl(item.live_url);
+        ${items.map((item, index) => {
           const safeScreenshot = sanitizeImageSrc(item.screenshot);
           const safeBrand = escapeHtml(item.brand || '');
           const safePlatform = escapeHtml(item.platform || '');
           const safeTitle = escapeHtml(item.title || '');
+          const altText = `${safeTitle ? safeTitle : 'Social post for ' + safeBrand}${safePlatform ? ' on ' + safePlatform : ''}`;
           return `
             <div class="social-sample-card">
-              <a href="${safeLiveUrl}" target="_blank" rel="noopener noreferrer" class="social-screenshot-link" aria-label="View social post for ${safeBrand}">
+              <button type="button" class="social-screenshot-btn" data-lightbox-index="${index}" aria-label="View larger image for ${safeTitle ? safeTitle : safeBrand}">
                 <img 
                   src="${safeScreenshot}" 
-                  alt="${safeTitle ? safeTitle : 'Social post for ' + safeBrand}${safePlatform ? ' on ' + safePlatform : ''}" 
+                  alt="${altText}" 
                   class="social-screenshot" 
                   loading="lazy"
                   data-brand="${safeBrand}">
-              </a>
+              </button>
               <div class="social-meta-row">
                 <div class="social-header-row">
                   <h2 class="social-brand-name">${safeBrand}</h2>
                   ${safePlatform ? `<span class="social-platform-pill">${safePlatform}</span>` : ''}
                 </div>
                 ${safeTitle ? `<h3 class="social-post-title">${safeTitle}</h3>` : ''}
-                <a href="${safeLiveUrl}" target="_blank" rel="noopener noreferrer" class="social-view-link">
+                <button type="button" class="social-view-btn" data-lightbox-index="${index}">
                   View post <span aria-hidden="true">→</span>
-                </a>
+                </button>
               </div>
             </div>
           `;
@@ -920,6 +925,309 @@ function renderTabContent(typeId, samples, container) {
         handleImageError();
       }
     });
+  }
+}
+
+/**
+ * 2d. Reusable Lightbox Popup for Social Media Posts
+ */
+let socialLightboxInitialized = false;
+let socialItemsData = [];
+let currentLightboxIndex = 0;
+let lastFocusedOpener = null;
+
+function initSocialLightbox() {
+  if (socialLightboxInitialized) return;
+  socialLightboxInitialized = true;
+
+  // Create overlay element if not present in DOM
+  let overlay = document.getElementById('social-lightbox');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.id = 'social-lightbox';
+    overlay.className = 'social-lightbox-overlay';
+    overlay.setAttribute('role', 'dialog');
+    overlay.setAttribute('aria-modal', 'true');
+    overlay.setAttribute('aria-label', 'Social media post preview');
+    overlay.setAttribute('aria-hidden', 'true');
+    overlay.style.display = 'none';
+
+    overlay.innerHTML = `
+      <div class="social-lightbox-container" role="document">
+        <div class="social-lightbox-header">
+          <div class="social-lightbox-counter" id="social-lightbox-counter" aria-live="polite"></div>
+          <button type="button" class="social-lightbox-btn social-lightbox-close" id="social-lightbox-close" aria-label="Close dialog">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        <div class="social-lightbox-body">
+          <button type="button" class="social-lightbox-btn social-lightbox-nav social-lightbox-prev" id="social-lightbox-prev" aria-label="Previous post">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+          </button>
+          <div class="social-lightbox-media">
+            <img class="social-lightbox-image" id="social-lightbox-img" src="" alt="">
+            <div class="social-lightbox-error" id="social-lightbox-error" style="display: none;">Image unavailable</div>
+          </div>
+          <button type="button" class="social-lightbox-btn social-lightbox-nav social-lightbox-next" id="social-lightbox-next" aria-label="Next post">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </button>
+        </div>
+        <div class="social-lightbox-footer">
+          <p class="social-lightbox-caption" id="social-lightbox-caption"></p>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(overlay);
+  }
+
+  // Delegated click listener for openers and lightbox actions (never navigates away)
+  document.addEventListener('click', (e) => {
+    // Check if clicked element or parent is a lightbox trigger
+    const trigger = e.target.closest('[data-lightbox-index]');
+    if (trigger) {
+      e.preventDefault();
+      const idx = parseInt(trigger.getAttribute('data-lightbox-index'), 10);
+      if (!isNaN(idx)) {
+        openSocialLightbox(idx);
+      }
+      return;
+    }
+
+    // Lightbox interactions
+    const currentOverlay = document.getElementById('social-lightbox');
+    if (!currentOverlay || !currentOverlay.classList.contains('active')) return;
+
+    // Close button
+    if (e.target.closest('#social-lightbox-close')) {
+      e.preventDefault();
+      closeSocialLightbox();
+      return;
+    }
+
+    // Prev button
+    if (e.target.closest('#social-lightbox-prev')) {
+      e.preventDefault();
+      navigateSocialLightbox(-1);
+      return;
+    }
+
+    // Next button
+    if (e.target.closest('#social-lightbox-next')) {
+      e.preventDefault();
+      navigateSocialLightbox(1);
+      return;
+    }
+
+    // Backdrop click (click outside the lightbox container)
+    if (currentOverlay.contains(e.target) && !e.target.closest('.social-lightbox-container')) {
+      e.preventDefault();
+      closeSocialLightbox();
+      return;
+    }
+  });
+
+  // Global keydown handler for Esc, Arrow keys, and focus trap
+  window.addEventListener('keydown', handleLightboxKeydown);
+
+  // Touch swipe support (left for next, right for prev)
+  let touchStartX = 0;
+  let touchStartY = 0;
+
+  overlay.addEventListener('touchstart', (e) => {
+    if (e.touches && e.touches.length === 1) {
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+    }
+  }, { passive: true });
+
+  overlay.addEventListener('touchend', (e) => {
+    if (e.changedTouches && e.changedTouches.length === 1) {
+      const diffX = e.changedTouches[0].clientX - touchStartX;
+      const diffY = e.changedTouches[0].clientY - touchStartY;
+      if (Math.abs(diffX) > 40 && Math.abs(diffX) > Math.abs(diffY)) {
+        if (diffX < 0) {
+          navigateSocialLightbox(1);
+        } else {
+          navigateSocialLightbox(-1);
+        }
+      }
+    }
+  }, { passive: true });
+}
+
+function openSocialLightbox(index) {
+  const overlay = document.getElementById('social-lightbox');
+  if (!overlay || !socialItemsData || socialItemsData.length === 0) return;
+
+  lastFocusedOpener = document.activeElement;
+  currentLightboxIndex = (index >= 0 && index < socialItemsData.length) ? index : 0;
+
+  updateLightboxContent();
+
+  overlay.style.display = 'flex';
+  requestAnimationFrame(() => {
+    overlay.classList.add('active');
+    overlay.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('social-lightbox-open');
+
+    const closeBtn = document.getElementById('social-lightbox-close');
+    if (closeBtn) closeBtn.focus();
+  });
+}
+
+function closeSocialLightbox() {
+  const overlay = document.getElementById('social-lightbox');
+  if (!overlay || !overlay.classList.contains('active')) return;
+
+  overlay.classList.remove('active');
+  overlay.setAttribute('aria-hidden', 'true');
+  document.body.classList.remove('social-lightbox-open');
+
+  setTimeout(() => {
+    if (!overlay.classList.contains('active')) {
+      overlay.style.display = 'none';
+      const img = document.getElementById('social-lightbox-img');
+      if (img) img.src = '';
+    }
+  }, 150);
+
+  if (lastFocusedOpener && typeof lastFocusedOpener.focus === 'function') {
+    lastFocusedOpener.focus();
+  }
+}
+
+function navigateSocialLightbox(direction) {
+  if (!socialItemsData || socialItemsData.length <= 1) return;
+  const total = socialItemsData.length;
+  currentLightboxIndex = (currentLightboxIndex + direction + total) % total;
+  updateLightboxContent();
+}
+
+function updateLightboxContent() {
+  const item = socialItemsData[currentLightboxIndex];
+  if (!item) return;
+
+  const total = socialItemsData.length;
+  const counterEl = document.getElementById('social-lightbox-counter');
+  const captionEl = document.getElementById('social-lightbox-caption');
+  const imgEl = document.getElementById('social-lightbox-img');
+  const errorEl = document.getElementById('social-lightbox-error');
+  const prevBtn = document.getElementById('social-lightbox-prev');
+  const nextBtn = document.getElementById('social-lightbox-next');
+
+  // Counter: "n / total" with aria-live="polite"
+  if (counterEl) {
+    counterEl.textContent = `${currentLightboxIndex + 1} / ${total}`;
+  }
+
+  // Prev / Next button visibility (hide if only one post)
+  if (prevBtn && nextBtn) {
+    if (total <= 1) {
+      prevBtn.style.display = 'none';
+      nextBtn.style.display = 'none';
+    } else {
+      prevBtn.style.display = '';
+      nextBtn.style.display = '';
+    }
+  }
+
+  // Caption: "Brand · Platform"
+  if (captionEl) {
+    const brand = (item.brand || '').trim();
+    const platform = (item.platform || '').trim();
+    const parts = [brand, platform].filter(Boolean);
+    captionEl.textContent = parts.join(' · ');
+  }
+
+  // Image & alt text matching card
+  if (imgEl && errorEl) {
+    errorEl.style.display = 'none';
+    imgEl.style.display = 'none';
+
+    const safeScreenshot = sanitizeImageSrc(item.screenshot);
+    const safeTitle = item.title || '';
+    const safeBrand = item.brand || '';
+    const safePlatform = item.platform || '';
+    imgEl.alt = `${safeTitle ? safeTitle : 'Social post for ' + safeBrand}${safePlatform ? ' on ' + safePlatform : ''}`;
+
+    imgEl.onload = () => {
+      imgEl.style.display = 'block';
+      errorEl.style.display = 'none';
+    };
+    imgEl.onerror = () => {
+      imgEl.style.display = 'none';
+      errorEl.style.display = 'block';
+    };
+
+    if (safeScreenshot) {
+      imgEl.src = safeScreenshot;
+      if (imgEl.complete) {
+        if (imgEl.naturalWidth > 0) {
+          imgEl.style.display = 'block';
+          errorEl.style.display = 'none';
+        } else {
+          imgEl.style.display = 'none';
+          errorEl.style.display = 'block';
+        }
+      }
+    } else {
+      imgEl.style.display = 'none';
+      errorEl.style.display = 'block';
+    }
+  }
+}
+
+function handleLightboxKeydown(e) {
+  const overlay = document.getElementById('social-lightbox');
+  if (!overlay || !overlay.classList.contains('active')) return;
+
+  if (e.key === 'Escape') {
+    e.preventDefault();
+    closeSocialLightbox();
+    return;
+  }
+
+  if (e.key === 'ArrowLeft') {
+    e.preventDefault();
+    navigateSocialLightbox(-1);
+    return;
+  }
+
+  if (e.key === 'ArrowRight') {
+    e.preventDefault();
+    navigateSocialLightbox(1);
+    return;
+  }
+
+  // Focus trap inside dialog
+  if (e.key === 'Tab') {
+    const focusable = Array.from(overlay.querySelectorAll(
+      'button:not([disabled]):not([style*="display: none"]), [tabindex]:not([tabindex="-1"])'
+    )).filter(el => el.offsetParent !== null || window.getComputedStyle(el).display !== 'none');
+
+    if (!focusable || focusable.length === 0) return;
+
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+
+    if (e.shiftKey) {
+      if (document.activeElement === first || !overlay.contains(document.activeElement)) {
+        e.preventDefault();
+        last.focus();
+      }
+    } else {
+      if (document.activeElement === last || !overlay.contains(document.activeElement)) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
   }
 }
 

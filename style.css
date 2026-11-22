@@ -1643,7 +1643,9 @@ footer {
 .reel-screenshot-link:focus-visible,
 .reel-watch-link:focus-visible,
 .social-screenshot-link:focus-visible,
-.social-view-link:focus-visible {
+.social-screenshot-btn:focus-visible,
+.social-view-link:focus-visible,
+.social-view-btn:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 3px;
 }
@@ -2002,12 +2004,24 @@ footer {
   transform: translateY(-2px);
 }
 
-.social-screenshot-link {
+.social-screenshot-link,
+.social-screenshot-btn {
   display: block;
+  width: 100%;
+  padding: 0;
+  margin: 0;
   border-radius: 6px;
   overflow: hidden;
   border: 1px solid var(--border);
   background-color: #FFFFFF;
+  cursor: pointer;
+  text-align: left;
+  transition: var(--transition-smooth);
+}
+
+.social-screenshot-btn:hover {
+  border-color: var(--backdrop);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .social-screenshot {
@@ -2051,7 +2065,8 @@ footer {
   color: var(--text-muted);
 }
 
-.social-view-link {
+.social-view-link,
+.social-view-btn {
   display: inline-flex;
   align-items: center;
   gap: 0.25rem;
@@ -2059,10 +2074,19 @@ footer {
   font-weight: 600;
   color: var(--text-muted);
   text-decoration: none;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font-family: inherit;
+  cursor: pointer;
+  text-align: left;
   transition: var(--transition-smooth);
+  width: fit-content;
 }
 
-.social-view-link:hover {
+.social-view-link:hover,
+.social-view-btn:hover {
   color: var(--accent);
 }
 
@@ -2109,6 +2133,216 @@ footer {
 @media (max-width: 480px) {
   .work-samples-masonry-social {
     column-count: 1;
+  }
+}
+
+/* ==========================================================================
+   Social Media Posts Lightbox Popup
+   ========================================================================== */
+
+body.social-lightbox-open {
+  overflow: hidden !important;
+}
+
+.social-lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(23, 23, 23, 0.85); /* dark --ink backdrop at ~85% */
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 1.5rem;
+  overflow-y: auto;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 150ms ease, visibility 150ms ease;
+}
+
+.social-lightbox-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.social-lightbox-container {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px; /* same radius as cards */
+  max-width: 96vw;
+  max-height: 94vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+  transform: scale(0.96);
+  transition: transform 150ms ease;
+  margin: auto;
+}
+
+.social-lightbox-overlay.active .social-lightbox-container {
+  transform: scale(1);
+}
+
+.social-lightbox-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  min-height: 48px;
+}
+
+.social-lightbox-counter {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.social-lightbox-btn {
+  min-width: 44px;
+  min-height: 44px;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  color: var(--text);
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.social-lightbox-btn:hover {
+  background: rgba(0, 0, 0, 0.06);
+  color: var(--ink);
+  border-color: var(--border);
+}
+
+.social-lightbox-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.social-lightbox-body {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #111111;
+  padding: 0.5rem;
+  overflow: hidden;
+  min-height: 200px;
+}
+
+.social-lightbox-media {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.social-lightbox-image {
+  max-width: 92vw;
+  max-height: 85vh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+.social-lightbox-error {
+  padding: 3rem 2rem;
+  text-align: center;
+  color: #FFFFFF;
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+}
+
+.social-lightbox-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  background: rgba(23, 23, 23, 0.7);
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.social-lightbox-prev {
+  left: 0.75rem;
+}
+
+.social-lightbox-next {
+  right: 0.75rem;
+}
+
+.social-lightbox-nav:hover {
+  background: rgba(23, 23, 23, 0.95);
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.social-lightbox-footer {
+  padding: 0.75rem 1rem;
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+  text-align: center;
+}
+
+.social-lightbox-caption {
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0;
+}
+
+@media (max-width: 600px) {
+  .social-lightbox-overlay {
+    padding: 0.5rem;
+    align-items: flex-start;
+  }
+
+  .social-lightbox-container {
+    width: 100%;
+    max-width: 100%;
+    margin: auto 0;
+  }
+
+  .social-lightbox-image {
+    width: 100%;
+    max-width: 100%;
+    max-height: 75vh;
+  }
+
+  .social-lightbox-prev {
+    left: 0.25rem;
+  }
+
+  .social-lightbox-next {
+    right: 0.25rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .social-lightbox-overlay,
+  .social-lightbox-container,
+  .social-lightbox-overlay.active .social-lightbox-container {
+    transition: none !important;
+    transform: none !important;
   }
 }
 
