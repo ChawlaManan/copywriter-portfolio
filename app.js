@@ -564,9 +564,9 @@ function renderWorkSamplesPage(data) {
   // Categories & Tabs Configuration
   const rawCategories = pageData.categories || [
     { id: 'blogs', label: 'Blogs', order: 1, note: 'Blogs written to rank on Google and bring in organic buyers.' },
-    { id: 'emails', label: 'Emails', order: 2, note: 'Each email starts with a real challenge and a clear audience.' },
-    { id: 'reels', label: 'Reels', order: 3, note: 'Short-form scripts that went live.' },
-    { id: 'social', label: 'Social Posts', order: 4, note: 'Posts written for brands, live on their channels.' }
+    { id: 'reels', label: 'Reels', order: 2, note: 'Short-form scripts that went live.' },
+    { id: 'social', label: 'Social Media Posts', order: 3, note: 'Posts, carousels, and visual copy live on brand channels.' },
+    { id: 'emails', label: 'Emails', order: 4, note: 'Each email starts with a real challenge and a clear audience.' }
   ];
   const sortedCategories = [...rawCategories].sort((a, b) => (a.order || 0) - (b.order || 0));
 
@@ -872,16 +872,23 @@ function renderTabContent(typeId, samples, container) {
           const safeScreenshot = sanitizeImageSrc(item.screenshot);
           const safeBrand = escapeHtml(item.brand || '');
           const safePlatform = escapeHtml(item.platform || '');
+          const safeTitle = escapeHtml(item.title || '');
           return `
             <div class="social-sample-card">
               <a href="${safeLiveUrl}" target="_blank" rel="noopener noreferrer" class="social-screenshot-link" aria-label="View social post for ${safeBrand}">
-                <img src="${safeScreenshot}" alt="Social post for ${safeBrand}${safePlatform ? ' on ' + safePlatform : ''}" class="social-screenshot" loading="lazy">
+                <img 
+                  src="${safeScreenshot}" 
+                  alt="${safeTitle ? safeTitle : 'Social post for ' + safeBrand}${safePlatform ? ' on ' + safePlatform : ''}" 
+                  class="social-screenshot" 
+                  loading="lazy"
+                  data-brand="${safeBrand}">
               </a>
               <div class="social-meta-row">
                 <div class="social-header-row">
                   <h2 class="social-brand-name">${safeBrand}</h2>
                   ${safePlatform ? `<span class="social-platform-pill">${safePlatform}</span>` : ''}
                 </div>
+                ${safeTitle ? `<h3 class="social-post-title">${safeTitle}</h3>` : ''}
                 <a href="${safeLiveUrl}" target="_blank" rel="noopener noreferrer" class="social-view-link">
                   View post <span aria-hidden="true">→</span>
                 </a>
@@ -891,6 +898,28 @@ function renderTabContent(typeId, samples, container) {
         }).join('')}
       </div>
     `;
+
+    // Attach error listeners to screenshots for fallback tiles (no inline handlers)
+    const socialImages = container.querySelectorAll('.social-screenshot');
+    socialImages.forEach(img => {
+      const handleImageError = () => {
+        const brandName = img.getAttribute('data-brand') || '';
+        const fallback = document.createElement('div');
+        fallback.className = 'social-fallback-tile';
+        fallback.setAttribute('role', 'img');
+        fallback.setAttribute('aria-label', `Social post for ${brandName}`);
+        fallback.innerHTML = `
+          <span class="social-fallback-brand">${escapeHtml(brandName)}</span>
+          <span class="social-fallback-tag">Social Post</span>
+        `;
+        img.replaceWith(fallback);
+      };
+
+      img.addEventListener('error', handleImageError, { once: true });
+      if (img.complete && img.naturalWidth === 0) {
+        handleImageError();
+      }
+    });
   }
 }
 

@@ -356,22 +356,22 @@
         "note": "Blogs written to rank on Google and bring in organic buyers."
       },
       {
-        "id": "emails",
-        "label": "Emails",
-        "order": 2,
-        "note": "Each email starts with a real challenge and a clear audience."
-      },
-      {
         "id": "reels",
         "label": "Reels",
-        "order": 3,
+        "order": 2,
         "note": "Short-form scripts that went live."
       },
       {
         "id": "social",
-        "label": "Social Posts",
+        "label": "Social Media Posts",
+        "order": 3,
+        "note": "Posts, carousels, and visual copy live on brand channels."
+      },
+      {
+        "id": "emails",
+        "label": "Emails",
         "order": 4,
-        "note": "Posts written for brands, live on their channels."
+        "note": "Each email starts with a real challenge and a clear audience."
       }
     ]
   },
@@ -552,26 +552,65 @@
     {
       "id": "social-1",
       "type": "social",
-      "brand": "[Placeholder] SaaSTrack",
-      "screenshot": "assets/work/social-placeholder-1.svg",
-      "live_url": "https://linkedin.com",
-      "platform": "LinkedIn"
+      "brand": "Lavister",
+      "title": "Your Skin Isn't Dark — It's over producing melanin",
+      "platform": "Instagram",
+      "screenshot": "assets/work/social/social-1.jpg",
+      "live_url": "https://www.instagram.com/lavister.india/"
     },
     {
       "id": "social-2",
       "type": "social",
-      "brand": "[Placeholder] CraftDesign Co",
-      "screenshot": "assets/work/social-placeholder-2.svg",
-      "live_url": "https://instagram.com",
-      "platform": "Instagram"
+      "brand": "Lavister",
+      "title": "Your dark spot has a name it's Called Melanin",
+      "platform": "Instagram",
+      "screenshot": "assets/work/social/social-2.jpg",
+      "live_url": "https://www.instagram.com/lavister.india/"
     },
     {
       "id": "social-3",
       "type": "social",
-      "brand": "[Placeholder] B2B Growth Lab",
-      "screenshot": "assets/work/social-placeholder-3.svg",
-      "live_url": "https://twitter.com",
-      "platform": "X (Twitter)"
+      "brand": "Lavister",
+      "title": "Niacinamide Night Gel — Overnight Radiance Complex",
+      "platform": "Instagram",
+      "screenshot": "assets/work/social/social-3.jpg",
+      "live_url": "https://www.instagram.com/lavister.india/"
+    },
+    {
+      "id": "social-4",
+      "type": "social",
+      "brand": "Lavister",
+      "title": "Morning and night consistency wins",
+      "platform": "Instagram",
+      "screenshot": "assets/work/social/social-4.jpg",
+      "live_url": "https://www.instagram.com/lavister.india/"
+    },
+    {
+      "id": "social-5",
+      "type": "social",
+      "brand": "Lavister",
+      "title": "Here's how a dark spot is born",
+      "platform": "Instagram",
+      "screenshot": "assets/work/social/social-5.jpg",
+      "live_url": "https://www.instagram.com/lavister.india/"
+    },
+    {
+      "id": "social-6",
+      "type": "social",
+      "brand": "Lavister",
+      "title": "3 steps radiant skin",
+      "platform": "Instagram",
+      "screenshot": "assets/work/social/social-6.jpg",
+      "live_url": "https://www.instagram.com/lavister.india/"
+    },
+    {
+      "id": "social-7",
+      "type": "social",
+      "brand": "Lavister",
+      "title": "We target melanin at every step",
+      "platform": "Instagram",
+      "screenshot": "assets/work/social/social-7.jpg",
+      "live_url": "https://www.instagram.com/lavister.india/"
     },
     {
       "id": "email-1",
