@@ -356,22 +356,28 @@
         "note": "Blogs written to rank on Google and bring in organic buyers."
       },
       {
+        "id": "emails",
+        "label": "Emails",
+        "order": 2,
+        "note": "Each email starts with a real challenge and a clear audience."
+      },
+      {
         "id": "reels",
         "label": "Reels",
-        "order": 2,
+        "order": 3,
         "note": "Short-form scripts that went live."
       },
       {
         "id": "social",
         "label": "Social Media Posts",
-        "order": 3,
+        "order": 4,
         "note": "Posts, carousels, and visual copy live on brand channels."
       },
       {
-        "id": "emails",
-        "label": "Emails",
-        "order": 4,
-        "note": "Each email starts with a real challenge and a clear audience."
+        "id": "linkedin",
+        "label": "LinkedIn Posts",
+        "order": 5,
+        "note": "Posts I wrote for founders and company pages, live on LinkedIn."
       }
     ]
   },
@@ -611,6 +617,21 @@
       "platform": "Instagram",
       "screenshot": "assets/work/social/social-7.jpg",
       "live_url": "https://www.instagram.com/lavister.india/"
+    },
+    {
+      "id": "linkedin-1",
+      "type": "linkedin",
+      "name": "[Placeholder] Jashandeep Singh Brar | Financial Advisor"
+    },
+    {
+      "id": "linkedin-2",
+      "type": "linkedin",
+      "name": "[Placeholder] Founder Name"
+    },
+    {
+      "id": "linkedin-3",
+      "type": "linkedin",
+      "name": "[Placeholder] Company Name"
     },
     {
       "id": "email-1",

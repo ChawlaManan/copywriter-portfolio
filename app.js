@@ -497,13 +497,28 @@ function isRealSampleItem(item) {
   if (!item || typeof item !== 'object') return false;
   if (typeof item.brand === 'string' && item.brand.trim().startsWith('[Placeholder]')) return false;
   if (typeof item.title === 'string' && item.title.trim().startsWith('[Placeholder]')) return false;
+  if (typeof item.name === 'string' && item.name.trim().startsWith('[Placeholder]')) return false;
   return true;
+}
+
+function getLinkedInVideoSrc(id) {
+  if (!id || typeof id !== 'string' || !/^[A-Za-z0-9_-]+$/.test(id)) {
+    return '';
+  }
+  return `assets/work/linkedin/${id}.mp4`;
 }
 
 function getValidItemsForCategory(typeId, samples) {
   return samples.filter(item => {
     if (item.type !== typeId) return false;
     if (!isRealSampleItem(item)) return false;
+
+    if (typeId === 'linkedin') {
+      if (!item.name || typeof item.name !== 'string' || !item.name.trim()) return false;
+      if (!item.id || typeof item.id !== 'string' || !/^[A-Za-z0-9_-]+$/.test(item.id)) return false;
+      return true;
+    }
+
     if (!item.brand || typeof item.brand !== 'string' || !item.brand.trim()) return false;
 
     if (typeId === 'blogs') {
@@ -564,9 +579,10 @@ function renderWorkSamplesPage(data) {
   // Categories & Tabs Configuration
   const rawCategories = pageData.categories || [
     { id: 'blogs', label: 'Blogs', order: 1, note: 'Blogs written to rank on Google and bring in organic buyers.' },
-    { id: 'reels', label: 'Reels', order: 2, note: 'Short-form scripts that went live.' },
-    { id: 'social', label: 'Social Media Posts', order: 3, note: 'Posts, carousels, and visual copy live on brand channels.' },
-    { id: 'emails', label: 'Emails', order: 4, note: 'Each email starts with a real challenge and a clear audience.' }
+    { id: 'emails', label: 'Emails', order: 2, note: 'Each email starts with a real challenge and a clear audience.' },
+    { id: 'reels', label: 'Reels', order: 3, note: 'Short-form scripts that went live.' },
+    { id: 'social', label: 'Social Media Posts', order: 4, note: 'Posts, carousels, and visual copy live on brand channels.' },
+    { id: 'linkedin', label: 'LinkedIn Posts', order: 5, note: 'Posts I wrote for founders and company pages, live on LinkedIn.' }
   ];
   const sortedCategories = [...rawCategories].sort((a, b) => (a.order || 0) - (b.order || 0));
 
@@ -645,6 +661,10 @@ function renderWorkSamplesPage(data) {
       if (!visibleCategories.some(c => c.id === newTypeId)) return;
       activeCategoryId = newTypeId;
 
+      if (typeof closeSocialLightbox === 'function') {
+        closeSocialLightbox();
+      }
+
       // Update URL query parameter without page reload
       const newUrl = new URL(window.location);
       newUrl.searchParams.set('type', newTypeId);
@@ -700,8 +720,9 @@ function renderWorkSamplesPage(data) {
   // Always show category note and content for active category
   updateCategoryNote(activeCategoryId);
 
-  // Initialize social posts lightbox (delegated events, single instance)
+  // Initialize social posts & linkedin lightbox (delegated events, single instance)
   socialItemsData = getValidItemsForCategory('social', samples);
+  linkedinItemsData = getValidItemsForCategory('linkedin', samples);
   initSocialLightbox();
 
   if (panel) {
@@ -925,14 +946,72 @@ function renderTabContent(typeId, samples, container) {
         handleImageError();
       }
     });
+  } else if (typeId === 'linkedin') {
+    linkedinItemsData = items;
+    container.innerHTML = `
+      <div class="work-samples-masonry-linkedin">
+        ${items.map((item, index) => {
+          const safeVideoSrc = getLinkedInVideoSrc(item.id);
+          const safeName = escapeHtml(item.name || '');
+          return `
+            <div class="linkedin-sample-card">
+              <button type="button" class="linkedin-video-trigger" data-lightbox-index="${index}" data-lightbox-type="linkedin" aria-label="Play recording for ${safeName}">
+                <div class="linkedin-video-wrapper">
+                  <video muted playsinline preload="metadata" src="${safeVideoSrc}#t=0.1" class="linkedin-card-video" data-name="${safeName}"></video>
+                  <span class="linkedin-play-badge" aria-hidden="true">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                      <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                    </svg>
+                  </span>
+                </div>
+              </button>
+              <div class="linkedin-meta-row">
+                <button type="button" class="linkedin-name-btn" data-lightbox-index="${index}" data-lightbox-type="linkedin">
+                  <h2 class="linkedin-author-name">${safeName}</h2>
+                </button>
+              </div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    `;
+
+    // Attach error listeners to videos for fallback tiles (no inline handlers)
+    const linkedinVideos = container.querySelectorAll('.linkedin-card-video');
+    linkedinVideos.forEach(vid => {
+      const handleVideoError = () => {
+        const authorName = vid.getAttribute('data-name') || '';
+        const trigger = vid.closest('.linkedin-video-trigger');
+        const fallback = document.createElement('div');
+        fallback.className = 'linkedin-fallback-tile';
+        fallback.setAttribute('role', 'img');
+        fallback.setAttribute('aria-label', `Video unavailable for ${authorName}`);
+        fallback.innerHTML = `
+          <span class="linkedin-fallback-icon" aria-hidden="true">⚠️</span>
+          <span class="linkedin-fallback-text">Video unavailable</span>
+        `;
+        if (trigger) {
+          trigger.replaceWith(fallback);
+        } else {
+          vid.replaceWith(fallback);
+        }
+      };
+
+      vid.addEventListener('error', handleVideoError, { once: true });
+      if (vid.error) {
+        handleVideoError();
+      }
+    });
   }
 }
 
 /**
- * 2d. Reusable Lightbox Popup for Social Media Posts
+ * 2d. Reusable Lightbox Popup for Social Media Posts & LinkedIn Posts
  */
 let socialLightboxInitialized = false;
 let socialItemsData = [];
+let linkedinItemsData = [];
+let currentLightboxType = 'social';
 let currentLightboxIndex = 0;
 let lastFocusedOpener = null;
 
@@ -948,7 +1027,7 @@ function initSocialLightbox() {
     overlay.className = 'social-lightbox-overlay';
     overlay.setAttribute('role', 'dialog');
     overlay.setAttribute('aria-modal', 'true');
-    overlay.setAttribute('aria-label', 'Social media post preview');
+    overlay.setAttribute('aria-label', 'Work sample preview');
     overlay.setAttribute('aria-hidden', 'true');
     overlay.style.display = 'none';
 
@@ -964,16 +1043,17 @@ function initSocialLightbox() {
           </button>
         </div>
         <div class="social-lightbox-body">
-          <button type="button" class="social-lightbox-btn social-lightbox-nav social-lightbox-prev" id="social-lightbox-prev" aria-label="Previous post">
+          <button type="button" class="social-lightbox-btn social-lightbox-nav social-lightbox-prev" id="social-lightbox-prev" aria-label="Previous item">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <polyline points="15 18 9 12 15 6"></polyline>
             </svg>
           </button>
           <div class="social-lightbox-media">
-            <img class="social-lightbox-image" id="social-lightbox-img" src="" alt="">
+            <img class="social-lightbox-image" id="social-lightbox-img" src="" alt="" style="display: none;">
+            <video class="social-lightbox-video" id="social-lightbox-video" controls playsinline preload="metadata" style="display: none;"></video>
             <div class="social-lightbox-error" id="social-lightbox-error" style="display: none;">Image unavailable</div>
           </div>
-          <button type="button" class="social-lightbox-btn social-lightbox-nav social-lightbox-next" id="social-lightbox-next" aria-label="Next post">
+          <button type="button" class="social-lightbox-btn social-lightbox-nav social-lightbox-next" id="social-lightbox-next" aria-label="Next item">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <polyline points="9 18 15 12 9 6"></polyline>
             </svg>
@@ -994,8 +1074,9 @@ function initSocialLightbox() {
     if (trigger) {
       e.preventDefault();
       const idx = parseInt(trigger.getAttribute('data-lightbox-index'), 10);
+      const type = trigger.getAttribute('data-lightbox-type') || 'social';
       if (!isNaN(idx)) {
-        openSocialLightbox(idx);
+        openSocialLightbox(idx, type);
       }
       return;
     }
@@ -1062,12 +1143,14 @@ function initSocialLightbox() {
   }, { passive: true });
 }
 
-function openSocialLightbox(index) {
+function openSocialLightbox(index, type = 'social') {
+  currentLightboxType = (type === 'linkedin') ? 'linkedin' : 'social';
+  const items = (currentLightboxType === 'linkedin') ? linkedinItemsData : socialItemsData;
   const overlay = document.getElementById('social-lightbox');
-  if (!overlay || !socialItemsData || socialItemsData.length === 0) return;
+  if (!overlay || !items || items.length === 0) return;
 
   lastFocusedOpener = document.activeElement;
-  currentLightboxIndex = (index >= 0 && index < socialItemsData.length) ? index : 0;
+  currentLightboxIndex = (index >= 0 && index < items.length) ? index : 0;
 
   updateLightboxContent();
 
@@ -1085,6 +1168,16 @@ function openSocialLightbox(index) {
 function closeSocialLightbox() {
   const overlay = document.getElementById('social-lightbox');
   if (!overlay || !overlay.classList.contains('active')) return;
+
+  // Pause and reset video if playing
+  const video = document.getElementById('social-lightbox-video');
+  if (video) {
+    video.pause();
+    video.currentTime = 0;
+    video.removeAttribute('src');
+    video.load();
+    video.style.display = 'none';
+  }
 
   overlay.classList.remove('active');
   overlay.setAttribute('aria-hidden', 'true');
@@ -1104,20 +1197,31 @@ function closeSocialLightbox() {
 }
 
 function navigateSocialLightbox(direction) {
-  if (!socialItemsData || socialItemsData.length <= 1) return;
-  const total = socialItemsData.length;
+  const items = (currentLightboxType === 'linkedin') ? linkedinItemsData : socialItemsData;
+  if (!items || items.length <= 1) return;
+
+  // Pause and reset video when changing item
+  const video = document.getElementById('social-lightbox-video');
+  if (video) {
+    video.pause();
+    video.currentTime = 0;
+  }
+
+  const total = items.length;
   currentLightboxIndex = (currentLightboxIndex + direction + total) % total;
   updateLightboxContent();
 }
 
 function updateLightboxContent() {
-  const item = socialItemsData[currentLightboxIndex];
+  const items = (currentLightboxType === 'linkedin') ? linkedinItemsData : socialItemsData;
+  const item = items ? items[currentLightboxIndex] : null;
   if (!item) return;
 
-  const total = socialItemsData.length;
+  const total = items.length;
   const counterEl = document.getElementById('social-lightbox-counter');
   const captionEl = document.getElementById('social-lightbox-caption');
   const imgEl = document.getElementById('social-lightbox-img');
+  const videoEl = document.getElementById('social-lightbox-video');
   const errorEl = document.getElementById('social-lightbox-error');
   const prevBtn = document.getElementById('social-lightbox-prev');
   const nextBtn = document.getElementById('social-lightbox-next');
@@ -1127,7 +1231,7 @@ function updateLightboxContent() {
     counterEl.textContent = `${currentLightboxIndex + 1} / ${total}`;
   }
 
-  // Prev / Next button visibility (hide if only one post)
+  // Prev / Next button visibility (hide if only one item)
   if (prevBtn && nextBtn) {
     if (total <= 1) {
       prevBtn.style.display = 'none';
@@ -1138,48 +1242,111 @@ function updateLightboxContent() {
     }
   }
 
-  // Caption: "Brand · Platform"
-  if (captionEl) {
-    const brand = (item.brand || '').trim();
-    const platform = (item.platform || '').trim();
-    const parts = [brand, platform].filter(Boolean);
-    captionEl.textContent = parts.join(' · ');
-  }
+  if (currentLightboxType === 'linkedin') {
+    // Caption: name only
+    if (captionEl) {
+      captionEl.textContent = (item.name || '').trim();
+    }
 
-  // Image & alt text matching card
-  if (imgEl && errorEl) {
-    errorEl.style.display = 'none';
-    imgEl.style.display = 'none';
-
-    const safeScreenshot = sanitizeImageSrc(item.screenshot);
-    const safeTitle = item.title || '';
-    const safeBrand = item.brand || '';
-    const safePlatform = item.platform || '';
-    imgEl.alt = `${safeTitle ? safeTitle : 'Social post for ' + safeBrand}${safePlatform ? ' on ' + safePlatform : ''}`;
-
-    imgEl.onload = () => {
-      imgEl.style.display = 'block';
-      errorEl.style.display = 'none';
-    };
-    imgEl.onerror = () => {
+    // Hide image, reset error
+    if (imgEl) {
       imgEl.style.display = 'none';
-      errorEl.style.display = 'block';
-    };
+      imgEl.src = '';
+    }
+    if (errorEl) {
+      errorEl.style.display = 'none';
+      errorEl.textContent = 'Video unavailable';
+    }
 
-    if (safeScreenshot) {
-      imgEl.src = safeScreenshot;
-      if (imgEl.complete) {
-        if (imgEl.naturalWidth > 0) {
-          imgEl.style.display = 'block';
-          errorEl.style.display = 'none';
-        } else {
-          imgEl.style.display = 'none';
+    if (videoEl) {
+      videoEl.pause();
+      videoEl.currentTime = 0;
+      videoEl.style.display = 'none';
+      videoEl.controls = true;
+      videoEl.autoplay = false;
+
+      const safeSrc = getLinkedInVideoSrc(item.id);
+      if (safeSrc) {
+        videoEl.src = safeSrc;
+        videoEl.onloadeddata = () => {
+          videoEl.style.display = 'block';
+          if (errorEl) errorEl.style.display = 'none';
+        };
+        videoEl.onerror = () => {
+          videoEl.style.display = 'none';
+          if (errorEl) {
+            errorEl.textContent = 'Video unavailable';
+            errorEl.style.display = 'block';
+          }
+        };
+        if (videoEl.readyState >= 2) {
+          videoEl.style.display = 'block';
+          if (errorEl) errorEl.style.display = 'none';
+        }
+      } else {
+        videoEl.style.display = 'none';
+        if (errorEl) {
+          errorEl.textContent = 'Video unavailable';
           errorEl.style.display = 'block';
         }
       }
-    } else {
+    }
+  } else {
+    // Social Posts
+    if (videoEl) {
+      videoEl.pause();
+      videoEl.currentTime = 0;
+      videoEl.removeAttribute('src');
+      videoEl.style.display = 'none';
+    }
+
+    // Caption: "Brand · Platform"
+    if (captionEl) {
+      const brand = (item.brand || '').trim();
+      const platform = (item.platform || '').trim();
+      const parts = [brand, platform].filter(Boolean);
+      captionEl.textContent = parts.join(' · ');
+    }
+
+    // Image & alt text matching card
+    if (imgEl && errorEl) {
+      errorEl.style.display = 'none';
+      errorEl.textContent = 'Image unavailable';
       imgEl.style.display = 'none';
-      errorEl.style.display = 'block';
+
+      const safeScreenshot = sanitizeImageSrc(item.screenshot);
+      const safeTitle = item.title || '';
+      const safeBrand = item.brand || '';
+      const safePlatform = item.platform || '';
+      imgEl.alt = `${safeTitle ? safeTitle : 'Social post for ' + safeBrand}${safePlatform ? ' on ' + safePlatform : ''}`;
+
+      imgEl.onload = () => {
+        imgEl.style.display = 'block';
+        errorEl.style.display = 'none';
+      };
+      imgEl.onerror = () => {
+        imgEl.style.display = 'none';
+        errorEl.textContent = 'Image unavailable';
+        errorEl.style.display = 'block';
+      };
+
+      if (safeScreenshot) {
+        imgEl.src = safeScreenshot;
+        if (imgEl.complete) {
+          if (imgEl.naturalWidth > 0) {
+            imgEl.style.display = 'block';
+            errorEl.style.display = 'none';
+          } else {
+            imgEl.style.display = 'none';
+            errorEl.textContent = 'Image unavailable';
+            errorEl.style.display = 'block';
+          }
+        }
+      } else {
+        imgEl.style.display = 'none';
+        errorEl.textContent = 'Image unavailable';
+        errorEl.style.display = 'block';
+      }
     }
   }
 }
